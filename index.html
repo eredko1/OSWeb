@@ -28,7 +28,7 @@
             --icon-color: #B0B0B0;
             --disabled-opacity: 0.5;
 
-            --dock-bg-opacity: 0.75; 
+            --dock-bg-opacity: 0.5; /* Defaulted to High */
             --window-content-bg: var(--surface-bg); 
         }
         body {
@@ -106,8 +106,8 @@
             --surface-active-bg: rgba(245, 245, 245, 0.1);
             --accent-color: #E53935; /* Crimson Red */
             --secondary-accent: #FDD835; /* Amber/Gold */
-            --error-color: #FF5370; /* Default, or could be a lighter red */
-            --warning-color: #FFCB6B; /* Default, or could be a more intense yellow */
+            --error-color: #FF5370; 
+            --warning-color: #FFCB6B; 
             --text-primary: #F5F5F5; 
             --text-secondary: #BDBDBD; 
             --border-color: #202020; 
@@ -120,7 +120,7 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
         }
         body.crimson-peak-theme .window-title-bar {
-            background-color: #4A2A2A; /* Darker red-tinged gray */
+            background-color: #4A2A2A; 
             border-bottom: 1px solid var(--primary-bg); 
             background-image: linear-gradient(to bottom, rgba(255,255,255,0.04), rgba(0,0,0,0.04));
         }
@@ -172,8 +172,13 @@
             transition: background-color 0.3s ease;
         }
         .window.glass-mode .window-content-area {
-            backdrop-filter: blur(8px); /* Optional: add blur to glass effect */
+            background-color: rgba(var(--surface-bg-rgb), 0.01) !important; /* Ensure high transparency for glass */
+            backdrop-filter: blur(8px); 
             -webkit-backdrop-filter: blur(8px);
+        }
+        /* Ensure content inside glass windows doesn't have opaque backgrounds unless intended */
+        .window.glass-mode .window-content-area > *:not(.terminal-output):not(.code-editor-content):not(.notepad-content):not(.calculator-grid):not(.calc-display):not(.mail-grid):not(.music-player-content):not(.app-launcher-grid) {
+             /* This is a general rule, specific app content might need more granular control */
         }
 
 
@@ -398,6 +403,9 @@
         body.light-mode .terminal-output span.explanation { color: #1976D2; }
         .terminal-output .neofetch-art { white-space: pre; font-family: 'Roboto Mono', monospace; line-height: 1.1; color: var(--accent-color); }
         .terminal-output .neofetch-label { color: var(--secondary-accent); }
+        .terminal-output .tree-item { margin-left: 1.5em; position: relative; }
+        .terminal-output .tree-item::before { content: "├── "; position: absolute; left: -1.5em; color: var(--text-secondary); }
+        .terminal-output .tree-item.last::before { content: "└── "; }
 
 
         .code-editor-content textarea, .notepad-content textarea {
@@ -584,6 +592,21 @@
             background-color: var(--primary-bg); color: var(--text-primary);
             outline-color: var(--accent-color);
         }
+        /* Settings App Specific Styles */
+        .settings-grid { display: grid; grid-template-columns: 200px 1fr; height: 100%; }
+        .settings-sidebar { border-right: 1px solid var(--border-color); padding: 0.5rem; overflow-y: auto; }
+        .settings-sidebar-item { padding: 0.75rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.9rem; }
+        .settings-sidebar-item:hover { background-color: var(--surface-overlay-bg); }
+        .settings-sidebar-item.active { background-color: var(--accent-color); color: var(--primary-bg); font-weight: 500; }
+        body.light-mode .settings-sidebar-item.active { color: #FFFFFF; }
+        .settings-content-pane { padding: 1.5rem; overflow-y: auto; }
+        .settings-section h3 { font-size: 1.25rem; font-weight: 500; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;}
+        .settings-item { margin-bottom: 1rem; }
+        .settings-item label { display: block; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem; }
+        .settings-item select, .settings-item input[type="text"], .settings-item input[type="range"] {
+            width: 100%; padding: 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border-color);
+            background-color: var(--surface-overlay-bg); color: var(--text-primary);
+        }
 
 
         /* Mobile UI Adjustments */
@@ -630,17 +653,19 @@
 
     <main id="desktop-area" class="flex-grow p-1 sm:p-2 md:p-4 relative overflow-hidden flex items-center justify-center">
         <div id="app-launcher-folder" class="desktop-icon" style="top: 50px; left: 50px;">
-            <i class="fas fa-folder-open"></i>
+            <i class="fas fa-th-large"></i> <!-- Changed icon to match app launcher -->
             <span>Apps</span>
         </div>
         <div id="my-files-folder" class="desktop-icon" style="top: 50px; left: 150px;">
-            <i class="fas fa-cloud"></i> <span>Cloud Docs</span>
+            <i class="fas fa-folder-open"></i> <!-- Changed icon to be more generic files -->
+            <span>My Files</span>
         </div>
     </main>
 
     <nav id="dock" class="surface-card w-max mx-auto mb-2 sm:mb-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-2xl flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 z-50 flex-shrink-0 !shadow-lg"> </nav>
 
-    <aside id="right-sidebar" class="surface-card fixed top-16 right-0 h-[calc(100vh-4rem-0.5rem)] sm:h-[calc(100vh-4rem-0.75rem)] w-72 sm:w-80 md:w-96 p-4 sm:p-5 space-y-3 transform translate-x-full transition-transform duration-300 ease-out z-40 !shadow-xl overflow-y-auto">
+    <aside id="right-sidebar" class="surface-card fixed top-16 right-0 h-[calc(100vh-4rem-0.5rem)] sm:h-[calc(100vh-4rem-0.75rem)] w-72 sm:w-80 md:w-96 p-4 sm:p-5 space-y-3 transform transition-transform duration-300 ease-out z-40 !shadow-xl overflow-y-auto">
+        <!-- Sidebar content remains the same, but will be open by default after login -->
         <div class="sidebar-section">
             <h2>Notifications</h2>
             <div id="notifications-container" class="space-y-2.5">
@@ -760,7 +785,7 @@
         let highestZIndex = 10;
         const openWindows = {}; 
         let currentWallpaperIdx = 3; 
-        const wallpapers = [
+        const wallpapers = [ // Added more wallpapers
             { name: 'Default Dark', class: '' }, 
             { name: 'Abstract Flow', url: 'https://images.unsplash.com/photo-1536003253694-851258756111?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
             { name: 'Neon City', url: 'https://images.unsplash.com/photo-1544580055-819595279529?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
@@ -771,7 +796,11 @@
             { name: 'Minimalist Waves', url: 'https://images.unsplash.com/photo-1525087747085-9092047893c1?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
             { name: 'Lush Forest Canopy', url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
             { name: 'City Lights Bokeh', url: 'https://images.unsplash.com/photo-1535224206222-525a31947975?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
-            { name: 'Tranquil Beach', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' }
+            { name: 'Tranquil Beach', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
+            { name: 'Geometric Abstract', url: 'https://images.unsplash.com/photo-1518655048521-f130df041f66?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
+            { name: 'Desert Dunes', url: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
+            { name: 'Ocean Depths', url: 'https://images.unsplash.com/photo-1530053969600-ac87992736PA?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
+            { name: 'Starry Night Sky', url: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' }
         ];
         let nextWidgetId = 1;
         const MIN_WINDOW_WIDTH = 320; 
@@ -786,26 +815,43 @@
         const LONG_PRESS_DURATION = 500;
         
         const themes = ['indigo-magic-theme', 'light-mode', 'crimson-peak-theme', 'default-dark'];
-        let currentThemeIndex = 0; // Will be set in window.onload to match initial theme
+        let currentThemeIndex = 0; 
         
         let activeMenuBarDropdown = null; 
         const dockTransparencyLevels = [
             { label: 'Off', value: 1.0 }, { label: 'Low', value: 0.9 },
             { label: 'Med', value: 0.75 }, { label: 'High', value: 0.5 }
         ];
-        let currentDockTransparencyIndex = 2; 
+        let currentDockTransparencyIndex = 3; // Default to High
 
         const windowTransparencyLevels = [
             { label: 'Off', value: 1.0 }, { label: 'Low', value: 0.9 },
-            { label: 'Med', value: 0.75 }, { label: 'High', value: 0.6 },
-            { label: 'Glass', value: 0.01 } // Value close to 0 for full transparency effect
+            { label: 'Med', value: 0.75 }, { label: 'High', value: 0.6 }, // Default to High
+            { label: 'Glass', value: 0.01 } 
         ];
-        let currentWindowTransparencyIndex = 0; 
+        let currentWindowTransparencyIndex = 3; // Default to High
 
         let systemStartTime = null; 
         let currentUsername = null;
-        const OS_VERSION = "OSWeb v1.alpha4"; // Updated version
+        const OS_VERSION = "OSWeb v1.beta1"; // Updated version
+        
         let terminalCommandHistory = [];
+        let terminalHistoryIndex = -1;
+        let currentTerminalPath = "~"; // For mock `cd` command
+        const mockFileSystem = { // Basic mock file system for `ls`, `cd`, `cat`, `tree`
+            "~": { type: "dir", content: ["Desktop", "Documents", "Downloads", "Music", "Pictures", "Videos", ".bashrc"] },
+            "~/Desktop": { type: "dir", content: ["screenshot.png", "notes.txt"] },
+            "~/Documents": { type: "dir", content: ["ProjectAlpha", "report.docx"] },
+            "~/Documents/ProjectAlpha": { type: "dir", content: ["README.md", "main.py"] },
+            "~/Downloads": { type: "dir", content: ["installer.exe", "archive.zip"] },
+            "~/Music": { type: "dir", content: ["song1.mp3", "album_art.jpg"] },
+            "~/Pictures": { type: "dir", content: ["vacation_2025", "profile.jpg"] },
+            "~/Pictures/vacation_2025": { type: "dir", content: ["img_001.jpg", "img_002.jpg"] },
+            "~/Videos": { type: "dir", content: ["tutorial.mp4"] },
+            "~/.bashrc": { type: "file", content: "# OSWeb Bash Config\n\nPS1='\\u@\\h:\\w\\$ '\n\nalias ll='ls -laH'" },
+            "~/Desktop/notes.txt": { type: "file", content: "Quick notes for OSWeb demo.\n- Add more features\n- Test thoroughly" },
+            "~/Documents/ProjectAlpha/README.md": { type: "file", content: "# Project Alpha\nThis is a mock project." }
+        };
 
 
         // --- App Initialization Functions ---
@@ -854,16 +900,23 @@
         function initTerminal(windowEl) {
             const inputEl = windowEl.querySelector('.terminal-input');
             const outputEl = windowEl.querySelector('.terminal-output');
-            outputEl.innerHTML += `<div>Welcome to OS Terminal. Type 'help' for commands. Prefix with 'explain ' to get command details.</div>`;
+            const promptSpan = windowEl.querySelector('.terminal-prompt-span');
+
+            currentTerminalPath = `~`; // Reset path for new terminal
+            if(promptSpan) promptSpan.textContent = `${currentUsername || 'user'}@osweb:${currentTerminalPath}$ `;
+            outputEl.innerHTML = `<div>Welcome to OSWeb Terminal. Type 'help' for commands.</div>`;
             
-            inputEl.addEventListener('keypress', async (e) => {
+            inputEl.addEventListener('keydown', async (e) => { // Changed to keydown for better history/tab control
                 if (e.key === 'Enter' && inputEl.value.trim() !== '') {
+                    e.preventDefault();
                     const fullCommand = inputEl.value.trim();
                     lastTerminalCommand = fullCommand; 
-                    if (terminalCommandHistory.length > 20) terminalCommandHistory.shift(); 
-                    terminalCommandHistory.push(fullCommand);
+                    if (fullCommand && (!terminalCommandHistory.length || terminalCommandHistory[terminalCommandHistory.length - 1] !== fullCommand)) {
+                        terminalCommandHistory.push(fullCommand);
+                    }
+                    terminalHistoryIndex = terminalCommandHistory.length; // Reset history index
                     inputEl.value = '';
-                    outputEl.innerHTML += `<div><span class="prompt">${currentUsername || 'user'}@osweb:~$ </span><span class="command">${fullCommand.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span></div>`;
+                    outputEl.innerHTML += `<div><span class="prompt">${currentUsername || 'user'}@osweb:${currentTerminalPath}$ </span><span class="command">${fullCommand.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span></div>`;
                     outputEl.scrollTop = outputEl.scrollHeight;
 
                     const parts = fullCommand.split(' ');
@@ -888,15 +941,49 @@
                             response = `<span class="explanation">${explanation.replace(/\n/g, "<br>")}</span>`;
                         } else { response = `<span class="error">Usage: man [command]</span>`; }
                     } else {
+                         // --- Enhanced Terminal Commands ---
                         switch (command) {
-                            case 'help': response = "Commands: ls, date, clear, exit, uname, whoami, pwd, neofetch, ping, echo, mkdir, touch, cat, rm, history, man, sudo, uptime, df, free, ip, reboot, shutdown. Use 'explain [cmd]' for details."; break;
-                            case 'ls': response = args.length > 0 ? `Desktop/ Documents/ Downloads/ (mock listing for ${args[0]})` : "Desktop/  Documents/  Downloads/  Music/  Pictures/  Videos/"; break;
-                            case 'date': response = new Date().toLocaleString(); break;
+                            case 'help': response = "Commands: ls, cd, pwd, cat, echo, clear, exit, date, uname, whoami, neofetch, history, man, uptime, df, free, ip, cal, time, mkdir, touch, rm, cp, mv, grep, find, users, groups, ps, kill, tree, less, sudo, reboot, shutdown. Use 'explain [cmd]' for details."; break;
+                            case 'ls': {
+                                const targetPath = args[0] ? resolvePath(args[0]) : currentTerminalPath;
+                                const item = mockFileSystem[targetPath];
+                                if (item && item.type === "dir") {
+                                    response = item.content.map(name => {
+                                        const fullItemPath = targetPath === "~" ? `~/${name}` : `${targetPath}/${name}`;
+                                        return mockFileSystem[fullItemPath]?.type === "dir" ? `<span style="color:var(--accent-color);">${name}/</span>` : name;
+                                    }).join('&nbsp;&nbsp;&nbsp;');
+                                } else if (item && item.type === "file") {
+                                    response = args[0]; // ls on a file just shows the file name
+                                } else { response = `<span class="error">ls: cannot access '${args[0] || '.'}': No such file or directory</span>`; }
+                                break;
+                            }
+                            case 'cd': {
+                                if (!args[0]) { currentTerminalPath = "~"; } 
+                                else {
+                                    const newPath = resolvePath(args[0]);
+                                    if (mockFileSystem[newPath] && mockFileSystem[newPath].type === "dir") {
+                                        currentTerminalPath = newPath;
+                                    } else { response = `<span class="error">cd: ${args[0]}: No such file or directory</span>`; }
+                                }
+                                if(promptSpan) promptSpan.textContent = `${currentUsername || 'user'}@osweb:${currentTerminalPath}$ `;
+                                break;
+                            }
+                            case 'pwd': response = currentTerminalPath.startsWith("~") ? `/home/${currentUsername || 'user'}${currentTerminalPath.substring(1)}` : currentTerminalPath; break;
+                            case 'cat': {
+                                if (!args[0]) { response = `<span class="error">cat: missing operand</span>`; break; }
+                                const filePath = resolvePath(args[0]);
+                                const file = mockFileSystem[filePath];
+                                if (file && file.type === "file") { response = file.content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>"); }
+                                else if (file && file.type === "dir") { response = `<span class="error">cat: ${args[0]}: Is a directory</span>`; }
+                                else { response = `<span class="error">cat: ${args[0]}: No such file or directory</span>`; }
+                                break;
+                            }
+                            case 'echo': response = args.join(' ').replace(/</g, "&lt;").replace(/>/g, "&gt;") || ''; break;
                             case 'clear': outputEl.innerHTML = ''; return;
                             case 'exit': closeWindow(windowEl.id); return;
+                            case 'date': response = new Date().toString(); break;
                             case 'uname': response = args[0] === '-a' ? `OSWeb Kernel v1.0 ${OS_VERSION} GNU/Linux (mock)` : `OSWeb (mock)`; break;
                             case 'whoami': response = currentUsername || 'user'; break;
-                            case 'pwd': response = `/home/${currentUsername || 'user'}`; break;
                             case 'neofetch':
                                 const uptimeText = systemUptimeEl ? systemUptimeEl.textContent : 'N/A';
                                 const cpuText = cpuMeter ? cpuMeter.textContent.split(': ')[1] : 'N/A';
@@ -915,18 +1002,32 @@
               <span class="neofetch-label">Theme</span>: ${currentThemeName}
 </div>`;
                                 break;
-                            case 'ping': response = args.length > 0 ? `PING ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")}: 64 bytes of data. (mock reply...)` : 'Usage: ping &lt;hostname&gt;'; break;
-                            case 'echo': response = args.join(' ').replace(/</g, "&lt;").replace(/>/g, "&gt;") || ''; break;
+                            case 'history': response = terminalCommandHistory.map((cmd, i) => `${i + 1}. ${cmd.replace(/</g, "&lt;").replace(/>/g, "&gt;")}`).join('<br>'); break;
+                            case 'uptime': response = systemUptimeEl ? ` ${systemUptimeEl.textContent},  1 user,  load average: 0.15, 0.20, 0.25 (mock)` : 'Uptime data not available.'; break;
+                            case 'df': response = args[0] === '-h' ? 'Filesystem &nbsp;&nbsp;Size &nbsp;Used Avail Use% Mounted on<br>/dev/osweb &nbsp;&nbsp;&nbsp;100G &nbsp;&nbsp;20G &nbsp;&nbsp;80G &nbsp;20% / (mock)' : 'Filesystem 1K-blocks Used Available Use% Mounted on<br>/dev/osweb 104857600 20971520 83886080 20% / (mock)'; break;
+                            case 'free': response = args[0] === '-m' ? ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;used &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shared &nbsp;buff/cache &nbsp;available<br>Mem: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7980 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1250 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5700 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;150 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1030 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6500 (mock MB)' : 'total used free ... (mock KB)'; break;
+                            case 'ip': response = (args[0] === 'addr' || args[0] === 'a') ? '1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000<br>&nbsp;&nbsp;&nbsp;&nbsp;link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00<br>&nbsp;&nbsp;&nbsp;&nbsp;inet 127.0.0.1/8 scope host lo<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valid_lft forever preferred_lft forever<br>2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000<br>&nbsp;&nbsp;&nbsp;&nbsp;link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff<br>&nbsp;&nbsp;&nbsp;&nbsp;inet 192.168.1.101/24 brd 192.168.1.255 scope global dynamic eth0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valid_lft 86300sec preferred_lft 86300sec (mock)' : 'Usage: ip addr (mock)'; break;
+                            case 'cal': { const d = new Date(); response = `&nbsp;&nbsp;&nbsp; ${d.toLocaleString('default', { month: 'long' })} ${d.getFullYear()}<br>Su Mo Tu We Th Fr Sa<br>${Array(new Date(d.getFullYear(), d.getMonth(), 1).getDay()).fill('&nbsp;&nbsp; ').join('')}${Array.from({length: new Date(d.getFullYear(), d.getMonth()+1,0).getDate()}, (_,i)=>String(i+1).padStart(2,' ')).join(' ').replace(new RegExp(`(${String(d.getDate()).padStart(2,' ')})`), `<span style="background:var(--text-secondary);color:var(--surface-bg);border-radius:2px;">$1</span>`).replace(/(.{20})/g, '$1<br>')}`; break; } // Basic calendar
+                            case 'time': response = `Real time: 0m${(Math.random()*10).toFixed(3)}s<br>User time: 0m${(Math.random()*2).toFixed(3)}s<br>Sys time: 0m${(Math.random()*1).toFixed(3)}s (mock)`; break;
                             case 'mkdir': response = args.length > 0 ? `Created directory: ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")}` : 'Usage: mkdir &lt;dirname&gt;'; break;
                             case 'touch': response = args.length > 0 ? `Created file: ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")}` : 'Usage: touch &lt;filename&gt;'; break;
-                            case 'cat': response = args.length > 0 ? `Contents of ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")}: This is a mock file.` : 'Usage: cat &lt;filename&gt;'; break;
                             case 'rm': response = args.length > 0 ? `Removed ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")} (mock)` : 'Usage: rm &lt;filename&gt;'; break;
-                            case 'history': response = terminalCommandHistory.map((cmd, i) => `${i + 1}. ${cmd.replace(/</g, "&lt;").replace(/>/g, "&gt;")}`).join('<br>'); break;
+                            case 'cp': response = args.length > 1 ? `Copied ${args[0]} to ${args[1]} (mock)` : 'Usage: cp &lt;source&gt; &lt;destination&gt;'; break;
+                            case 'mv': response = args.length > 1 ? `Moved ${args[0]} to ${args[1]} (mock)` : 'Usage: mv &lt;source&gt; &lt;destination&gt;'; break;
+                            case 'grep': response = args.length > 1 ? `(mock grep results for "${args[0]}" in ${args[1]})` : 'Usage: grep &lt;pattern&gt; &lt;file&gt;'; break;
+                            case 'find': response = args.length > 0 ? `(mock find results for ${args.join(' ')})` : 'Usage: find &lt;path&gt; -name &lt;pattern&gt;'; break;
+                            case 'users': response = `${currentUsername || 'user'}`; break;
+                            case 'groups': response = `${currentUsername || 'user'} adm cdrom sudo dip plugdev lpadmin (mock)`; break;
+                            case 'ps': response = args[0] === 'aux' ? `USER &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PID %CPU %MEM &nbsp;&nbsp;VSZ &nbsp;RSS TTY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STAT START &nbsp;TIME COMMAND<br>root &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;0.0 &nbsp;0.1 &nbsp;1600 &nbsp;800 ? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ss &nbsp;&nbsp;10:00 &nbsp;0:00 /sbin/init<br>${currentUsername || 'user'} &nbsp;1234 &nbsp;0.5 &nbsp;1.2 32000 9600 pts/0 &nbsp;&nbsp;S+ &nbsp;&nbsp;10:05 &nbsp;0:02 bash (mock)` : 'PID TTY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIME CMD<br>1234 pts/0 &nbsp;&nbsp;&nbsp;&nbsp;00:00:02 bash (mock)'; break;
+                            case 'kill': response = args.length > 0 ? `Sent signal to process ${args[0]} (mock)` : 'Usage: kill &lt;pid&gt;'; break;
+                            case 'tree': {
+                                const targetPath = args[0] ? resolvePath(args[0]) : currentTerminalPath;
+                                response = generateTree(targetPath, 0);
+                                if (!response) response = `<span class="error">tree: '${args[0] || '.'}' not found or not a directory.</span>`;
+                                break;
+                            }
+                            case 'less': response = args.length > 0 ? `Opening ${args[0]} in less (mock)... Press 'q' to quit.` : 'Usage: less <file>'; break;
                             case 'sudo': response = `<span class="error">Error: '${currentUsername || 'user'}' is not in the sudoers file. This incident will be reported. (Just kidding!)</span>`; break;
-                            case 'uptime': response = systemUptimeEl ? systemUptimeEl.textContent : 'Uptime data not available.'; break;
-                            case 'df': response = args[0] === '-h' ? 'Filesystem Size Used Avail Use% Mounted on<br>/dev/sda1  100G  20G   80G  20% / (mock)' : 'Filesystem 1K-blocks Used Available Use% Mounted on<br>/dev/sda1 104857600 20971520 83886080 20% / (mock)'; break;
-                            case 'free': response = args[0] === '-m' ? '              total        used        free      shared  buff/cache   available<br>Mem:           7980        1250        5700         150        1030        6500 (mock MB)' : 'total used free ... (mock KB)'; break;
-                            case 'ip': response = args[0] === 'addr' ? '1: lo: &lt;LOOPBACK,UP&gt; mtu 65536<br>    inet 127.0.0.1/8 scope host lo<br>2: eth0: &lt;BROADCAST,MULTICAST,UP&gt; mtu 1500<br>    inet 192.168.1.10/24 brd 192.168.1.255 scope global eth0 (mock)' : 'Usage: ip addr (mock)'; break;
                             case 'reboot': response = 'System is going down for reboot NOW! (mock - closing terminal)'; setTimeout(() => closeWindow(windowEl.id), 1000); break;
                             case 'shutdown': response = 'System is halting. (mock - closing terminal)'; setTimeout(() => closeWindow(windowEl.id), 1000); break;
                             default: response = `<span class="error">Command not found: ${command.replace(/</g, "&lt;").replace(/>/g, "&gt;")}. Type 'help'.</span>`;
@@ -934,9 +1035,99 @@
                     }
                     outputEl.innerHTML += `<div><span class="response">${response}</span></div>`;
                     outputEl.scrollTop = outputEl.scrollHeight;
+                } else if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    if (terminalCommandHistory.length > 0) {
+                        terminalHistoryIndex = Math.max(0, terminalHistoryIndex - 1);
+                        inputEl.value = terminalCommandHistory[terminalHistoryIndex] || "";
+                        inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length); // Move cursor to end
+                    }
+                } else if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    if (terminalHistoryIndex < terminalCommandHistory.length -1) {
+                        terminalHistoryIndex++;
+                        inputEl.value = terminalCommandHistory[terminalHistoryIndex] || "";
+                    } else {
+                        terminalHistoryIndex = terminalCommandHistory.length;
+                        inputEl.value = "";
+                    }
+                    inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+                } else if (e.key === "Tab") {
+                    e.preventDefault();
+                    const currentInput = inputEl.value;
+                    const lastWord = currentInput.split(" ").pop();
+                    if (!lastWord) return;
+
+                    const isCommandStart = currentInput.split(" ").length === 1 && !currentInput.includes(" ");
+                    
+                    let suggestions = [];
+                    if (isCommandStart) { // Suggest commands
+                        suggestions = Object.keys(appConfig) // Suggest apps first
+                            .filter(appId => appId.startsWith(lastWord))
+                            .map(appId => appId) // Use appId as command
+                            .concat(
+                                ["ls", "cd", "pwd", "cat", "echo", "clear", "exit", "date", "uname", "whoami", "neofetch", "history", "man", "uptime", "df", "free", "ip", "cal", "time", "mkdir", "touch", "rm", "cp", "mv", "grep", "find", "users", "groups", "ps", "kill", "tree", "less", "sudo", "reboot", "shutdown", "explain"]
+                                .filter(cmd => cmd.startsWith(lastWord))
+                            );
+                    } else { // Suggest file/dir paths
+                        const currentDirItems = mockFileSystem[currentTerminalPath]?.content || [];
+                        suggestions = currentDirItems.filter(item => item.toLowerCase().startsWith(lastWord.toLowerCase()));
+                    }
+
+                    if (suggestions.length === 1) {
+                        const parts = currentInput.split(" ");
+                        parts.pop(); 
+                        parts.push(suggestions[0] + (mockFileSystem[resolvePath(suggestions[0])]?.type === "dir" && !isCommandStart ? "/" : " "));
+                        inputEl.value = parts.join(" ");
+                    } else if (suggestions.length > 1) {
+                        outputEl.innerHTML += `<div><span class="prompt">${currentUsername || 'user'}@osweb:${currentTerminalPath}$ </span><span class="command">${currentInput}</span></div>`;
+                        outputEl.innerHTML += `<div><span class="response">${suggestions.join("  ")}</span></div>`;
+                        outputEl.scrollTop = outputEl.scrollHeight;
+                    }
                 }
             });
+            inputEl.focus();
         }
+        function resolvePath(path) { // Helper for cd and ls
+            if (path === "~" || path.startsWith("~/")) return path; // Absolute from home
+            if (path.startsWith("/")) return path; // Absolute from root (not really supported, treat as relative to ~)
+            
+            let parts = currentTerminalPath.split("/").filter(p => p);
+            if (currentTerminalPath === "~") parts = ["~"];
+
+            const pathParts = path.split("/").filter(p => p);
+            for (const part of pathParts) {
+                if (part === ".") continue;
+                if (part === "..") {
+                    if (parts.length > 1 && parts[parts.length -1] !== "~") parts.pop();
+                    else if (parts.length === 1 && parts[0] !== "~") parts.pop(); // Handle if at root-like level
+                } else {
+                    parts.push(part);
+                }
+            }
+            if (parts.length === 1 && parts[0] === "~") return "~";
+            if (parts[0] === "~") return parts.join("/");
+            return "~/" + parts.join("/"); // Default to home relative if path becomes odd
+        }
+        function generateTree(path, depth, prefix = "") {
+            const item = mockFileSystem[path];
+            if (!item || item.type !== "dir" || depth > 3) return ""; // Limit depth for sanity
+            let output = "";
+            const entries = item.content;
+            entries.forEach((entry, index) => {
+                const entryPath = path === "~" ? `~/${entry}` : `${path}/${entry}`;
+                const entryItem = mockFileSystem[entryPath];
+                const isLast = index === entries.length - 1;
+                const connector = isLast ? "└── " : "├── ";
+                const entryName = entryItem?.type === "dir" ? `<span style="color:var(--accent-color);">${entry}/</span>` : entry;
+                output += `<div class="tree-item ${isLast ? 'last' : ''}">${prefix}${connector}${entryName}</div>`;
+                if (entryItem && entryItem.type === "dir") {
+                    output += generateTree(entryPath, depth + 1, prefix + (isLast ? "    " : "│   "));
+                }
+            });
+            return output;
+        }
+
         function initAIAssistant(windowEl) {
             const inputEl = windowEl.querySelector('#ai-command-input');
             const chatLogEl = windowEl.querySelector('#ai-chat-log');
@@ -1087,6 +1278,103 @@
                 memBar.textContent = `${memUsed}/${memTotal} GB`;
             }
         }
+        function initSettingsApp(windowEl) {
+            const sidebarItems = windowEl.querySelectorAll('.settings-sidebar-item');
+            const contentPanes = windowEl.querySelectorAll('.settings-content-pane > div');
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    const targetPaneId = item.dataset.pane;
+                    contentPanes.forEach(pane => {
+                        pane.classList.toggle('hidden', pane.id !== targetPaneId);
+                    });
+                });
+            });
+            // Activate the first pane by default
+            if (sidebarItems.length > 0) sidebarItems[0].click();
+
+            // Example: Theme changer in appearance
+            const themeSelector = windowEl.querySelector('#settings-theme-selector');
+            if (themeSelector) {
+                themes.forEach((themeSlug, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = themeSlug.replace('-theme','').replace('-mode','').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                    if (themeSlug === 'default-dark') option.textContent = "Default Dark";
+                    themeSelector.appendChild(option);
+                });
+                themeSelector.value = currentThemeIndex;
+                themeSelector.onchange = (e) => {
+                    const newIndex = parseInt(e.target.value);
+                    if (newIndex !== currentThemeIndex) {
+                        // Simulate theme toggle button click logic
+                        currentThemeIndex = newIndex;
+                        document.body.className = ''; // Clear all body classes first
+                        const newThemeSlug = themes[currentThemeIndex];
+                         let themeUserFriendlyName = "";
+                        if (newThemeSlug !== 'default-dark') document.body.classList.add(newThemeSlug);
+                        
+                        if (newThemeSlug === 'light-mode') themeUserFriendlyName = "Light";
+                        else if (newThemeSlug === 'indigo-magic-theme') themeUserFriendlyName = "Indigo Magic";
+                        else if (newThemeSlug === 'crimson-peak-theme') themeUserFriendlyName = "Crimson Peak";
+                        else themeUserFriendlyName = "Default Dark";
+
+                        const themeIcon = themeToggleButton.querySelector('i');
+                        if (newThemeSlug === 'light-mode') { themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun');} 
+                        else { themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon'); }
+                        
+                        const nextThemeIdx = (currentThemeIndex + 1) % themes.length;
+                        let nextThemeName = themes[nextThemeIdx].replace('-theme','').replace('-mode','').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                        if (themes[nextThemeIdx] === 'default-dark') nextThemeName = "Default Dark";
+                        themeToggleButton.title = `Switch to ${nextThemeName} Theme`;
+
+                        showTemporaryMessage(`Theme changed to ${themeUserFriendlyName} via Settings.`, 1500);
+                        updateUserAvatar(); applyDockTransparency(); applyWindowTransparency();
+                    }
+                };
+            }
+        }
+        function initCalendarApp(windowEl) {
+            const calMonthYearEl = windowEl.querySelector('.calendar-app-month-year');
+            const calDaysGridEl = windowEl.querySelector('.calendar-app-days-grid');
+            let calAppDate = new Date(); // Use current date for this app
+
+            function renderCalApp() {
+                if (!calMonthYearEl || !calDaysGridEl) return;
+                calMonthYearEl.textContent = calAppDate.toLocaleDateString([], { month: 'long', year: 'numeric' });
+                calDaysGridEl.innerHTML = ''; 
+                const month = calAppDate.getMonth(); const year = calAppDate.getFullYear();
+                const firstDayOfMonth = new Date(year, month, 1).getDay(); 
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(d => { 
+                    const dayLabel = document.createElement('div'); 
+                    dayLabel.className = 'text-center font-medium text-xs text-[var(--text-secondary)] py-1'; 
+                    dayLabel.textContent = d; 
+                    calDaysGridEl.appendChild(dayLabel); 
+                });
+
+                for (let i = 0; i < firstDayOfMonth; i++) calDaysGridEl.appendChild(document.createElement('div')); // Empty cells
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayCell = document.createElement('div');
+                    dayCell.className = 'border border-[var(--border-color)] p-1.5 text-xs hover:bg-[var(--surface-overlay-bg)] cursor-pointer min-h-[70px]';
+                    dayCell.textContent = day;
+                    const today = new Date();
+                    if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                        dayCell.classList.add('!bg-[var(--accent-color)]', '!text-[var(--primary-bg)]', 'font-bold');
+                    }
+                    dayCell.onclick = () => showTemporaryMessage(`Calendar App: Selected ${month+1}/${day}/${year}`,1500);
+                    calDaysGridEl.appendChild(dayCell);
+                }
+            }
+            windowEl.querySelector('.calendar-app-prev').onclick = () => { calAppDate.setMonth(calAppDate.getMonth() - 1); renderCalApp(); };
+            windowEl.querySelector('.calendar-app-next').onclick = () => { calAppDate.setMonth(calAppDate.getMonth() + 1); renderCalApp(); };
+            windowEl.querySelector('.calendar-app-today').onclick = () => { calAppDate = new Date(); renderCalApp(); };
+            renderCalApp();
+        }
 
 
         // --- App Configuration (with menuBar & contextMenuItems) ---
@@ -1097,10 +1385,14 @@
                 allowMultiple: false, 
                 initialWidth: 500, initialHeight: 400,
                 initFunction: initAppLauncher,
-                isPinnedToDock: false 
+                isPinnedToDock: false, // Not typically pinned, opened via desktop icon
+                menuBar: [
+                    { label: "File", items: [{ label: "Close Launcher", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : null }] },
+                    { label: "View", items: [{ label: "Refresh Apps (mock)", icon: "fa-sync", action: () => showTemporaryMessage("App list refreshed (mock)", 1500) }] }
+                ]
             },
             "file-explorer": { 
-                name: "Files", icon: "fas fa-folder", 
+                name: "Files", icon: "fas fa-folder-open", // Changed icon
                 content: `<div class="p-4 text-sm"><p class="mb-3 text-[var(--text-secondary)]">My Storage</p><div class="grid grid-cols-2 sm:grid-cols-3 gap-3"> <div class="bg-[var(--surface-overlay-bg)] p-4 rounded-lg text-center hover:bg-[var(--surface-active-bg)] cursor-pointer transition-all" onclick="showTemporaryMessage('Opening Documents folder...',1500)"><i class="fas fa-file-alt text-3xl mb-2 text-[var(--accent-color)]"></i> Documents</div> <div class="bg-[var(--surface-overlay-bg)] p-4 rounded-lg text-center hover:bg-[var(--surface-active-bg)] cursor-pointer transition-all" onclick="showTemporaryMessage('Opening Pictures folder...',1500)"><i class="fas fa-images text-3xl mb-2 text-[var(--secondary-accent)]"></i> Pictures</div> <div class="bg-[var(--surface-overlay-bg)] p-4 rounded-lg text-center hover:bg-[var(--surface-active-bg)] cursor-pointer transition-all" onclick="showTemporaryMessage('Opening Downloads folder...',1500)"><i class="fas fa-download text-3xl mb-2 text-orange-400"></i> Downloads</div></div></div>`, 
                 allowMultiple: true, 
                 isPinnedToDock: true,
@@ -1125,7 +1417,7 @@
             },
             "terminal": { 
                 name: "Terminal", icon: "fas fa-terminal", 
-                content: `<div class="terminal-content p-1 flex-grow flex flex-col h-full"><div class="terminal-output flex-grow overflow-y-auto p-2 text-xs leading-normal"></div><div class="flex items-center p-1 border-t border-[var(--border-color)]"><span class="text-[var(--secondary-accent)] font-mono mr-1">user@osweb:~$</span><input type="text" class="terminal-input flex-grow bg-transparent outline-none text-[var(--text-primary)] text-xs"></div></div>`, 
+                content: `<div class="terminal-content p-1 flex-grow flex flex-col h-full"><div class="terminal-output flex-grow overflow-y-auto p-2 text-xs leading-normal"></div><div class="flex items-center p-1 border-t border-[var(--border-color)]"><span class="terminal-prompt-span text-[var(--secondary-accent)] font-mono mr-1">user@osweb:~$</span><input type="text" class="terminal-input flex-grow bg-transparent outline-none text-[var(--text-primary)] text-xs"></div></div>`, 
                 allowMultiple: true, 
                 isPinnedToDock: true,
                 initFunction: initTerminal,
@@ -1141,7 +1433,7 @@
                         { label: "Copy", icon: "fa-copy", action: (winEl) => mockTerminalAction("Copy", winEl) },
                         { label: "Paste", icon: "fa-paste", action: (winEl) => mockTerminalAction("Paste", winEl) },
                     ]},
-                    { label: "Help", items: [{ label: "About Terminal", action: () => showTemporaryMessage("OSWeb Terminal v1.0", 1500) }] }
+                    { label: "Help", items: [{ label: "About Terminal", action: () => showTemporaryMessage("OSWeb Terminal v1.1", 1500) }] }
                 ],
                 contextMenuItems: [{label:"Copy", icon:"fa-copy", action:(winEl)=>mockTerminalAction("Copy", winEl)}, {label:"Paste", icon:"fa-paste", action:(winEl)=>mockTerminalAction("Paste", winEl)}, {label:"Clear", icon:"fa-eraser", action:(winEl)=>mockTerminalAction("Clear", winEl)}, {isDivider: true}, {label:"✨ Explain Last Cmd", icon:"fa-question-circle", action:(winEl)=>handleTerminalExplain(winEl)}] 
             },
@@ -1177,34 +1469,6 @@
                 ],
                 contextMenuItems: [{label:"New Tab (mock)", icon:"fa-plus-square", action:()=>showTemporaryMessage("New Tab (mock)",1500)}, {label:"Reload Page", icon:"fa-sync", action:(winEl) => { showTemporaryMessage("Reload only affects internal placeholder.", 2000); const frame = winEl ? winEl.querySelector('#browser-content-frame') : null; if (frame && frame.src !== 'about:blank' && frame.src.startsWith('data:text/html')) try { frame.src = frame.src; } catch(e){ console.error("Reload error:", e); }} }, {label:"Add Bookmark", icon:"fa-bookmark", action:()=>showTemporaryMessage("Bookmark Added (mock)",1500)}] 
             },
-            "text-editor": { 
-                name: "Text Editor", icon: "fas fa-file-code", 
-                content: `<div class="code-editor-content h-full"><textarea class="w-full h-full p-4 text-sm border-0 outline-none resize-none" spellcheck="false">// Welcome to Text Editor\n\n</textarea></div>`, 
-                allowMultiple: true, 
-                isPinnedToDock: true,
-                menuBar: [
-                    { label: "File", items: [
-                        { label: "New File", icon: "fa-file", action: () => createWindow('text-editor') },
-                        { label: "Open...", icon: "fa-folder-open", action: () => showTemporaryMessage("Open File (mock)", 1500) },
-                        { label: "Save", icon: "fa-save", action: (winEl) => showTemporaryMessage("File Saved (mock)",1500) },
-                        { label: "Save As...", icon: "fa-save", action: () => showTemporaryMessage("Save As (mock)", 1500) },
-                        { isDivider: true },
-                        { label: "Close Window", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : (activeWindowId ? closeWindow(activeWindowId) : null) }
-                    ]},
-                    { label: "Edit", items: [
-                        { label: "Cut", icon: "fa-cut", action: (winEl) => mockTextAction("Cut", winEl) },
-                        { label: "Copy", icon: "fa-copy", action: (winEl) => mockTextAction("Copy", winEl) },
-                        { label: "Paste", icon: "fa-paste", action: (winEl) => mockTextAction("Paste", winEl) },
-                        { isDivider: true },
-                        { label: "Find/Replace", icon: "fa-search", action: (winEl) => showTemporaryMessage("Find/Replace (mock)",1500) },
-                    ]},
-                     { label: "Format", items: [
-                        { label: "Toggle Word Wrap", icon: "fa-exchange-alt", action: () => showTemporaryMessage("Word Wrap Toggled (mock)", 1500) },
-                    ]},
-                    { label: "Help", items: [{ label: "About Text Editor", action: () => showTemporaryMessage("OSWeb Text Editor v1.0", 1500) }] }
-                ],
-                contextMenuItems: [{label:"Save File", icon:"fa-save", action:()=>showTemporaryMessage("File Saved (mock)",1500)}, {label:"Find/Replace", icon:"fa-search", action:()=>showTemporaryMessage("Find/Replace (mock)",1500)}, {isDivider: true}, {label:"Cut", icon:"fa-cut", action:(winEl)=>mockTextAction("Cut", winEl)}, {label:"Copy", icon:"fa-copy", action:(winEl)=>mockTextAction("Copy", winEl)}, {label:"Paste", icon:"fa-paste", action:(winEl)=>mockTextAction("Paste", winEl)}] 
-            },
             "notepad": { 
                 name: "Notes", icon: "fas fa-sticky-note", 
                 content: `<div class="notepad-content flex-grow flex flex-col h-full"><textarea class="w-full flex-grow p-4 text-sm border-0 outline-none resize-none" placeholder="Start typing your note..."></textarea><div class="notepad-toolbar flex items-center justify-end space-x-2 p-2"><button class="notepad-action-button" id="summarize-note-btn">✨ Summarize</button><button class="notepad-action-button" id="suggest-title-btn">✨ Suggest Title</button></div></div>`, 
@@ -1229,30 +1493,78 @@
             "calculator": { 
                 name: "Calculator", icon: "fas fa-calculator", 
                 content: `<div class="p-4 flex flex-col h-full"><div id="calc-output" class="calc-display">0</div><div class="calculator-grid flex-grow"> <button class="calc-button" data-value="7">7</button> <button class="calc-button" data-value="8">8</button> <button class="calc-button" data-value="9">9</button> <button class="calc-button operator" data-op="/">÷</button> <button class="calc-button" data-value="4">4</button> <button class="calc-button" data-value="5">5</button> <button class="calc-button" data-value="6">6</button> <button class="calc-button operator" data-op="*">×</button> <button class="calc-button" data-value="1">1</button> <button class="calc-button" data-value="2">2</button> <button class="calc-button" data-value="3">3</button> <button class="calc-button operator" data-op="-">-</button> <button class="calc-button" data-value="0">0</button> <button class="calc-button" data-value=".">.</button> <button class="calc-button operator" data-op="C">C</button> <button class="calc-button operator" data-op="+">+</button> <button class="calc-button equals col-span-4" data-op="=">=</button> </div></div>`, 
-                allowMultiple: true, 
+                allowMultiple: false, // Typically only one calculator instance
                 isPinnedToDock: false, 
                 initFunction: initCalculator,
+                menuBar: [
+                    { label: "View", items: [{ label: "Standard", icon: "fa-calculator", action: () => showTemporaryMessage("Standard mode (already active)", 1000)}, { label: "Scientific (mock)", icon: "fa-flask", action: () => showTemporaryMessage("Scientific mode (mock)", 1500)}] },
+                    { label: "Edit", items: [{ label: "Copy", icon: "fa-copy", action: (winEl) => { const res = winEl.querySelector('#calc-output').textContent; try { navigator.clipboard.writeText(res).then(() => showTemporaryMessage(`Copied: ${res}`, 1500)).catch(() => { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); }); } catch (err) { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); } }}]},
+                    { label: "Help", items: [{ label: "About Calculator", action: () => showTemporaryMessage("OSWeb Calculator v1.0", 1500) }] }
+                ],
                 contextMenuItems:[{label: "Copy Result", icon:"fa-copy", action:(winEl)=>{ const res = winEl.querySelector('#calc-output').textContent; try { navigator.clipboard.writeText(res).then(() => showTemporaryMessage(`Copied: ${res}`, 1500)).catch(() => { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); }); } catch (err) { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); } }}]
             },
-            "settings": { 
+            "settings": { // Enhanced Settings App
                 name: "Settings", icon: "fas fa-cog", 
-                content: `<div class="p-4 text-sm"><h2 class="text-lg font-medium text-[var(--text-primary)] mb-4">System Settings</h2><div class="space-y-2"> <button class="w-full text-left p-3 bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] rounded-md transition-all" onclick="showTemporaryMessage('Opening Network & Internet settings...',1500)">Network & Internet</button> <button class="w-full text-left p-3 bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] rounded-md transition-all" onclick="showTemporaryMessage('Opening Display settings...',1500)">Display</button> <button class="w-full text-left p-3 bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] rounded-md transition-all" onclick="showTemporaryMessage('Opening Apps settings...',1500)">Apps</button></div></div>`, 
-                allowMultiple: true, 
+                content: `<div class="settings-grid h-full">
+                            <div class="settings-sidebar">
+                                <div class="settings-sidebar-item active" data-pane="settings-appearance"><i class="fas fa-palette fa-fw mr-2"></i>Appearance</div>
+                                <div class="settings-sidebar-item" data-pane="settings-network"><i class="fas fa-wifi fa-fw mr-2"></i>Network</div>
+                                <div class="settings-sidebar-item" data-pane="settings-system"><i class="fas fa-cogs fa-fw mr-2"></i>System</div>
+                                <div class="settings-sidebar-item" data-pane="settings-apps"><i class="fas fa-th-large fa-fw mr-2"></i>Applications</div>
+                            </div>
+                            <div class="settings-content-pane">
+                                <div id="settings-appearance">
+                                    <h3>Appearance</h3>
+                                    <div class="settings-item">
+                                        <label for="settings-theme-selector">Theme</label>
+                                        <select id="settings-theme-selector"></select>
+                                    </div>
+                                    <div class="settings-item">
+                                        <label for="settings-wallpaper-changer">Wallpaper (Cycles next)</label>
+                                        <button class="action-button" id="settings-wallpaper-changer" onclick="changeWallpaperContext(false); showTemporaryMessage('Wallpaper Changed',1000);">Change Wallpaper</button>
+                                    </div>
+                                     <div class="settings-item">
+                                        <label for="settings-dock-transparency">Dock Transparency: <span id="settings-dock-label"></span></label>
+                                        <input type="range" id="settings-dock-transparency" min="0" max="3" value="${currentDockTransparencyIndex}" oninput="currentDockTransparencyIndex = this.value; applyDockTransparency(); document.getElementById('settings-dock-label').textContent = dockTransparencyLevels[this.value].label;">
+                                    </div>
+                                     <div class="settings-item">
+                                        <label for="settings-window-transparency">Window Transparency: <span id="settings-window-label"></span></label>
+                                        <input type="range" id="settings-window-transparency" min="0" max="4" value="${currentWindowTransparencyIndex}" oninput="currentWindowTransparencyIndex = this.value; applyWindowTransparency(); document.getElementById('settings-window-label').textContent = windowTransparencyLevels[this.value].label;">
+                                    </div>
+                                </div>
+                                <div id="settings-network" class="hidden">
+                                    <h3>Network & Internet</h3>
+                                    <p class="text-sm text-[var(--text-secondary)]">Mock network settings. Wi-Fi: Connected (Strong Signal). Ethernet: Not Connected.</p>
+                                </div>
+                                <div id="settings-system" class="hidden">
+                                    <h3>System Information</h3>
+                                    <p class="text-sm text-[var(--text-secondary)]">OS Version: ${OS_VERSION}<br>User: ${currentUsername || 'user'}<br>Mock Hardware Info: CPU X-Core, 8GB RAM</p>
+                                </div>
+                                <div id="settings-apps" class="hidden">
+                                    <h3>Applications</h3>
+                                    <p class="text-sm text-[var(--text-secondary)]">Manage installed applications (mock).</p>
+                                </div>
+                            </div>
+                         </div>`, 
+                allowMultiple: false, 
                 isPinnedToDock: true,
-                contextMenuItems:[
-                    {label: "Personalization", icon: "fa-palette", action:() => showTemporaryMessage("Opening Personalization (mock)...", 1500)},
-                    {label: "Network Settings", icon: "fa-wifi", action:() => showTemporaryMessage("Opening Network settings (mock)...", 1500)},
-                    {label: "Check for Updates", icon: "fa-sync-alt", action:() => showTemporaryMessage("Checking for updates (mock)...", 1500)},
-                    {isDivider: true},
-                    {label: "Reset All Settings", icon:"fa-undo", action:()=>showTemporaryMessage("Resetting all settings (mock)", 2000)}
+                initialWidth: 700, initialHeight: 500,
+                initFunction: initSettingsApp,
+                menuBar: [
+                    { label: "File", items: [{ label: "Close Settings", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : null }] },
+                    { label: "Help", items: [{ label: "About Settings", action: () => showTemporaryMessage("OSWeb Settings v1.1", 1500) }] }
                 ]
             },
             "ai-assistant": { 
                 name: "Assistant", icon: "fas fa-robot", 
                 content: `<div class="p-4 flex flex-col h-full"><div class="flex-grow bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] rounded-md p-2 overflow-y-auto text-xs mb-2" id="ai-chat-log"></div><input type="text" id="ai-command-input" placeholder="Ask Assistant..." class="p-2.5 rounded-md bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] outline-none focus:border-[var(--accent-color)] focus:ring-1 focus:ring-[var(--accent-color)] text-sm"></div>`, 
-                allowMultiple: true, 
+                allowMultiple: false, 
                 isPinnedToDock: false,
                 initFunction: initAIAssistant,
+                menuBar: [
+                    { label: "Chat", items: [{ label: "Clear History", icon: "fa-trash-alt", action: (winEl) => { winEl.querySelector('#ai-chat-log').innerHTML = ''; showTemporaryMessage("Chat history cleared.",1500); }}]},
+                    { label: "Help", items: [{ label: "About Assistant", action: () => showTemporaryMessage("OSWeb AI Assistant v1.0", 1500) }] }
+                ],
                 contextMenuItems:[{label: "Clear Chat History", icon:"fa-trash-alt", action:(winEl)=>{ winEl.querySelector('#ai-chat-log').innerHTML = ''; showTemporaryMessage("Chat history cleared.",1500);}}, {label:"Copy Last Response", icon:"fa-copy", action:(winEl)=> { const logs = winEl.querySelectorAll('#ai-chat-log > div > span'); if(logs.length > 0){ const lastResponse = logs[logs.length-1].textContent; try { navigator.clipboard.writeText(lastResponse).then(() => showTemporaryMessage("Copied last response.",1500)).catch(() => { const textArea = document.createElement("textarea"); textArea.value = lastResponse; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage("Copied last response (fallback).",1500); }); } catch (err) { const textArea = document.createElement("textarea"); textArea.value = lastResponse; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage("Copied last response (fallback).",1500); }} else {showTemporaryMessage("No response to copy.",1500);}}}]
             },
             "mail-client": { 
@@ -1261,6 +1573,11 @@
                 allowMultiple: false, 
                 isPinnedToDock: true,
                 initFunction: initMailClient,
+                menuBar: [
+                    { label: "File", items: [{ label: "Compose New Mail", icon: "fa-pen-nib", action: () => showTemporaryMessage("Opening compose window (mock)...", 1500)}, {isDivider: true}, { label: "Close", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : null }] },
+                    { label: "Edit", items: [{ label: "Preferences (mock)", icon: "fa-sliders-h", action: () => showTemporaryMessage("Mail Preferences (mock)", 1500)}] },
+                    { label: "View", items: [{ label: "Refresh Mailbox", icon: "fa-sync", action: () => showTemporaryMessage("Checking for new mail (mock)...",1500)}] }
+                ],
                 contextMenuItems:[{label:"Compose New Mail", icon:"fa-pen-nib", action:()=>showTemporaryMessage("Opening compose window (mock)...", 1500)}, {label:"Refresh Mailbox", icon:"fa-sync", action:()=>showTemporaryMessage("Checking for new mail (mock)...",1500)}, {label:"Archive Selected", icon:"fa-archive", action:()=>showTemporaryMessage("Archived (mock).",1500)}]
             },
             "music-player": { 
@@ -1268,6 +1585,10 @@
                 content: `<div class="music-player-content"><div class="music-track-info"><img src="https://placehold.co/128x128/2A2A2A/82AAFF?text=AlbumArt&font=roboto" alt="Album Art"><h3 class="text-lg font-medium" id="music-track-title">Future Beats</h3><p class="text-sm text-[var(--text-secondary)]" id="music-track-artist">Synthwave Artist</p></div><div class="music-controls"><button class="top-panel-item p-3 rounded-full text-xl"><i class="fas fa-step-backward"></i></button><button class="top-panel-item p-4 rounded-full text-2xl bg-[var(--accent-color)] !text-[var(--primary-bg)]"><i class="fas fa-play"></i></button><button class="top-panel-item p-3 rounded-full text-xl"><i class="fas fa-step-forward"></i></button></div><div class="music-playlist"><div class="music-playlist-item">Track 1 - Electro Funk</div><div class="music-playlist-item">Track 2 - Neon Drive</div><div class="music-playlist-item">Track 3 - Midnight Run</div></div></div>`, 
                 allowMultiple: false, 
                 isPinnedToDock: true,
+                menuBar: [
+                    { label: "Playback", items: [{ label: "Play/Pause", icon: "fa-play-circle", action: () => showTemporaryMessage("Toggled Play/Pause (mock)",1000)}, { label: "Next Track", icon: "fa-step-forward", action: () => showTemporaryMessage("Next Track (mock)",1000)}, { label: "Previous Track", icon: "fa-step-backward", action: () => showTemporaryMessage("Previous Track (mock)",1000)} ]},
+                    { label: "File", items: [{ label: "Add Music (mock)", icon: "fa-plus", action: () => showTemporaryMessage("Add music (mock)",1500)}]}
+                ],
                 contextMenuItems:[{label:"Play/Pause", icon:"fa-play-circle", action:()=>showTemporaryMessage("Toggled Play/Pause (mock)",1000)}, {label:"Next Track", icon:"fa-step-forward", action:()=>showTemporaryMessage("Next Track (mock)",1000)},{label:"Add to Queue", icon:"fa-plus", action:()=>showTemporaryMessage("Added to queue (mock)",1000)}]
             },
             "image-viewer": {
@@ -1299,6 +1620,85 @@
                 initFunction: initSystemMonitor,
                 menuBar: [ { label: "File", items: [ { label: "Refresh Data", icon: "fa-sync-alt", action: (winEl) => { if(winEl && typeof initSystemMonitor === 'function') initSystemMonitor(winEl, true); showTemporaryMessage("Refreshing monitor data (mock)...", 1000); } }, { isDivider: true }, { label: "Close", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : (activeWindowId ? closeWindow(activeWindowId) : null) } ]}, { label: "View", items: [{ label: "Processes (mock)", icon: "fa-list-ul", action: () => showTemporaryMessage("Viewing processes (mock)", 1500) }] } ],
                 contextMenuItems: [ {label: "Refresh Data", icon:"fa-sync-alt", action:(winEl) => { if(winEl && typeof initSystemMonitor === 'function') initSystemMonitor(winEl, true); showTemporaryMessage("Refreshing monitor data (mock)...", 1000); }}, {label: "View Processes (mock)", icon:"fa-list-ul", action:()=>showTemporaryMessage("Viewing processes (mock)",1500)}, {label: "Resource History (mock)", icon:"fa-chart-area", action:()=>showTemporaryMessage("Resource history (mock)",1500)} ]
+            },
+            // --- New Apps Start Here ---
+            "code-studio": {
+                name: "Code Studio", icon: "fas fa-code-branch",
+                content: `<div class="flex flex-col h-full">
+                            <div class="p-1.5 bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)] text-xs flex items-center space-x-2">
+                                <button class="top-panel-item !p-1" title="New File"><i class="fas fa-file"></i></button>
+                                <button class="top-panel-item !p-1" title="Open File"><i class="fas fa-folder-open"></i></button>
+                                <button class="top-panel-item !p-1" title="Save File"><i class="fas fa-save"></i></button>
+                                <span class="text-[var(--text-secondary)]">Untitled.js</span>
+                            </div>
+                            <textarea class="w-full flex-grow p-3 text-sm font-mono bg-[var(--primary-bg)] text-[var(--text-primary)] border-0 outline-none resize-none" spellcheck="false" placeholder="// Start coding your masterpiece..."></textarea>
+                            <div class="p-1.5 bg-[var(--surface-overlay-bg)] border-t border-[var(--border-color)] text-xs text-[var(--text-secondary)]">Ln 1, Col 1 (UTF-8) JavaScript (Mock)</div>
+                         </div>`,
+                allowMultiple: true, initialWidth: 700, initialHeight: 500, isPinnedToDock: true,
+                menuBar: [
+                    { label: "File", items: [{label:"New"}, {label:"Open"}, {label:"Save"}, {label:"Save As..."}, {isDivider:true}, {label:"Close"}] },
+                    { label: "Edit", items: [{label:"Undo"}, {label:"Redo"}, {isDivider:true}, {label:"Cut"}, {label:"Copy"}, {label:"Paste"}] },
+                    { label: "View", items: [{label:"Command Palette..."}, {label:"Toggle Sidebar (mock)"}] },
+                    { label: "Terminal", items: [{label:"New Terminal (mock)"}] }
+                ],
+                contextMenuItems: [{label:"Save File"}, {label:"Format Document (mock)"}]
+            },
+            "pdf-viewer": {
+                name: "PDF Viewer", icon: "fas fa-file-pdf",
+                content: `<div class="p-4 flex flex-col items-center justify-center h-full bg-gray-700 text-white">
+                            <i class="fas fa-file-pdf text-6xl mb-4 text-red-400"></i>
+                            <p class="text-lg">PDF Viewer (Mock)</p>
+                            <p class="text-sm">No PDF loaded. Use File > Open to load a PDF (mock).</p>
+                         </div>`,
+                allowMultiple: true, initialWidth: 600, initialHeight: 700, isPinnedToDock: false,
+                menuBar: [
+                    { label: "File", items: [{label:"Open PDF (mock)"}, {isDivider:true}, {label:"Close"}] },
+                    { label: "View", items: [{label:"Zoom In"}, {label:"Zoom Out"}, {label:"Fit to Page"}] }
+                ]
+            },
+            "calendar-app": {
+                name: "Calendar", icon: "fas fa-calendar-alt",
+                content: `<div class="p-3 flex flex-col h-full">
+                            <div class="flex justify-between items-center mb-3">
+                                <button class="calendar-app-prev top-panel-item p-2 rounded-full"><i class="fas fa-chevron-left"></i></button>
+                                <h2 class="calendar-app-month-year text-xl font-medium text-[var(--text-primary)]">Month Year</h2>
+                                <button class="calendar-app-next top-panel-item p-2 rounded-full"><i class="fas fa-chevron-right"></i></button>
+                                <button class="calendar-app-today action-button !text-xs !py-1 !px-2 ml-2">Today</button>
+                            </div>
+                            <div class="calendar-app-days-grid grid grid-cols-7 gap-px bg-[var(--border-color)] border border-[var(--border-color)] flex-grow overflow-y-auto">
+                                <!-- Days will be populated by JS -->
+                            </div>
+                          </div>`,
+                allowMultiple: false, initialWidth: 750, initialHeight: 550, isPinnedToDock: true,
+                initFunction: initCalendarApp,
+                menuBar: [
+                    { label: "File", items: [{label:"New Event (mock)"}, {isDivider:true}, {label:"Close"}] },
+                    { label: "View", items: [{label:"Day"}, {label:"Week"}, {label:"Month"}] }
+                ]
+            },
+            "task-manager": {
+                name: "Task Manager", icon: "fas fa-tasks",
+                content: `<div class="p-2 flex flex-col h-full">
+                            <div class="overflow-x-auto flex-grow">
+                                <table class="min-w-full text-xs text-left">
+                                    <thead class="border-b border-[var(--border-color)]">
+                                        <tr><th class="p-1.5">Process Name</th><th class="p-1.5">CPU%</th><th class="p-1.5">Memory</th><th class="p-1.5">PID</th></tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-[var(--border-color)]">
+                                        <tr><td class="p-1.5">OSWeb Shell</td><td class="p-1.5">2.5</td><td class="p-1.5">120MB</td><td class="p-1.5">101</td></tr>
+                                        <tr><td class="p-1.5">Browser</td><td class="p-1.5">15.2</td><td class="p-1.5">350MB</td><td class="p-1.5">1052</td></tr>
+                                        <tr><td class="p-1.5">Terminal</td><td class="p-1.5">0.8</td><td class="p-1.5">60MB</td><td class="p-1.5">1230</td></tr>
+                                        <tr><td class="p-1.5">Music Player</td><td class="p-1.5">5.1</td><td class="p-1.5">90MB</td><td class="p-1.5">1400</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="action-button text-xs mt-2 self-end" onclick="showTemporaryMessage('End Task (mock)', 1500)">End Task</button>
+                         </div>`,
+                allowMultiple: false, initialWidth: 500, initialHeight: 350, isPinnedToDock: false,
+                menuBar: [
+                    { label: "File", items: [{label:"Run New Task (mock)"}, {isDivider:true}, {label:"Close"}] },
+                    { label: "Options", items: [{label:"Always on Top (mock)"}] }
+                ]
             }
         };
         
@@ -1401,6 +1801,10 @@
             document.documentElement.style.setProperty('--dock-bg-opacity', selectedTransparency.value);
             const labelEl = document.getElementById('dock-transparency-label');
             if (labelEl) labelEl.textContent = selectedTransparency.label;
+            const settingsRange = document.getElementById('settings-dock-transparency');
+            if(settingsRange) settingsRange.value = currentDockTransparencyIndex;
+            const settingsLabel = document.getElementById('settings-dock-label');
+            if(settingsLabel) settingsLabel.textContent = selectedTransparency.label;
         }
 
         function toggleDockTransparency() {
@@ -1418,13 +1822,17 @@
             document.querySelectorAll('.window').forEach(win => win.classList.remove('glass-mode'));
 
             if (selectedLevel.value <= 0.01) { // Glass mode
-                rootStyle.setProperty('--window-content-bg', 'transparent');
-                document.querySelectorAll('.window').forEach(win => {
-                    if (!win.classList.contains('minimized')) win.classList.add('glass-mode');
+                rootStyle.setProperty('--window-content-bg', 'transparent'); // Main background transparent
+                document.querySelectorAll('.window:not(.minimized) .window-content-area').forEach(area => {
+                    area.style.backgroundColor = `rgba(${rgbString}, ${selectedLevel.value})`; // Apply to content area for blur
                 });
+                document.querySelectorAll('.window:not(.minimized)').forEach(win => win.classList.add('glass-mode'));
             } else {
                 if (rgbString) {
                     rootStyle.setProperty('--window-content-bg', `rgba(${rgbString}, ${selectedLevel.value})`);
+                    document.querySelectorAll('.window .window-content-area').forEach(area => {
+                        area.style.backgroundColor = ''; // Reset specific style if not glass
+                    });
                 } else {
                     console.warn("Could not get RGB values for window transparency, defaulting to solid.");
                     rootStyle.setProperty('--window-content-bg', `var(--surface-bg)`);
@@ -1432,6 +1840,10 @@
             }
             const labelEl = document.getElementById('window-transparency-label');
             if (labelEl) labelEl.textContent = selectedLevel.label;
+            const settingsRange = document.getElementById('settings-window-transparency');
+            if(settingsRange) settingsRange.value = currentWindowTransparencyIndex;
+            const settingsLabel = document.getElementById('settings-window-label');
+            if(settingsLabel) settingsLabel.textContent = selectedLevel.label;
         }
 
         function toggleWindowTransparency() {
@@ -1479,6 +1891,7 @@
             const desktopRect = desktopArea.getBoundingClientRect();
             let initialWidth = Math.min(app.initialWidth || desktopRect.width * 0.55, desktopRect.width - 40); 
             let initialHeight = Math.min(app.initialHeight || desktopRect.height * 0.65, desktopRect.height - 40);
+            // App specific size overrides
             if (appId === 'calculator') { initialWidth = 300; initialHeight = 460; }
             if (appId === 'mail-client') { initialWidth = Math.min(800, desktopRect.width - 40) ; initialHeight = Math.min(600, desktopRect.height - 40); }
             if (appId === 'music-player') { initialWidth = 360 ; initialHeight = 500; }
@@ -1487,6 +1900,10 @@
             if (appId === 'weather-app') { initialWidth = 320; initialHeight = 380; }
             if (appId === 'clicker-game') { initialWidth = 300; initialHeight = 250; }
             if (appId === 'system-monitor') { initialWidth = 380; initialHeight = 320; }
+            if (appId === 'code-studio') { initialWidth = Math.min(700, desktopRect.width - 60); initialHeight = Math.min(500, desktopRect.height - 60); }
+            if (appId === 'pdf-viewer') { initialWidth = Math.min(600, desktopRect.width - 60); initialHeight = Math.min(700, desktopRect.height - 60); }
+            if (appId === 'calendar-app') { initialWidth = Math.min(750, desktopRect.width - 60); initialHeight = Math.min(550, desktopRect.height - 60); }
+            if (appId === 'task-manager') { initialWidth = Math.min(500, desktopRect.width - 60); initialHeight = Math.min(350, desktopRect.height - 60); }
 
 
             windowEl.style.width = `${initialWidth}px`; windowEl.style.height = `${initialHeight}px`;
@@ -1523,6 +1940,7 @@
             if (app.initFunction) {
                 app.initFunction(windowEl, initialData);
             }
+            initializeDock(); // Refresh dock in case this is the first instance of a non-pinned app
             return windowEl; 
         }
         
@@ -1680,7 +2098,16 @@
                             closeActiveMenuBarDropdown();
                         } else {
                             closeActiveMenuBarDropdown(); 
-                            displayContextMenu(rect.left, rect.bottom + 2, menu.items, openWindows[activeWindowId]?.element, menu.label);
+                            // Pass actions if they are simple functions, or wrap them if they need winEl
+                            const processedItems = menu.items.map(item => {
+                                if (item.action && typeof item.action === 'function' && item.action.length === 0) { // No args, direct call
+                                    return item;
+                                } else if (item.action) { // Needs winEl or other context
+                                    return { ...item, action: () => item.action(openWindows[activeWindowId]?.element) };
+                                }
+                                return item; // No action or already processed
+                            });
+                            displayContextMenu(rect.left, rect.bottom + 2, processedItems, openWindows[activeWindowId]?.element, menu.label);
                             activeMenuBarDropdown = contextMenuEl; 
                             activeMenuBarDropdown.dataset.menuLabel = menu.label; 
                         }
@@ -1757,7 +2184,7 @@
             windowData.element.addEventListener('transitionend', () => {
                 windowData.element.remove(); delete openWindows[instanceId];
                 if (activeWindowId === instanceId) focusDesktop();
-                updateDockActiveState(windowData.appId);
+                initializeDock(); // Refresh dock to remove icon if it was the last instance of a non-pinned app
             }, { once: true });
         }
         
@@ -1766,11 +2193,12 @@
             if (!dock) return;
             dock.innerHTML = ''; 
             Object.keys(appConfig).forEach(appId => {
-                if (appId === 'app-launcher') return; 
                 const app = appConfig[appId];
+                if (appId === 'app-launcher') return; // App Launcher is not on the dock
                 if (app.isPinnedToDock === undefined) app.isPinnedToDock = true; 
 
-                if (app.isPinnedToDock || Object.values(openWindows).some(win => win.appId === appId)) {
+                const hasOpenInstances = Object.values(openWindows).some(win => win.appId === appId);
+                if (app.isPinnedToDock || hasOpenInstances) {
                     const button = document.createElement('button');
                     button.className = 'dock-icon p-2.5 md:p-3 rounded-full text-xl relative'; 
                     button.title = `Open ${app.name}`;
@@ -1781,16 +2209,40 @@
                     button.oncontextmenu = (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        const isAppOpen = Object.values(openWindows).some(win => win.appId === appId && !win.minimized && win.desktop === currentVirtualDesktop);
-                        const dockContextMenu = [
-                            { label: "Open New Instance", icon: "fa-plus-circle", action: () => createWindow(appId, {}, currentVirtualDesktop) },
-                            app.isPinnedToDock 
-                                ? { label: "Unpin from Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = false; initializeDock(); updateDockActiveState(appId); showTemporaryMessage(`${app.name} unpinned.`, 1500); } }
-                                : { label: "Pin to Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = true; initializeDock(); updateDockActiveState(appId); showTemporaryMessage(`${app.name} pinned.`, 1500); } },
+                        const openInstancesOfThisApp = Object.values(openWindows).filter(win => win.appId === appId);
+                        
+                        let dockContextMenu = [
+                            { label: `Open New ${app.name}`, icon: "fa-plus-circle", action: () => createWindow(appId, {}, currentVirtualDesktop) },
                         ];
-                        if (isAppOpen) {
-                             dockContextMenu.push({ label: "Close All Instances", icon: "fa-times-circle", action: () => Object.values(openWindows).filter(w => w.appId === appId).forEach(win => closeWindow(win.element.id)) });
+
+                        if (openInstancesOfThisApp.length > 0) {
+                            dockContextMenu.push({isDivider: true});
+                            openInstancesOfThisApp.forEach(instance => {
+                                const instanceNumber = instance.element.id.split('-').pop();
+                                let label = `${instance.name} ${app.allowMultiple && openInstancesOfThisApp.length > 1 ? `(#${instanceNumber})` : ''} on D${instance.desktop}`;
+                                if (instance.minimized) label += " (minimized)";
+                                dockContextMenu.push({
+                                    label: label,
+                                    icon: instance.minimized ? 'fa-window-maximize' : (instance.desktop === currentVirtualDesktop && instance.element.id === activeWindowId ? 'fa-eye' : 'fa-external-link-square-alt'),
+                                    action: () => {
+                                        if (instance.desktop !== currentVirtualDesktop) switchVirtualDesktop(instance.desktop, true);
+                                        setTimeout(() => {
+                                            if (instance.minimized) toggleMinimizeWindow(instance.element.id);
+                                            focusWindow(instance.element.id);
+                                        }, 50);
+                                    }
+                                });
+                            });
+                            dockContextMenu.push({isDivider: true});
+                            dockContextMenu.push({ label: "Close All Instances", icon: "fa-times-circle", action: () => openInstancesOfThisApp.forEach(win => closeWindow(win.element.id)) });
                         }
+                        
+                        dockContextMenu.push({isDivider: true});
+                        dockContextMenu.push(
+                            app.isPinnedToDock 
+                                ? { label: "Unpin from Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = false; initializeDock(); showTemporaryMessage(`${app.name} unpinned.`, 1500); } }
+                                : { label: "Pin to Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = true; initializeDock(); showTemporaryMessage(`${app.name} pinned.`, 1500); } }
+                        );
                         displayContextMenu(e.clientX, e.clientY, dockContextMenu, null, `dock-${appId}`);
                     };
 
@@ -1811,22 +2263,27 @@
             if (!app) return;
 
             const allInstancesOfApp = Object.values(openWindows).filter(win => win.appId === appId);
+            const activeInstancesOnCurrentDesktop = allInstancesOfApp.filter(win => win.desktop === currentVirtualDesktop && !win.minimized);
 
-            if (allInstancesOfApp.length > 0 && dockButtonElement) {
+            if (allInstancesOfApp.length > 0 && dockButtonElement) { // Clicked on dock icon
+                if (activeInstancesOnCurrentDesktop.length > 0 && activeInstancesOnCurrentDesktop[0].element.id === activeWindowId && !app.allowMultiple) {
+                    // If it's the active window of a single-instance app, minimize it
+                    toggleMinimizeWindow(activeWindowId);
+                    return;
+                }
+
                 const instanceMenuItems = allInstancesOfApp.map(instance => {
                     const instanceNumber = instance.element.id.split('-').pop();
-                    let label = `${instance.name} ${app.allowMultiple && allInstancesOfApp.length > 1 ? `(${instanceNumber})` : ''} on D${instance.desktop}`;
+                    let label = `${instance.name} ${app.allowMultiple && allInstancesOfApp.length > 1 ? `(#${instanceNumber})` : ''} on D${instance.desktop}`;
                     if (instance.minimized) label += " (minimized)";
                     return {
                         label: label,
-                        icon: instance.minimized ? 'fa-window-maximize' : (instance.desktop === currentVirtualDesktop ? 'fa-eye' : 'fa-external-link-alt'),
+                        icon: instance.minimized ? 'fa-window-maximize' : (instance.desktop === currentVirtualDesktop && instance.element.id === activeWindowId ? 'fa-eye' : 'fa-external-link-square-alt'),
                         action: () => {
-                            if (instance.desktop !== currentVirtualDesktop) {
-                                switchVirtualDesktop(instance.desktop, true);
-                            }
-                            setTimeout(() => { // Ensure desktop switch completes
+                            if (instance.desktop !== currentVirtualDesktop) switchVirtualDesktop(instance.desktop, true);
+                            setTimeout(() => {
                                 if (instance.minimized) toggleMinimizeWindow(instance.element.id);
-                                else focusWindow(instance.element.id);
+                                focusWindow(instance.element.id);
                             }, 50);
                         }
                     };
@@ -1839,28 +2296,21 @@
                         icon: "fa-plus-circle",
                         action: () => createWindow(appId, {}, currentVirtualDesktop)
                     });
-                    const openOnDesktopSubmenu = virtualDesktops.map(desktopNum => ({
-                        label: `Desktop ${desktopNum}`,
-                        icon: "fa-desktop",
-                        action: () => createWindow(appId, {}, desktopNum)
-                    }));
-                    instanceMenuItems.push({ label: "Open New on Desktop...", icon: "fa-ellipsis-h", items: openOnDesktopSubmenu, isSubmenuPlaceholder: true });
                 }
                 
                 const rect = dockButtonElement.getBoundingClientRect();
                 displayContextMenu(rect.left, rect.top - 10, instanceMenuItems, null, `dockAppInstancePicker-${appId}`, true); // fromBottom = true
             
             } else if (allInstancesOfApp.length > 0 && !app.allowMultiple) { 
-                 const instance = allInstancesOfApp[0];
+                 const instance = allInstancesOfApp[0]; // Focus the single instance
                  if (instance.desktop !== currentVirtualDesktop) switchVirtualDesktop(instance.desktop, true);
                  setTimeout(() => {
                     if (instance.minimized) toggleMinimizeWindow(instance.element.id);
                     else focusWindow(instance.element.id);
                  }, 50);
-            } else { 
+            } else { // No instances open, or launching not from dock (e.g., app launcher)
                 createWindow(appId, {}, currentVirtualDesktop); 
             }
-            initializeDock(); 
         }
 
 
@@ -1869,7 +2319,7 @@
                 if (appId === 'app-launcher') return;
                 const app = appConfig[appId]; 
                 if (!app.dockElement && (app.isPinnedToDock || Object.values(openWindows).some(win => win.appId === appId))) {
-                    initializeDock();
+                    initializeDock(); // Re-init if a new app was opened that needs a dock icon
                     return; 
                 }
                 if (!app.dockElement) return; 
@@ -1879,9 +2329,9 @@
                 
                 app.dockElement.classList.toggle('active', isCurrentlyFocusedAppType && hasOpenNotMinimizedInstanceOnCurrentDesktop);
                 
-                const hasAnyOpenInstance = Object.values(openWindows).some(win => win.appId === appId);
+                const hasAnyOpenInstanceAnywhere = Object.values(openWindows).some(win => win.appId === appId);
                 let dot = app.dockElement.querySelector('.open-dot');
-                if (hasAnyOpenInstance) { 
+                if (hasAnyOpenInstanceAnywhere) { 
                     if (!dot) { 
                         dot = document.createElement('span'); 
                         dot.className = 'open-dot absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-[var(--accent-color)] rounded-full'; 
@@ -1949,7 +2399,7 @@
             
             let finalY = y;
             if (fromBottom) { 
-                 finalY = y - menuHeight; 
+                 finalY = y - menuHeight - 5; // Adjusted for better placement from bottom
             }
             finalY = Math.max(10, Math.min(finalY, window.innerHeight - menuHeight - 10)); 
             let finalX = x;
@@ -1971,9 +2421,8 @@
         const desktopContextMenuItems = [
             {label: "Change Wallpaper", icon: "fa-palette", action: () => changeWallpaperContext()},
             {label: "Set Wallpaper from URL", icon: "fa-link", action: () => promptForWallpaperURL()},
-            {label: "Add Widget", icon: "fa-puzzle-piece", action: () => addWidgetContext()},
             {isDivider: true},
-            {label: "Display Settings", icon: "fa-desktop", action: () => showTemporaryMessage("Opening Display settings...", 1500)},
+            {label: "Display Settings (mock)", icon: "fa-desktop", action: () => showTemporaryMessage("Opening Display settings...", 1500)},
             {label: "System Settings", icon: "fa-cog", action: () => createWindow('settings')} 
         ];
         
@@ -2014,8 +2463,6 @@
                 showTemporaryMessage("No URL entered. Wallpaper not changed.", 1500);
             }
         }
-
-        function addWidgetContext() { showTemporaryMessage('Add widget (mock action)', 1500); if(contextMenuEl){contextMenuEl.classList.remove('show'); contextMenuEl.style.display = 'none';} }
         
         let overviewActive = false; const originalWindowsState = [];
         
@@ -2079,11 +2526,16 @@
                 showTemporaryMessage("Maximum number of desktops reached.", 2000);
                 return;
             }
+            // Ensure nextDesktopId is always higher than the max existing ID
+            nextDesktopId = virtualDesktops.length > 0 ? Math.max(...virtualDesktops) + 1 : 1;
+            if (virtualDesktops.includes(nextDesktopId)) { // Double check if somehow it's already there
+                 nextDesktopId = Math.max(...virtualDesktops, nextDesktopId) + 1;
+            }
+
             virtualDesktops.push(nextDesktopId);
             showTemporaryMessage(`Desktop ${nextDesktopId} added.`, 1500);
-            nextDesktopId++;
             updateVirtualDesktopSwitcherUI();
-            switchVirtualDesktop(virtualDesktops[virtualDesktops.length - 1]); 
+            switchVirtualDesktop(nextDesktopId); 
         }
 
         function removeVirtualDesktop(desktopIdToRemove) {
@@ -2099,7 +2551,7 @@
             const indexToRemove = virtualDesktops.indexOf(desktopIdToRemove);
             if (indexToRemove === -1) return; 
 
-            const targetDesktopForWindows = virtualDesktops.find(d => d !== desktopIdToRemove) || virtualDesktops[0]; 
+            const targetDesktopForWindows = virtualDesktops.find(d => d !== desktopIdToRemove && d < desktopIdToRemove) || virtualDesktops.find(d => d !== desktopIdToRemove) || 1;
             Object.values(openWindows).forEach(winData => {
                 if (winData.desktop === desktopIdToRemove) {
                     moveWindowToDesktop(winData.element.id, targetDesktopForWindows, false); 
@@ -2107,10 +2559,10 @@
             });
 
             virtualDesktops.splice(indexToRemove, 1);
-            showTemporaryMessage(`Desktop ${desktopIdToRemove} removed.`, 1500);
+            showTemporaryMessage(`Desktop ${desktopIdToRemove} removed. Windows moved to Desktop ${targetDesktopForWindows}.`, 2000);
 
             if (currentVirtualDesktop === desktopIdToRemove) {
-                currentVirtualDesktop = virtualDesktops[0] || 1; 
+                currentVirtualDesktop = targetDesktopForWindows; 
                 switchVirtualDesktop(currentVirtualDesktop, true);
             } else {
                 updateVirtualDesktopSwitcherUI(); 
@@ -2137,6 +2589,10 @@
                     updateAppMenuBar(openWindows[activeWindowId].appId, openWindows[activeWindowId].name); 
                 } else {
                     focusDesktop(); 
+                }
+                // Ensure sidebar state is maintained (open by default)
+                if (sidebar && sidebar.classList.contains('translate-x-full')) {
+                    // sidebar.classList.remove('translate-x-full'); // Keep it open
                 }
             }
         }
@@ -2217,7 +2673,7 @@
             if (winEl && winEl.dataset.appId === "terminal") {
                 if (action === "Clear" || action === "Clear Scrollback") { 
                     const outputEl = winEl.querySelector('.terminal-output');
-                    if (outputEl) outputEl.innerHTML = (action === "Clear Scrollback" ? `<div>Scrollback cleared.</div>` : '');
+                    if (outputEl) outputEl.innerHTML = (action === "Clear Scrollback" ? `<div>Scrollback cleared. Current path: ${currentTerminalPath}</div>` : `Current path: ${currentTerminalPath}`);
                 }
             }
             showTemporaryMessage(`Terminal: ${action} (mocked for ${winEl ? winEl.id : 'unknown window'})`, 1500); 
@@ -2330,6 +2786,7 @@
             desktopArea.style.display = 'flex';
             dock.style.display = 'flex';
             rightSidebar.style.display = 'block'; 
+            rightSidebar.classList.remove('translate-x-full'); // Open sidebar by default
 
             systemStartTime = Date.now(); 
             initializeDesktop();
@@ -2365,7 +2822,7 @@
             
             desktopArea.addEventListener('click', (event) => {
                 if (!sidebar.classList.contains('translate-x-full') && !sidebar.contains(event.target) && !sidebarToggle.contains(event.target) && !event.target.closest('#sidebar-toggle')) {
-                    sidebar.classList.add('translate-x-full');
+                    // sidebar.classList.add('translate-x-full'); // Don't auto-close on desktop click if it's default open
                 }
                 if (activeMenuBarDropdown && !activeMenuBarDropdown.contains(event.target) && !appMenuBarContainer.contains(event.target)) {
                     closeActiveMenuBarDropdown();
@@ -2443,26 +2900,21 @@
             
             themeToggleButton.addEventListener('click', () => {
                 currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-                document.body.classList.remove('light-mode', 'indigo-magic-theme', 'crimson-peak-theme'); // Remove all specific theme classes
+                document.body.className = ''; // Clear all body classes first
 
                 const newThemeSlug = themes[currentThemeIndex];
                 let themeUserFriendlyName = "";
                 const themeIcon = themeToggleButton.querySelector('i');
 
-                if (newThemeSlug === 'light-mode') {
-                    document.body.classList.add('light-mode');
-                    themeUserFriendlyName = "Light";
-                } else if (newThemeSlug === 'indigo-magic-theme') {
-                    document.body.classList.add('indigo-magic-theme');
-                    themeUserFriendlyName = "Indigo Magic";
-                } else if (newThemeSlug === 'crimson-peak-theme') {
-                    document.body.classList.add('crimson-peak-theme');
-                    themeUserFriendlyName = "Crimson Peak";
-                } else { // default-dark
-                    themeUserFriendlyName = "Default Dark";
+                if (newThemeSlug !== 'default-dark') { // Apply specific theme class if not default dark
+                    document.body.classList.add(newThemeSlug);
                 }
                 
-                // Update icon based on whether the new theme is light or dark-ish
+                if (newThemeSlug === 'light-mode') themeUserFriendlyName = "Light";
+                else if (newThemeSlug === 'indigo-magic-theme') themeUserFriendlyName = "Indigo Magic";
+                else if (newThemeSlug === 'crimson-peak-theme') themeUserFriendlyName = "Crimson Peak";
+                else themeUserFriendlyName = "Default Dark"; // For default-dark or any other case
+                
                 if (newThemeSlug === 'light-mode') {
                     themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun');
                 } else {
@@ -2470,9 +2922,8 @@
                 }
 
                 const nextThemeIndex = (currentThemeIndex + 1) % themes.length;
-                const nextThemeSlug = themes[nextThemeIndex];
-                let nextThemeUserFriendlyName = nextThemeSlug.replace('-theme','').replace('-mode','').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-                if (nextThemeSlug === 'default-dark') nextThemeUserFriendlyName = "Default Dark";
+                let nextThemeUserFriendlyName = themes[nextThemeIndex].replace('-theme','').replace('-mode','').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                if (themes[nextThemeIndex] === 'default-dark') nextThemeUserFriendlyName = "Default Dark";
 
 
                 themeToggleButton.title = `Switch to ${nextThemeUserFriendlyName} Theme`;
@@ -2481,6 +2932,9 @@
                 updateUserAvatar();
                 applyDockTransparency(); 
                 applyWindowTransparency(); 
+                // Update settings app theme selector if open
+                const settingsThemeSelector = document.querySelector('#settings-theme-selector');
+                if (settingsThemeSelector) settingsThemeSelector.value = currentThemeIndex;
             });
             
             showDesktopButton.addEventListener('click', () => {
@@ -2531,7 +2985,7 @@
             initializeDesktopEventListeners(); 
 
             createWindow('file-explorer', {}, 1); 
-            setTimeout(() => createWindow('web-browser', {}, 1), 250); 
+            setTimeout(() => createWindow('web-browser', {url: "https://osweb.dev"}, 1), 250); 
             setTimeout(() => createWindow('notepad', {}, 1), 500); 
             
             focusDesktop(); 
@@ -2549,7 +3003,8 @@
             setInterval(updateSystemUptime, 60000); 
             setInterval(updateClock, 1000); updateClock();
             setInterval(updateSystemMeters, 3000); updateSystemMeters();
-            applyWindowTransparency(); 
+            applyDockTransparency(); // Apply default dock transparency
+            applyWindowTransparency(); // Apply default window transparency
         }
 
 
