@@ -625,14 +625,17 @@
 
     <header id="top-panel" class="surface-card h-14 w-full px-3 sm:px-4 flex items-center justify-between z-50 flex-shrink-0 !shadow-md !border-0 !border-b !border-[var(--border-color)]">
         <div class="flex items-center space-x-1 sm:space-x-2">
+            <!-- App Launcher Button Added -->
+            <button id="app-launcher-button" class="top-panel-item p-2.5 rounded-full focus:outline-none" title="App Launcher"> <i class="fas fa-th-large text-lg"></i> </button>
             <button id="show-desktop-button" class="top-panel-item p-2.5 rounded-full focus:outline-none" title="Show Desktop"> <i class="fas fa-desktop text-lg"></i> </button>
-            <button id="activities-button" class="top-panel-item p-2.5 rounded-full focus:outline-none" title="Overview"> <i class="fas fa-th-large text-lg"></i> </button>
+            <button id="activities-button" class="top-panel-item p-2.5 rounded-full focus:outline-none" title="Overview"> <i class="fas fa-layer-group text-lg"></i> </button> <!-- Changed icon for Activities -->
             <div id="virtual-desktop-switcher" class="flex space-x-1.5 items-center">
-                {/* Desktop buttons will be populated by JavaScript */}
+                <!-- Desktop buttons will be populated by JavaScript -->
             </div>
             <button id="add-desktop-button" class="top-panel-item p-1.5 rounded-full focus:outline-none !ml-1" title="Add Virtual Desktop"> <i class="fas fa-plus text-xs"></i> </button>
             <div id="app-menu-bar-container" class="flex items-center h-full ml-1 sm:ml-2 hidden sm:flex">
-                </div>
+                <!-- App-specific menu items will appear here -->
+            </div>
         </div>
         <div class="flex items-center space-x-2 sm:space-x-3">
             <div id="cpu-meter" class="system-meter" title="CPU Usage">CPU: 0%</div>
@@ -652,17 +655,16 @@
     </header>
 
     <main id="desktop-area" class="flex-grow p-1 sm:p-2 md:p-4 relative overflow-hidden flex items-center justify-center">
-        <div id="app-launcher-folder" class="desktop-icon" style="top: 50px; left: 50px;">
-            <i class="fas fa-th-large"></i> <!-- Changed icon to match app launcher -->
-            <span>Apps</span>
-        </div>
-        <div id="my-files-folder" class="desktop-icon" style="top: 50px; left: 150px;">
-            <i class="fas fa-folder-open"></i> <!-- Changed icon to be more generic files -->
+        <!-- Desktop icons like "My Files" can still exist here -->
+        <div id="my-files-folder" class="desktop-icon" style="top: 50px; left: 50px;"> <!-- Adjusted position as App Launcher icon is removed from desktop -->
+            <i class="fas fa-folder-open"></i>
             <span>My Files</span>
         </div>
     </main>
 
-    <nav id="dock" class="surface-card w-max mx-auto mb-2 sm:mb-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-2xl flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 z-50 flex-shrink-0 !shadow-lg"> </nav>
+    <nav id="dock" class="surface-card w-max mx-auto mb-2 sm:mb-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-2xl flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 z-50 flex-shrink-0 !shadow-lg">
+        <!-- Dock icons will be populated by JavaScript -->
+    </nav>
 
     <aside id="right-sidebar" class="surface-card fixed top-16 right-0 h-[calc(100vh-4rem-0.5rem)] sm:h-[calc(100vh-4rem-0.75rem)] w-72 sm:w-80 md:w-96 p-4 sm:p-5 space-y-3 transform transition-transform duration-300 ease-out z-40 !shadow-xl overflow-y-auto">
         <!-- Sidebar content remains the same, but will be open by default after login -->
@@ -833,7 +835,7 @@
 
         let systemStartTime = null; 
         let currentUsername = null;
-        const OS_VERSION = "OSWeb v1.beta1"; // Updated version
+        const OS_VERSION = "OSWeb v1.beta2"; // Updated version
         
         let terminalCommandHistory = [];
         let terminalHistoryIndex = -1;
@@ -1211,8 +1213,17 @@
             if (!grid) return;
             grid.innerHTML = ''; 
 
-            Object.keys(appConfig).forEach(appId => {
-                if (appId === 'app-launcher') return; 
+            // Sort apps alphabetically by name, but keep "Settings" at the end if it exists
+            const sortedAppIds = Object.keys(appConfig)
+                .filter(appId => appId !== 'app-launcher') // Exclude the launcher itself
+                .sort((a, b) => {
+                    if (a === 'settings') return 1; // settings always last
+                    if (b === 'settings') return -1; // settings always last
+                    return appConfig[a].name.localeCompare(appConfig[b].name);
+                });
+
+
+            sortedAppIds.forEach(appId => {
                 const app = appConfig[appId];
                 const itemEl = document.createElement('div');
                 itemEl.className = 'app-launcher-item';
@@ -1385,14 +1396,14 @@
                 allowMultiple: false, 
                 initialWidth: 500, initialHeight: 400,
                 initFunction: initAppLauncher,
-                isPinnedToDock: false, // Not typically pinned, opened via desktop icon
+                isPinnedToDock: true, // CHANGED: Now pinned to dock
                 menuBar: [
                     { label: "File", items: [{ label: "Close Launcher", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : null }] },
                     { label: "View", items: [{ label: "Refresh Apps (mock)", icon: "fa-sync", action: () => showTemporaryMessage("App list refreshed (mock)", 1500) }] }
                 ]
             },
             "file-explorer": { 
-                name: "Files", icon: "fas fa-folder-open", // Changed icon
+                name: "Files", icon: "fas fa-folder-open",
                 content: `<div class="p-4 text-sm"><p class="mb-3 text-[var(--text-secondary)]">My Storage</p><div class="grid grid-cols-2 sm:grid-cols-3 gap-3"> <div class="bg-[var(--surface-overlay-bg)] p-4 rounded-lg text-center hover:bg-[var(--surface-active-bg)] cursor-pointer transition-all" onclick="showTemporaryMessage('Opening Documents folder...',1500)"><i class="fas fa-file-alt text-3xl mb-2 text-[var(--accent-color)]"></i> Documents</div> <div class="bg-[var(--surface-overlay-bg)] p-4 rounded-lg text-center hover:bg-[var(--surface-active-bg)] cursor-pointer transition-all" onclick="showTemporaryMessage('Opening Pictures folder...',1500)"><i class="fas fa-images text-3xl mb-2 text-[var(--secondary-accent)]"></i> Pictures</div> <div class="bg-[var(--surface-overlay-bg)] p-4 rounded-lg text-center hover:bg-[var(--surface-active-bg)] cursor-pointer transition-all" onclick="showTemporaryMessage('Opening Downloads folder...',1500)"><i class="fas fa-download text-3xl mb-2 text-orange-400"></i> Downloads</div></div></div>`, 
                 allowMultiple: true, 
                 isPinnedToDock: true,
@@ -1493,7 +1504,7 @@
             "calculator": { 
                 name: "Calculator", icon: "fas fa-calculator", 
                 content: `<div class="p-4 flex flex-col h-full"><div id="calc-output" class="calc-display">0</div><div class="calculator-grid flex-grow"> <button class="calc-button" data-value="7">7</button> <button class="calc-button" data-value="8">8</button> <button class="calc-button" data-value="9">9</button> <button class="calc-button operator" data-op="/">÷</button> <button class="calc-button" data-value="4">4</button> <button class="calc-button" data-value="5">5</button> <button class="calc-button" data-value="6">6</button> <button class="calc-button operator" data-op="*">×</button> <button class="calc-button" data-value="1">1</button> <button class="calc-button" data-value="2">2</button> <button class="calc-button" data-value="3">3</button> <button class="calc-button operator" data-op="-">-</button> <button class="calc-button" data-value="0">0</button> <button class="calc-button" data-value=".">.</button> <button class="calc-button operator" data-op="C">C</button> <button class="calc-button operator" data-op="+">+</button> <button class="calc-button equals col-span-4" data-op="=">=</button> </div></div>`, 
-                allowMultiple: false, // Typically only one calculator instance
+                allowMultiple: false, 
                 isPinnedToDock: false, 
                 initFunction: initCalculator,
                 menuBar: [
@@ -1503,7 +1514,7 @@
                 ],
                 contextMenuItems:[{label: "Copy Result", icon:"fa-copy", action:(winEl)=>{ const res = winEl.querySelector('#calc-output').textContent; try { navigator.clipboard.writeText(res).then(() => showTemporaryMessage(`Copied: ${res}`, 1500)).catch(() => { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); }); } catch (err) { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); } }}]
             },
-            "settings": { // Enhanced Settings App
+            "settings": { 
                 name: "Settings", icon: "fas fa-cog", 
                 content: `<div class="settings-grid h-full">
                             <div class="settings-sidebar">
@@ -1621,7 +1632,6 @@
                 menuBar: [ { label: "File", items: [ { label: "Refresh Data", icon: "fa-sync-alt", action: (winEl) => { if(winEl && typeof initSystemMonitor === 'function') initSystemMonitor(winEl, true); showTemporaryMessage("Refreshing monitor data (mock)...", 1000); } }, { isDivider: true }, { label: "Close", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : (activeWindowId ? closeWindow(activeWindowId) : null) } ]}, { label: "View", items: [{ label: "Processes (mock)", icon: "fa-list-ul", action: () => showTemporaryMessage("Viewing processes (mock)", 1500) }] } ],
                 contextMenuItems: [ {label: "Refresh Data", icon:"fa-sync-alt", action:(winEl) => { if(winEl && typeof initSystemMonitor === 'function') initSystemMonitor(winEl, true); showTemporaryMessage("Refreshing monitor data (mock)...", 1000); }}, {label: "View Processes (mock)", icon:"fa-list-ul", action:()=>showTemporaryMessage("Viewing processes (mock)",1500)}, {label: "Resource History (mock)", icon:"fa-chart-area", action:()=>showTemporaryMessage("Resource history (mock)",1500)} ]
             },
-            // --- New Apps Start Here ---
             "code-studio": {
                 name: "Code Studio", icon: "fas fa-code-branch",
                 content: `<div class="flex flex-col h-full">
@@ -1703,7 +1713,7 @@
         };
         
         // --- DOM Element References (available after DOM loaded) ---
-        let desktopArea, dock, appMenuBarContainer, globalSearchInput, tempMsgContainer, themeToggleButton, userAvatarImg, cpuMeter, gpuMeter, showDesktopButton, appLauncherFolder, myFilesFolder, clockEl, sidebar, sidebarToggle, activitiesButton, vDesktopSwitcher, contextMenuEl, wallpaperContainer, loginModal, usernameInput, loginButton, topPanel, rightSidebar, osVersionInfoEl, userInfoEl, systemUptimeEl, addDesktopButtonEl;
+        let desktopArea, dock, appMenuBarContainer, globalSearchInput, tempMsgContainer, themeToggleButton, userAvatarImg, cpuMeter, gpuMeter, showDesktopButton, appLauncherButton, myFilesFolder, clockEl, sidebar, sidebarToggle, activitiesButton, vDesktopSwitcher, contextMenuEl, wallpaperContainer, loginModal, usernameInput, loginButton, topPanel, rightSidebar, osVersionInfoEl, userInfoEl, systemUptimeEl, addDesktopButtonEl;
 
         function assignGlobalElements() {
             desktopArea = document.getElementById('desktop-area');
@@ -1716,7 +1726,7 @@
             cpuMeter = document.getElementById('cpu-meter');
             gpuMeter = document.getElementById('gpu-meter');
             showDesktopButton = document.getElementById('show-desktop-button');
-            appLauncherFolder = document.getElementById('app-launcher-folder');
+            appLauncherButton = document.getElementById('app-launcher-button'); // New App Launcher button in top panel
             myFilesFolder = document.getElementById('my-files-folder');
             clockEl = document.getElementById('clock');
             sidebar = document.getElementById('right-sidebar');
@@ -2194,8 +2204,10 @@
             dock.innerHTML = ''; 
             Object.keys(appConfig).forEach(appId => {
                 const app = appConfig[appId];
-                if (appId === 'app-launcher') return; // App Launcher is not on the dock
-                if (app.isPinnedToDock === undefined) app.isPinnedToDock = true; 
+                // App Launcher is now pinned, so it will be handled like other pinned apps.
+                // No special exclusion needed here anymore for app-launcher.
+                if (app.isPinnedToDock === undefined && appId !== 'app-launcher') app.isPinnedToDock = true; // Default to pinned for most apps
+                else if (app.isPinnedToDock === undefined && appId === 'app-launcher') app.isPinnedToDock = true; // Ensure app-launcher is pinned
 
                 const hasOpenInstances = Object.values(openWindows).some(win => win.appId === appId);
                 if (app.isPinnedToDock || hasOpenInstances) {
@@ -2237,12 +2249,15 @@
                             dockContextMenu.push({ label: "Close All Instances", icon: "fa-times-circle", action: () => openInstancesOfThisApp.forEach(win => closeWindow(win.element.id)) });
                         }
                         
-                        dockContextMenu.push({isDivider: true});
-                        dockContextMenu.push(
-                            app.isPinnedToDock 
-                                ? { label: "Unpin from Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = false; initializeDock(); showTemporaryMessage(`${app.name} unpinned.`, 1500); } }
-                                : { label: "Pin to Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = true; initializeDock(); showTemporaryMessage(`${app.name} pinned.`, 1500); } }
-                        );
+                        // Pin/Unpin only for non-app-launcher apps, launcher is always pinned now.
+                        if (appId !== 'app-launcher') {
+                            dockContextMenu.push({isDivider: true});
+                            dockContextMenu.push(
+                                app.isPinnedToDock 
+                                    ? { label: "Unpin from Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = false; initializeDock(); showTemporaryMessage(`${app.name} unpinned.`, 1500); } }
+                                    : { label: "Pin to Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = true; initializeDock(); showTemporaryMessage(`${app.name} pinned.`, 1500); } }
+                            );
+                        }
                         displayContextMenu(e.clientX, e.clientY, dockContextMenu, null, `dock-${appId}`);
                     };
 
@@ -2289,7 +2304,7 @@
                     };
                 });
 
-                if (app.allowMultiple) {
+                if (app.allowMultiple || appId === 'app-launcher') { // Allow opening new for app-launcher too if desired
                     instanceMenuItems.push({ isDivider: true });
                     instanceMenuItems.push({
                         label: `Open New on Desktop ${currentVirtualDesktop}`,
@@ -2308,7 +2323,7 @@
                     if (instance.minimized) toggleMinimizeWindow(instance.element.id);
                     else focusWindow(instance.element.id);
                  }, 50);
-            } else { // No instances open, or launching not from dock (e.g., app launcher)
+            } else { // No instances open, or launching not from dock (e.g., app launcher button, desktop icon)
                 createWindow(appId, {}, currentVirtualDesktop); 
             }
         }
@@ -2316,10 +2331,10 @@
 
         function updateDockActiveState(activeAppIdParam) {
             Object.keys(appConfig).forEach(appId => {
-                if (appId === 'app-launcher') return;
+                // No exclusion for app-launcher here, it's a normal dock item now.
                 const app = appConfig[appId]; 
                 if (!app.dockElement && (app.isPinnedToDock || Object.values(openWindows).some(win => win.appId === appId))) {
-                    initializeDock(); // Re-init if a new app was opened that needs a dock icon
+                    initializeDock(); 
                     return; 
                 }
                 if (!app.dockElement) return; 
@@ -2760,8 +2775,6 @@
                 if (!isDraggingForClickCheck) { 
                     if (appIdToLaunchOnClick) {
                         createWindow(appIdToLaunchOnClick);
-                    } else if (folderEl.id === 'app-launcher-folder') {
-                        createWindow('app-launcher');
                     }
                 }
                 isDraggingForClickCheck = false; 
@@ -2898,6 +2911,11 @@
 
             addDesktopButtonEl.addEventListener('click', addVirtualDesktop);
             
+            // Event listener for the new App Launcher button in the top panel
+            if (appLauncherButton) {
+                appLauncherButton.addEventListener('click', () => launchOrFocusApp('app-launcher'));
+            }
+            
             themeToggleButton.addEventListener('click', () => {
                 currentThemeIndex = (currentThemeIndex + 1) % themes.length;
                 document.body.className = ''; // Clear all body classes first
@@ -2969,7 +2987,7 @@
             initializeDock(); 
             renderCalendar(); 
             updateSidebarWeather(); 
-            makeFolderDraggable(appLauncherFolder); 
+            // Removed makeFolderDraggable for appLauncherFolder as it's no longer on the desktop
             makeFolderDraggable(myFilesFolder, 'file-explorer');
             
             const initialWallpaper = wallpapers[currentWallpaperIdx];
@@ -2985,7 +3003,7 @@
             initializeDesktopEventListeners(); 
 
             createWindow('file-explorer', {}, 1); 
-            setTimeout(() => createWindow('web-browser', {url: "https://osweb.dev"}, 1), 250); 
+            setTimeout(() => createWindow('web-browser', {url: "https://www.google.com"}, 1), 250); 
             setTimeout(() => createWindow('notepad', {}, 1), 500); 
             
             focusDesktop(); 
