@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Default Dark Theme Variables (Fallback) */
+            /* Default Dark Theme Variables (Fallback if no theme class is applied) */
             --accent-color: #82AAFF; 
             --secondary-accent: #C3E88D; 
             --error-color: #FF5370;
@@ -18,7 +18,7 @@
             --primary-bg: #1E1E1E; 
             --primary-bg-rgb: 30, 30, 30;
             --surface-bg: #2A2A2A; 
-            --surface-bg-rgb: 42, 42, 42;
+            --surface-bg-rgb: 42, 42, 42; 
             --surface-overlay-bg: rgba(255, 255, 255, 0.05); 
             --surface-active-bg: rgba(255, 255, 255, 0.08);
 
@@ -28,7 +28,8 @@
             --icon-color: #B0B0B0;
             --disabled-opacity: 0.5;
 
-            --dock-bg-opacity: 0.75; /* Default dock opacity - Med */
+            --dock-bg-opacity: 0.75; 
+            --window-content-bg: var(--surface-bg); 
         }
         body {
             font-family: 'Roboto', 'Google Sans', sans-serif;
@@ -55,30 +56,26 @@
             --border-color: rgba(0, 0, 0, 0.12);
             --icon-color: #5F6368;
             --warning-color: #FFA000; 
-            --accent-color: #1976D2; /* Darker blue for light mode accent */
-            --secondary-accent: #4CAF50; /* Darker green */
+            --accent-color: #1976D2; 
+            --secondary-accent: #4CAF50;
         }
         
-        /* Indigo Magic Theme (SGI IRIX Inspired) - Default Theme */
-        body, body.indigo-magic-theme {
-            --primary-bg: #2E3440; /* Nord Polar Night Darkest */
+        body.indigo-magic-theme {
+            --primary-bg: #2E3440; 
             --primary-bg-rgb: 46, 52, 64;
-            --surface-bg: #3B4252; /* Nord Polar Night Darker */
+            --surface-bg: #3B4252; 
             --surface-bg-rgb: 59, 66, 82;
-            --surface-overlay-bg: rgba(216, 222, 233, 0.07); /* Nord Snow Storm, subtle */
+            --surface-overlay-bg: rgba(216, 222, 233, 0.07); 
             --surface-active-bg: rgba(216, 222, 233, 0.12);
-            
-            --accent-color: #88C0D0; /* Nord Frost - Icy Blue */
-            --secondary-accent: #A3BE8C; /* Nord Aurora - Green */
-            --error-color: #BF616A; /* Nord Aurora - Red */
-            --warning-color: #EBCB8B; /* Nord Aurora - Yellow */
-
-            --text-primary: #ECEFF4; /* Nord Snow Storm - Off-white */
-            --text-secondary: #D8DEE9; /* Nord Snow Storm - Lighter grey */
-            --border-color: #4C566A; /* Nord Polar Night - Medium */
+            --accent-color: #88C0D0; 
+            --secondary-accent: #A3BE8C; 
+            --error-color: #BF616A; 
+            --warning-color: #EBCB8B; 
+            --text-primary: #ECEFF4; 
+            --text-secondary: #D8DEE9; 
+            --border-color: #4C566A; 
             --icon-color: #D8DEE9;
         }
-
         body.indigo-magic-theme #top-panel, 
         body.indigo-magic-theme #dock {
             background-color: rgba(var(--surface-bg-rgb), var(--dock-bg-opacity, 0.85)) !important;
@@ -87,29 +84,57 @@
         }
         body.indigo-magic-theme .window-title-bar {
             background-color: #434C5E; 
-            border-bottom: 1px solid #2E3440; /* Darker border for title bar */
+            border-bottom: 1px solid #2E3440; 
             background-image: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(0,0,0,0.05));
         }
-        body.indigo-magic-theme .window-title-bar .app-name { color: var(--text-primary); font-weight: 700; }
-        body.indigo-magic-theme .window.focused {
-             box-shadow: 0 0 0 1.5px var(--accent-color), 0 8px 20px rgba(0,0,0,0.25);
-        }
-         body.indigo-magic-theme .vdesktop-button.active {
-            background-color: var(--accent-color);
-            color: #2E3440; 
-        }
-        body.indigo-magic-theme .action-button {
-            background-color: var(--accent-color);
-            color: #2E3440;
-            border: 1px solid color-mix(in srgb, var(--accent-color) 80%, black);
-        }
-         body.indigo-magic-theme .action-button:hover {
-            background-color: color-mix(in srgb, var(--accent-color) 90%, #ECEFF4);
-        }
+        body.indigo-magic-theme .window.focused { box-shadow: 0 0 0 1.5px var(--accent-color), 0 8px 20px rgba(0,0,0,0.25); }
+        body.indigo-magic-theme .vdesktop-button.active { background-color: var(--accent-color); color: #2E3440; }
+        body.indigo-magic-theme .action-button { background-color: var(--accent-color); color: #2E3440; border: 1px solid color-mix(in srgb, var(--accent-color) 80%, black); }
+        body.indigo-magic-theme .action-button:hover { background-color: color-mix(in srgb, var(--accent-color) 90%, #ECEFF4); }
         body.indigo-magic-theme .desktop-icon i { color: var(--accent-color); }
         body.indigo-magic-theme .desktop-icon:hover { background-color: rgba(var(--surface-bg-rgb), 0.5); }
         body.indigo-magic-theme #custom-modal-cancel { background-color: #4C566A !important; }
         body.indigo-magic-theme #custom-modal-cancel:hover { background-color: #5E81AC !important; }
+        body.indigo-magic-theme #wallpaper-container { background: #2E3440; }
+
+        body.crimson-peak-theme {
+            --primary-bg: #2C2C2C; 
+            --primary-bg-rgb: 44, 44, 44;
+            --surface-bg: #3C3C3C; 
+            --surface-bg-rgb: 60, 60, 60;
+            --surface-overlay-bg: rgba(245, 245, 245, 0.06); 
+            --surface-active-bg: rgba(245, 245, 245, 0.1);
+            --accent-color: #E53935; /* Crimson Red */
+            --secondary-accent: #FDD835; /* Amber/Gold */
+            --error-color: #FF5370; /* Default, or could be a lighter red */
+            --warning-color: #FFCB6B; /* Default, or could be a more intense yellow */
+            --text-primary: #F5F5F5; 
+            --text-secondary: #BDBDBD; 
+            --border-color: #202020; 
+            --icon-color: #D0D0D0;
+        }
+        body.crimson-peak-theme #top-panel, 
+        body.crimson-peak-theme #dock {
+            background-color: rgba(var(--surface-bg-rgb), var(--dock-bg-opacity, 0.85)) !important;
+            border-bottom-color: var(--border-color) !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+        }
+        body.crimson-peak-theme .window-title-bar {
+            background-color: #4A2A2A; /* Darker red-tinged gray */
+            border-bottom: 1px solid var(--primary-bg); 
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.04), rgba(0,0,0,0.04));
+        }
+        body.crimson-peak-theme .window.focused { box-shadow: 0 0 0 1.5px var(--accent-color), 0 8px 20px rgba(0,0,0,0.3); }
+        body.crimson-peak-theme .vdesktop-button.active { background-color: var(--accent-color); color: var(--text-primary); }
+        body.crimson-peak-theme .action-button { background-color: var(--accent-color); color: var(--text-primary); border: 1px solid color-mix(in srgb, var(--accent-color) 70%, black); }
+        body.crimson-peak-theme .action-button:hover { background-color: color-mix(in srgb, var(--accent-color) 90%, white); }
+        body.crimson-peak-theme .desktop-icon i { color: var(--accent-color); }
+        body.crimson-peak-theme .desktop-icon:hover { background-color: rgba(var(--surface-bg-rgb), 0.6); }
+        body.crimson-peak-theme #custom-modal-cancel { background-color: #555 !important; }
+        body.crimson-peak-theme #custom-modal-cancel:hover { background-color: #666 !important; }
+        body.crimson-peak-theme #wallpaper-container { background: #2C2C2C; }
+        body.crimson-peak-theme .terminal-output span.prompt { color: var(--secondary-accent); } 
+        body.crimson-peak-theme .terminal-output span.explanation { color: var(--accent-color); }
 
 
         ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -121,6 +146,8 @@
         body.light-mode ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
         body.indigo-magic-theme ::-webkit-scrollbar-thumb { background: #4C566A; }
         body.indigo-magic-theme ::-webkit-scrollbar-thumb:hover { background: #5E81AC; }
+        body.crimson-peak-theme ::-webkit-scrollbar-thumb { background: #5C5C5C; }
+        body.crimson-peak-theme ::-webkit-scrollbar-thumb:hover { background: var(--secondary-accent); }
 
 
         .surface-card { 
@@ -138,6 +165,15 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: background-color 0.3s ease; 
+        }
+
+        .window-content-area {
+            background-color: var(--window-content-bg); 
+            transition: background-color 0.3s ease;
+        }
+        .window.glass-mode .window-content-area {
+            backdrop-filter: blur(8px); /* Optional: add blur to glass effect */
+            -webkit-backdrop-filter: blur(8px);
         }
 
 
@@ -180,10 +216,14 @@
         }
 
 
-        .top-panel-item:hover, .dock-icon:hover, .sidebar-icon:hover, .window-control:hover, .vdesktop-button:hover, .notepad-action-button:hover, .action-button:hover, #theme-toggle-button:hover, .menubar-item:hover {
+        .top-panel-item:hover, .dock-icon:hover, .sidebar-icon:hover, .window-control:hover, .vdesktop-button:not(.remove-desktop-btn):hover, .notepad-action-button:hover, .action-button:hover, #theme-toggle-button:hover, .menubar-item:hover {
             background-color: var(--surface-overlay-bg);
             color: var(--accent-color);
             transform: translateY(-1px); 
+        }
+        .remove-desktop-btn:hover {
+            color: var(--error-color);
+            transform: scale(1.1);
         }
         .top-panel-item:active, .dock-icon:active, .sidebar-icon:active, .window-control:active, .vdesktop-button:active, .notepad-action-button:active, .action-button:active, #theme-toggle-button:active, .menubar-item:active {
             background-color: var(--surface-active-bg);
@@ -221,11 +261,30 @@
         }
         .vdesktop-button.active {
             background-color: var(--accent-color);
-            color: var(--primary-bg); 
+            color: var(--primary-bg) !important; 
             font-weight: bold;
         }
         body.light-mode .vdesktop-button.active {
-            color: #FFFFFF; 
+            color: #FFFFFF !important; 
+        }
+        .vdesktop-button-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .remove-desktop-btn {
+            position: absolute;
+            top: -6px; /* Adjust for visual centering */
+            right: -3px; /* Adjust for visual centering */
+            font-size: 0.6rem; /* Smaller icon */
+            padding: 0.1rem;
+            line-height: 1;
+            color: var(--icon-color);
+            opacity: 0.5;
+            transition: opacity 0.2s, color 0.2s, transform 0.2s;
+        }
+        .vdesktop-button-container:hover .remove-desktop-btn {
+            opacity: 1;
         }
 
 
@@ -238,9 +297,6 @@
         }
         body.light-mode #wallpaper-container {
             background: linear-gradient(145deg, #E8EAF6 0%, #C5CAE9 70%, #9FA8DA 100%); 
-        }
-        body.indigo-magic-theme #wallpaper-container {
-             background: #2E3440; /* Default for IRIX if no image */
         }
 
 
@@ -260,6 +316,13 @@
         .context-menu-item:hover { background-color: var(--surface-overlay-bg); }
         .context-menu-item i { margin-right: 1rem; width: 1.25em; color: var(--icon-color); }
         .context-menu-divider { height: 1px; background-color: var(--border-color); margin: 0.5rem 0; }
+        .context-menu-item.has-submenu::after { /* Basic arrow for submenu */
+            content: '▶';
+            font-size: 0.7em;
+            position: absolute;
+            right: 1rem;
+            color: var(--icon-color);
+        }
 
         .notification { animation: fadeInSlideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
         @keyframes fadeInSlideDown { from { opacity: 0; transform: translateY(-10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
@@ -320,16 +383,10 @@
 
         .terminal-content textarea, .terminal-output {
             font-family: 'Roboto Mono', 'Courier New', Courier, monospace !important; 
-            background-color: #1A1A1A !important; 
+            background-color: transparent !important; 
             color: var(--text-primary) !important; 
             line-height: 1.5;
-             transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        body.light-mode .terminal-content textarea, body.light-mode .terminal-output {
-            background-color: #FDFDFD !important;
-        }
-        body.indigo-magic-theme .terminal-content textarea, body.indigo-magic-theme .terminal-output {
-            background-color: #292E39 !important; /* Darker for IRIX terminal */
+             transition: color 0.3s ease; 
         }
         .terminal-output span.prompt { color: var(--secondary-accent); } 
         body.light-mode .terminal-output span.prompt { color: #007BFF; } 
@@ -339,15 +396,17 @@
         body.light-mode .terminal-output span.error { color: #D32F2F; }
         .terminal-output span.explanation { color: var(--accent-color); font-style: italic; } 
         body.light-mode .terminal-output span.explanation { color: #1976D2; }
+        .terminal-output .neofetch-art { white-space: pre; font-family: 'Roboto Mono', monospace; line-height: 1.1; color: var(--accent-color); }
+        .terminal-output .neofetch-label { color: var(--secondary-accent); }
 
 
         .code-editor-content textarea, .notepad-content textarea {
             font-family: 'Roboto Mono', 'Courier New', Courier, monospace !important;
-            background-color: var(--surface-bg) !important; 
+            background-color: transparent !important; 
             color: var(--text-primary) !important;
             line-height: 1.6;
             border: none !important;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: color 0.3s ease; 
         }
         .notepad-toolbar {
             padding: 0.5rem;
@@ -414,22 +473,22 @@
         @keyframes spinner-border { to { transform: rotate(360deg); } }
 
         .mail-grid { display: grid; grid-template-columns: 200px 1fr; height: 100%; } 
-        .mail-sidebar { border-right: 1px solid var(--border-color); padding: 0.5rem; overflow-y: auto; transition: border-color 0.3s ease; }
+        .mail-sidebar { border-right: 1px solid var(--border-color); padding: 0.5rem; overflow-y: auto; transition: border-color 0.3s ease; background-color: transparent; }
         .mail-sidebar-item { padding: 0.5rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; }
         .mail-sidebar-item:hover { background-color: var(--surface-overlay-bg); }
         .mail-sidebar-item.active { background-color: var(--accent-color); color: var(--primary-bg); font-weight: 500; }
         body.light-mode .mail-sidebar-item.active { color: #FFFFFF; }
-        .mail-content { padding: 0.5rem; overflow-y: auto; display: flex; flex-direction: column; }
+        .mail-content { padding: 0.5rem; overflow-y: auto; display: flex; flex-direction: column; background-color: transparent;}
         .mail-message-list-item { padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border-color); cursor: pointer; font-size: 0.875rem; transition: border-color 0.3s ease; }
         .mail-message-list-item:hover { background-color: var(--surface-overlay-bg); }
-        .mail-message-preview { margin-top: 0.5rem; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; flex-grow: 1; background-color: rgba(0,0,0,0.1); transition: background-color 0.3s ease, border-color 0.3s ease;}
+        .mail-message-preview { margin-top: 0.5rem; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; flex-grow: 1; background-color: rgba(0,0,0,0.05); transition: background-color 0.3s ease, border-color 0.3s ease;}
         body.light-mode .mail-message-preview { background-color: rgba(0,0,0,0.03); }
 
-        .music-player-content { display: flex; flex-direction: column; height: 100%; padding: 1rem; }
+        .music-player-content { display: flex; flex-direction: column; height: 100%; padding: 1rem; background-color: transparent; }
         .music-track-info { text-align: center; margin-bottom: 1.5rem; }
         .music-track-info img { width: 128px; height: 128px; object-fit: cover; margin: 0 auto 0.75rem; border-radius: 0.5rem; background-color: var(--surface-overlay-bg); }
         .music-controls { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-        .music-playlist { flex-grow: 1; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 0.375rem; padding: 0.5rem; background-color: rgba(0,0,0,0.1); transition: background-color 0.3s ease, border-color 0.3s ease;}
+        .music-playlist { flex-grow: 1; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 0.375rem; padding: 0.5rem; background-color: rgba(0,0,0,0.05); transition: background-color 0.3s ease, border-color 0.3s ease;}
         body.light-mode .music-playlist { background-color: rgba(0,0,0,0.03); }
         .music-playlist-item { padding: 0.5rem; border-bottom: 1px solid var(--border-color); cursor: pointer; font-size: 0.875rem; transition: border-color 0.3s ease;}
         .music-playlist-item:hover { background-color: var(--surface-overlay-bg); }
@@ -535,7 +594,6 @@
         body.mobile-ui #dock .dock-icon { padding: 0.5rem; font-size: 1rem; } /* Smaller dock icons */
         body.mobile-ui #right-sidebar { width: 80vw; } /* Sidebar takes more width */
 
-
     </style>
 </head>
 <body> 
@@ -546,11 +604,10 @@
         <div class="flex items-center space-x-1 sm:space-x-2">
             <button id="show-desktop-button" class="top-panel-item p-2.5 rounded-full focus:outline-none" title="Show Desktop"> <i class="fas fa-desktop text-lg"></i> </button>
             <button id="activities-button" class="top-panel-item p-2.5 rounded-full focus:outline-none" title="Overview"> <i class="fas fa-th-large text-lg"></i> </button>
-            <div id="virtual-desktop-switcher" class="flex space-x-1.5">
-                <button class="vdesktop-button px-3 py-1.5 text-xs active" data-desktop="1" title="Desktop 1">1</button>
-                <button class="vdesktop-button px-3 py-1.5 text-xs" data-desktop="2" title="Desktop 2">2</button>
-                <button class="vdesktop-button px-3 py-1.5 text-xs" data-desktop="3" title="Desktop 3">3</button>
+            <div id="virtual-desktop-switcher" class="flex space-x-1.5 items-center">
+                {/* Desktop buttons will be populated by JavaScript */}
             </div>
+            <button id="add-desktop-button" class="top-panel-item p-1.5 rounded-full focus:outline-none !ml-1" title="Add Virtual Desktop"> <i class="fas fa-plus text-xs"></i> </button>
             <div id="app-menu-bar-container" class="flex items-center h-full ml-1 sm:ml-2 hidden sm:flex">
                 </div>
         </div>
@@ -615,6 +672,23 @@
                 <button class="sidebar-icon bg-[var(--surface-overlay-bg)] p-3 rounded-xl flex flex-col items-center space-y-1" onclick="toggleQuickSetting(this, 'Night Mode')"> <i class="fas fa-moon text-xl text-yellow-500"></i> <span class="text-xs">Night Mode</span><span class="text-xs text-[var(--error-color)]">Off</span> </button>
                 <button class="sidebar-icon bg-[var(--surface-overlay-bg)] p-3 rounded-xl flex flex-col items-center space-y-1" onclick="changeWallpaperContext(true)"> <i class="fas fa-palette text-xl text-purple-400"></i> <span class="text-xs">Wallpaper</span> </button>
                 <button class="sidebar-icon bg-[var(--surface-overlay-bg)] p-3 rounded-xl flex flex-col items-center space-y-1" onclick="toggleDockTransparency()"> <i class="fas fa-adjust text-xl text-teal-400"></i> <span class="text-xs">Dock Glass</span><span id="dock-transparency-label" class="text-xs text-[var(--text-secondary)]">Med</span> </button>
+                <button class="sidebar-icon bg-[var(--surface-overlay-bg)] p-3 rounded-xl flex flex-col items-center space-y-1" onclick="toggleWindowTransparency()"> <i class="fas fa-layer-group text-xl text-cyan-400"></i> <span class="text-xs">Win Glass</span><span id="window-transparency-label" class="text-xs text-[var(--text-secondary)]">Off</span> </button>
+            </div>
+        </div>
+         <div class="sidebar-section">
+            <h2>Weather</h2>
+            <div id="sidebar-weather-container" class="bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] p-3 rounded-lg text-sm">
+                <div class="flex items-center mb-1">
+                    <i id="sidebar-weather-icon" class="fas fa-cloud-sun text-2xl mr-2 text-yellow-400"></i>
+                    <div>
+                        <p id="sidebar-weather-city" class="font-medium text-[var(--text-primary)]">Loading...</p>
+                        <p id="sidebar-weather-temp" class="text-xl text-[var(--text-primary)]">--°F</p>
+                    </div>
+                </div>
+                <p id="sidebar-weather-condition" class="text-xs text-[var(--text-secondary)]">Fetching data...</p>
+                <button class="text-xs mt-2 action-button !py-1 !px-2" onclick="updateSidebarWeather(true)">
+                    <i class="fas fa-sync-alt text-xs"></i> Refresh
+                </button>
             </div>
         </div>
          <div class="sidebar-section">
@@ -670,7 +744,7 @@
         </div>
     </div>
 
-    <div id="login-modal" class="fixed inset-0 z-[20000] flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="login-modal" class="fixed inset-0 z-[20000] flex items-center justify-content-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="bg-[var(--surface-bg)] p-8 rounded-lg shadow-2xl w-full max-w-md text-center">
             <h2 class="text-2xl font-bold text-[var(--text-primary)] mb-6">Welcome to OSWeb v1</h2>
             <input type="text" id="username-input" placeholder="Enter username" class="w-full p-3 mb-4 rounded-md border border-[var(--border-color)] bg-[var(--primary-bg)] text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-[var(--accent-color)]">
@@ -685,7 +759,7 @@
         let activeWindowId = null; 
         let highestZIndex = 10;
         const openWindows = {}; 
-        let currentWallpaperIdx = 3; // Start with Mountain Vista (index 3)
+        let currentWallpaperIdx = 3; 
         const wallpapers = [
             { name: 'Default Dark', class: '' }, 
             { name: 'Abstract Flow', url: 'https://images.unsplash.com/photo-1536003253694-851258756111?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
@@ -694,41 +768,342 @@
             { name: 'Cosmic Swirl', url: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
             { name: 'Aurora Borealis', url: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
             { name: 'Cyberpunk Alley', url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
-            { name: 'Minimalist Waves', url: 'https://images.unsplash.com/photo-1525087747085-9092047893c1?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' }
+            { name: 'Minimalist Waves', url: 'https://images.unsplash.com/photo-1525087747085-9092047893c1?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
+            { name: 'Lush Forest Canopy', url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
+            { name: 'City Lights Bokeh', url: 'https://images.unsplash.com/photo-1535224206222-525a31947975?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' },
+            { name: 'Tranquil Beach', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920' }
         ];
         let nextWidgetId = 1;
         const MIN_WINDOW_WIDTH = 320; 
         const MIN_WINDOW_HEIGHT = 240;
+        
+        let virtualDesktops = [1, 2, 3]; 
+        let nextDesktopId = 4; 
         let currentVirtualDesktop = 1;
+
         let windowInstanceCounter = {}; 
         let longPressTimer = null;
         const LONG_PRESS_DURATION = 500;
-        let isLightMode = false;
+        
+        const themes = ['indigo-magic-theme', 'light-mode', 'crimson-peak-theme', 'default-dark'];
+        let currentThemeIndex = 0; // Will be set in window.onload to match initial theme
+        
         let activeMenuBarDropdown = null; 
         const dockTransparencyLevels = [
-            { label: 'Off', value: 1.0 },
-            { label: 'Low', value: 0.9 },
-            { label: 'Med', value: 0.75 },
-            { label: 'High', value: 0.5 }
+            { label: 'Off', value: 1.0 }, { label: 'Low', value: 0.9 },
+            { label: 'Med', value: 0.75 }, { label: 'High', value: 0.5 }
         ];
-        let currentDockTransparencyIndex = 2; // Default to Med (0.75)
-        let systemStartTime = null; // Will be set on login
+        let currentDockTransparencyIndex = 2; 
+
+        const windowTransparencyLevels = [
+            { label: 'Off', value: 1.0 }, { label: 'Low', value: 0.9 },
+            { label: 'Med', value: 0.75 }, { label: 'High', value: 0.6 },
+            { label: 'Glass', value: 0.01 } // Value close to 0 for full transparency effect
+        ];
+        let currentWindowTransparencyIndex = 0; 
+
+        let systemStartTime = null; 
         let currentUsername = null;
-        const OS_VERSION = "OSWeb v1.alpha3";
+        const OS_VERSION = "OSWeb v1.alpha4"; // Updated version
+        let terminalCommandHistory = [];
 
 
-        // --- App Configuration (with menuBar) ---
+        // --- App Initialization Functions ---
+        function initCalculator(windowEl) {
+            calcDisplayElement = windowEl.querySelector('#calc-output');
+            const buttons = windowEl.querySelectorAll('.calc-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const value = button.dataset.value; const op = button.dataset.op;
+                    if (value) calcAppend(value);
+                    else if (op) { if (op === 'C') calcClear(); else if (op === '=') calcEquals(); else calcPerformOp(op); }
+                });
+            });
+            calcClear();
+        }
+        function initNotepad(windowEl) {
+            const summarizeBtn = windowEl.querySelector('#summarize-note-btn');
+            const suggestTitleBtn = windowEl.querySelector('#suggest-title-btn');
+            const textarea = windowEl.querySelector('textarea');
+
+            if (summarizeBtn) {
+                summarizeBtn.onclick = async () => {
+                    const noteContent = textarea.value;
+                    if (!noteContent.trim()) { showTemporaryMessage("Note is empty, nothing to summarize.", 2000); return; }
+                    summarizeBtn.disabled = true; summarizeBtn.innerHTML = '✨ Summarizing<span class="loading-spinner"></span>';
+                    const summary = await callGeminiAPI(`Summarize the following note concisely:\n\n${noteContent}`);
+                    textarea.value += `\n\n--- Summary ---\n${summary.trim()}`;
+                    summarizeBtn.disabled = false; summarizeBtn.innerHTML = '✨ Summarize';
+                    showTemporaryMessage("Summary appended.", 2000);
+                };
+            }
+            if (suggestTitleBtn) {
+                suggestTitleBtn.onclick = async () => {
+                    const noteContent = textarea.value;
+                    if (!noteContent.trim()) { showTemporaryMessage("Note is empty, cannot suggest a title.", 2000); return; }
+                    suggestTitleBtn.disabled = true; suggestTitleBtn.innerHTML = '✨ Suggesting<span class="loading-spinner"></span>';
+                    const title = await callGeminiAPI(`Suggest a very short, concise title (3-5 words max) for the following note (title only, no extra explanation):\n\n${noteContent}`);
+                    if (!textarea.value.trim().toLowerCase().includes(title.trim().toLowerCase())) {
+                         textarea.value = `${title.trim()}\n--------------------\n${noteContent}`;
+                    } else { showTemporaryMessage(`Title Suggestion: ${title.trim()}`, 3000); }
+                    suggestTitleBtn.disabled = false; suggestTitleBtn.innerHTML = '✨ Suggest Title';
+                };
+            }
+        }
+        let lastTerminalCommand = ""; 
+        function initTerminal(windowEl) {
+            const inputEl = windowEl.querySelector('.terminal-input');
+            const outputEl = windowEl.querySelector('.terminal-output');
+            outputEl.innerHTML += `<div>Welcome to OS Terminal. Type 'help' for commands. Prefix with 'explain ' to get command details.</div>`;
+            
+            inputEl.addEventListener('keypress', async (e) => {
+                if (e.key === 'Enter' && inputEl.value.trim() !== '') {
+                    const fullCommand = inputEl.value.trim();
+                    lastTerminalCommand = fullCommand; 
+                    if (terminalCommandHistory.length > 20) terminalCommandHistory.shift(); 
+                    terminalCommandHistory.push(fullCommand);
+                    inputEl.value = '';
+                    outputEl.innerHTML += `<div><span class="prompt">${currentUsername || 'user'}@osweb:~$ </span><span class="command">${fullCommand.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span></div>`;
+                    outputEl.scrollTop = outputEl.scrollHeight;
+
+                    const parts = fullCommand.split(' ');
+                    const command = parts[0].toLowerCase();
+                    const args = parts.slice(1);
+                    let response = '';
+
+                    if (command === 'explain') {
+                        const commandToExplain = args.join(' ');
+                        if(commandToExplain){
+                            outputEl.innerHTML += `<div><span class="explanation">Requesting explanation for: ${commandToExplain.replace(/</g, "&lt;").replace(/>/g, "&gt;")}...</span></div>`;
+                            outputEl.scrollTop = outputEl.scrollHeight;
+                            const explanation = await callGeminiAPI(`Explain the following Linux/bash command simply and concisely: ${commandToExplain}`);
+                            response = `<span class="explanation">${explanation.replace(/\n/g, "<br>")}</span>`;
+                        } else { response = `<span class="error">Usage: explain [command]</span>`; }
+                    } else if (command === 'man') {
+                        const commandToMan = args.join(' ');
+                        if(commandToMan){
+                            outputEl.innerHTML += `<div><span class="explanation">Fetching manual for: ${commandToMan.replace(/</g, "&lt;").replace(/>/g, "&gt;")}...</span></div>`;
+                            outputEl.scrollTop = outputEl.scrollHeight;
+                            const explanation = await callGeminiAPI(`Explain the Linux command '${commandToMan}' concisely, as if it were a man page summary.`);
+                            response = `<span class="explanation">${explanation.replace(/\n/g, "<br>")}</span>`;
+                        } else { response = `<span class="error">Usage: man [command]</span>`; }
+                    } else {
+                        switch (command) {
+                            case 'help': response = "Commands: ls, date, clear, exit, uname, whoami, pwd, neofetch, ping, echo, mkdir, touch, cat, rm, history, man, sudo, uptime, df, free, ip, reboot, shutdown. Use 'explain [cmd]' for details."; break;
+                            case 'ls': response = args.length > 0 ? `Desktop/ Documents/ Downloads/ (mock listing for ${args[0]})` : "Desktop/  Documents/  Downloads/  Music/  Pictures/  Videos/"; break;
+                            case 'date': response = new Date().toLocaleString(); break;
+                            case 'clear': outputEl.innerHTML = ''; return;
+                            case 'exit': closeWindow(windowEl.id); return;
+                            case 'uname': response = args[0] === '-a' ? `OSWeb Kernel v1.0 ${OS_VERSION} GNU/Linux (mock)` : `OSWeb (mock)`; break;
+                            case 'whoami': response = currentUsername || 'user'; break;
+                            case 'pwd': response = `/home/${currentUsername || 'user'}`; break;
+                            case 'neofetch':
+                                const uptimeText = systemUptimeEl ? systemUptimeEl.textContent : 'N/A';
+                                const cpuText = cpuMeter ? cpuMeter.textContent.split(': ')[1] : 'N/A';
+                                const gpuText = gpuMeter ? gpuMeter.textContent.split(': ')[1] : 'N/A';
+                                const currentThemeName = themes[currentThemeIndex].replace('-theme','').replace('-mode','').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                                response = `<div class="neofetch-art">
+    .--.      <span class="neofetch-label">${currentUsername || 'user'}@osweb</span>
+   |o_o |     -------------
+   |:_/ |     <span class="neofetch-label">OS</span>: OSWeb ${OS_VERSION}
+  //   \\ \\    <span class="neofetch-label">Kernel</span>: OSWeb Kernel v1.0
+ (|     | )   <span class="neofetch-label">Uptime</span>: ${uptimeText}
+/'\\_   _/ \`\\  <span class="neofetch-label">Shell</span>: bash (mock)
+\\___)=(___/   <span class="neofetch-label">Terminal</span>: OSWeb Terminal
+              <span class="neofetch-label">CPU</span>: ${cpuText} (mock)
+              <span class="neofetch-label">GPU</span>: ${gpuText} (mock)
+              <span class="neofetch-label">Theme</span>: ${currentThemeName}
+</div>`;
+                                break;
+                            case 'ping': response = args.length > 0 ? `PING ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")}: 64 bytes of data. (mock reply...)` : 'Usage: ping &lt;hostname&gt;'; break;
+                            case 'echo': response = args.join(' ').replace(/</g, "&lt;").replace(/>/g, "&gt;") || ''; break;
+                            case 'mkdir': response = args.length > 0 ? `Created directory: ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")}` : 'Usage: mkdir &lt;dirname&gt;'; break;
+                            case 'touch': response = args.length > 0 ? `Created file: ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")}` : 'Usage: touch &lt;filename&gt;'; break;
+                            case 'cat': response = args.length > 0 ? `Contents of ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")}: This is a mock file.` : 'Usage: cat &lt;filename&gt;'; break;
+                            case 'rm': response = args.length > 0 ? `Removed ${args[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")} (mock)` : 'Usage: rm &lt;filename&gt;'; break;
+                            case 'history': response = terminalCommandHistory.map((cmd, i) => `${i + 1}. ${cmd.replace(/</g, "&lt;").replace(/>/g, "&gt;")}`).join('<br>'); break;
+                            case 'sudo': response = `<span class="error">Error: '${currentUsername || 'user'}' is not in the sudoers file. This incident will be reported. (Just kidding!)</span>`; break;
+                            case 'uptime': response = systemUptimeEl ? systemUptimeEl.textContent : 'Uptime data not available.'; break;
+                            case 'df': response = args[0] === '-h' ? 'Filesystem Size Used Avail Use% Mounted on<br>/dev/sda1  100G  20G   80G  20% / (mock)' : 'Filesystem 1K-blocks Used Available Use% Mounted on<br>/dev/sda1 104857600 20971520 83886080 20% / (mock)'; break;
+                            case 'free': response = args[0] === '-m' ? '              total        used        free      shared  buff/cache   available<br>Mem:           7980        1250        5700         150        1030        6500 (mock MB)' : 'total used free ... (mock KB)'; break;
+                            case 'ip': response = args[0] === 'addr' ? '1: lo: &lt;LOOPBACK,UP&gt; mtu 65536<br>    inet 127.0.0.1/8 scope host lo<br>2: eth0: &lt;BROADCAST,MULTICAST,UP&gt; mtu 1500<br>    inet 192.168.1.10/24 brd 192.168.1.255 scope global eth0 (mock)' : 'Usage: ip addr (mock)'; break;
+                            case 'reboot': response = 'System is going down for reboot NOW! (mock - closing terminal)'; setTimeout(() => closeWindow(windowEl.id), 1000); break;
+                            case 'shutdown': response = 'System is halting. (mock - closing terminal)'; setTimeout(() => closeWindow(windowEl.id), 1000); break;
+                            default: response = `<span class="error">Command not found: ${command.replace(/</g, "&lt;").replace(/>/g, "&gt;")}. Type 'help'.</span>`;
+                        }
+                    }
+                    outputEl.innerHTML += `<div><span class="response">${response}</span></div>`;
+                    outputEl.scrollTop = outputEl.scrollHeight;
+                }
+            });
+        }
+        function initAIAssistant(windowEl) {
+            const inputEl = windowEl.querySelector('#ai-command-input');
+            const chatLogEl = windowEl.querySelector('#ai-chat-log');
+            chatLogEl.innerHTML = `<div class="text-left my-1"><span class="bg-[var(--surface-overlay-bg)] text-[var(--text-primary)] px-2.5 py-1.5 rounded-lg text-xs inline-block">Hello! I'm your OS Assistant. How can I help?</span></div>`;
+            inputEl.addEventListener('keypress', async (e) => {
+                if (e.key === 'Enter' && inputEl.value.trim() !== '') {
+                    const query = inputEl.value.trim();
+                    chatLogEl.innerHTML += `<div class="text-right my-1.5"><span class="bg-[var(--accent-color)] text-[var(--primary-bg)] px-2.5 py-1.5 rounded-lg text-xs inline-block">${query}</span></div>`;
+                    inputEl.value = ''; inputEl.disabled = true; chatLogEl.scrollTop = chatLogEl.scrollHeight;
+                    const thinkingElId = `thinking-${Date.now()}`;
+                    chatLogEl.innerHTML += `<div class="text-left my-1.5" id="${thinkingElId}"><span class="bg-[var(--surface-overlay-bg)] text-[var(--text-primary)] px-2.5 py-1.5 rounded-lg text-xs inline-block">Assistant is thinking<span class="loading-spinner"></span></span></div>`;
+                    chatLogEl.scrollTop = chatLogEl.scrollHeight;
+                    const response = await callGeminiAPI(query);
+                    const thinkingEl = document.getElementById(thinkingElId); if(thinkingEl) thinkingEl.remove();
+                    chatLogEl.innerHTML += `<div class="text-left my-1.5"><span class="bg-[var(--surface-overlay-bg)] text-[var(--text-primary)] px-2.5 py-1.5 rounded-lg text-xs inline-block">${response.replace(/\n/g, "<br>")}</span></div>`;
+                    chatLogEl.scrollTop = chatLogEl.scrollHeight; inputEl.disabled = false; inputEl.focus();
+                }
+            });
+        }
+        function initWebBrowser(windowEl, initialUrlFromCreate = null) {
+            const addressBar = windowEl.querySelector('#browser-address-bar');
+            const goButton = windowEl.querySelector('#browser-go-button');
+            const contentFrame = windowEl.querySelector('#browser-content-frame');
+            const lockIcon = windowEl.querySelector('#browser-lock-icon');
+
+            function navigateTo(urlToLoad) {
+                let url = urlToLoad.trim();
+                if (!url) return;
+                if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('data:')) {
+                    url = 'https://' + url;
+                }
+                addressBar.value = url; 
+                
+                if (url.startsWith('data:')) { 
+                     try { contentFrame.src = url; } catch (e) { console.error("Error loading data URI:", e); contentFrame.src = 'about:blank';}
+                } else { 
+                    window.open(url, '_blank'); 
+                    contentFrame.src = `data:text/html,
+                        <html style="height:100%;display:flex;align-items:center;justify-content:center;font-family:sans-serif;color:var(--text-secondary);background-color:var(--surface-bg);">
+                            <body style="text-align:center;padding:20px;">
+                                <p style="font-size:1.1em; color:var(--text-primary);">Opening in new tab:</p>
+                                <p style="font-size:0.9em; word-break:break-all; margin-bottom:15px;">${url}</p>
+                                <i class="fas fa-external-link-alt" style="font-size:2em; color:var(--accent-color); margin-bottom:15px;"></i>
+                                <p style="font-size:0.8em;">(If it didn't open, please check your pop-up blocker)</p>
+                            </body>
+                        </html>`;
+                }
+                
+                if (url.startsWith('https://')) {
+                    lockIcon.className = 'fas fa-lock px-1 text-[var(--secondary-accent)]'; 
+                } else if (url.startsWith('http://')) {
+                    lockIcon.className = 'fas fa-unlock-alt px-1 text-[var(--warning-color)]'; 
+                } else {
+                     lockIcon.className = 'fas fa-info-circle px-1 text-[var(--icon-color)]';
+                }
+            }
+
+            addressBar.addEventListener('keypress', (e) => { if (e.key === 'Enter') navigateTo(addressBar.value); });
+            goButton.addEventListener('click', () => navigateTo(addressBar.value));
+            
+            if(initialUrlFromCreate) { 
+                navigateTo(initialUrlFromCreate);
+            } else { 
+                contentFrame.src = `data:text/html,
+                    <html style="height:100%;display:flex;align-items:center;justify-content:center;font-family:sans-serif;color:var(--text-secondary);background-color:var(--surface-bg);">
+                        <body style="text-align:center;">
+                            <i class="fas fa-globe-americas" style="font-size:3em; color:var(--accent-color); margin-bottom:15px;"></i>
+                            <p style="font-size:1.2em;color:var(--text-primary);">OSWeb Browser Ready</p>
+                            <p style="font-size:0.9em;">Type a URL above and press Enter or click Go.</p>
+                        </body>
+                    </html>`;
+                lockIcon.className = 'fas fa-info-circle px-1 text-[var(--icon-color)]';
+            }
+        }
+        function initMailClient(windowEl) {
+            const firstFolder = windowEl.querySelector('.mail-sidebar-item');
+            if (firstFolder) firstFolder.classList.add('active');
+        }
+        function initAppLauncher(windowEl) {
+            const grid = windowEl.querySelector('#app-launcher-grid');
+            if (!grid) return;
+            grid.innerHTML = ''; 
+
+            Object.keys(appConfig).forEach(appId => {
+                if (appId === 'app-launcher') return; 
+                const app = appConfig[appId];
+                const itemEl = document.createElement('div');
+                itemEl.className = 'app-launcher-item';
+                itemEl.innerHTML = `<i class="${app.icon}"></i><span>${app.name}</span>`;
+                itemEl.onclick = () => {
+                    launchOrFocusApp(appId); 
+                    const launcherWindowId = Object.keys(openWindows).find(id => openWindows[id].appId === 'app-launcher');
+                    if (launcherWindowId) {
+                        closeWindow(launcherWindowId);
+                    }
+                };
+                 itemEl.oncontextmenu = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const desktopSubmenu = virtualDesktops.map(desktopNum => ({
+                        label: `Desktop ${desktopNum}`,
+                        icon: "fa-desktop",
+                        action: () => {
+                            createWindow(appId, {}, desktopNum);
+                             const launcherWindowId = Object.keys(openWindows).find(id => openWindows[id].appId === 'app-launcher');
+                            if (launcherWindowId) closeWindow(launcherWindowId);
+                        }
+                    }));
+                    const launcherContextMenu = [
+                        { label: "Open", icon: "fa-external-link-alt", action: () => { launchOrFocusApp(appId); const launcherWindowId = Object.keys(openWindows).find(id => openWindows[id].appId === 'app-launcher'); if (launcherWindowId) closeWindow(launcherWindowId); } },
+                        { label: "Open on Desktop...", icon: "fa-ellipsis-h", items: desktopSubmenu, isSubmenuPlaceholder: true }, 
+                    ];
+                    displayContextMenu(e.clientX, e.clientY, launcherContextMenu, null, `launcher-${appId}`);
+                };
+                grid.appendChild(itemEl);
+            });
+        }
+        function initClickerGame(windowEl) {
+            const scoreEl = windowEl.querySelector('#clicker-score');
+            const clickButton = windowEl.querySelector('#clicker-button');
+            let score = 0;
+            if (clickButton) {
+                score = parseInt(clickButton.dataset.score || '0');
+                if(scoreEl) scoreEl.textContent = score;
+
+                clickButton.addEventListener('click', () => {
+                    score++;
+                    if(scoreEl) scoreEl.textContent = score;
+                    clickButton.dataset.score = score; 
+                });
+            }
+        }
+        function initSystemMonitor(windowEl, isRefresh = false) {
+            const cpuBar = windowEl.querySelector('#sysmon-cpu-bar');
+            const memBar = windowEl.querySelector('#sysmon-mem-bar');
+
+            const cpuUsage = Math.floor(Math.random() * 90) + 5;
+            const memUsed = (Math.random() * 6 + 1).toFixed(1); 
+            const memTotal = 8.0;
+            const memPercent = Math.round((memUsed / memTotal) * 100);
+
+            if (cpuBar) {
+                cpuBar.style.width = `${cpuUsage}%`;
+                cpuBar.textContent = `${cpuUsage}%`;
+            }
+            if (memBar) {
+                memBar.style.width = `${memPercent}%`;
+                memBar.textContent = `${memUsed}/${memTotal} GB`;
+            }
+        }
+
+
+        // --- App Configuration (with menuBar & contextMenuItems) ---
         const appConfig = {
             "app-launcher": { 
                 name: "App Launcher", icon: "fas fa-th-large",
                 content: `<div id="app-launcher-grid" class="app-launcher-grid"></div>`,
                 allowMultiple: false, 
                 initialWidth: 500, initialHeight: 400,
+                initFunction: initAppLauncher,
+                isPinnedToDock: false 
             },
             "file-explorer": { 
                 name: "Files", icon: "fas fa-folder", 
                 content: `<div class="p-4 text-sm"><p class="mb-3 text-[var(--text-secondary)]">My Storage</p><div class="grid grid-cols-2 sm:grid-cols-3 gap-3"> <div class="bg-[var(--surface-overlay-bg)] p-4 rounded-lg text-center hover:bg-[var(--surface-active-bg)] cursor-pointer transition-all" onclick="showTemporaryMessage('Opening Documents folder...',1500)"><i class="fas fa-file-alt text-3xl mb-2 text-[var(--accent-color)]"></i> Documents</div> <div class="bg-[var(--surface-overlay-bg)] p-4 rounded-lg text-center hover:bg-[var(--surface-active-bg)] cursor-pointer transition-all" onclick="showTemporaryMessage('Opening Pictures folder...',1500)"><i class="fas fa-images text-3xl mb-2 text-[var(--secondary-accent)]"></i> Pictures</div> <div class="bg-[var(--surface-overlay-bg)] p-4 rounded-lg text-center hover:bg-[var(--surface-active-bg)] cursor-pointer transition-all" onclick="showTemporaryMessage('Opening Downloads folder...',1500)"><i class="fas fa-download text-3xl mb-2 text-orange-400"></i> Downloads</div></div></div>`, 
                 allowMultiple: true, 
+                isPinnedToDock: true,
                 menuBar: [
                     { label: "File", items: [
                         { label: "New Window", icon: "fa-window-restore", action: () => createWindow('file-explorer') },
@@ -752,6 +1127,8 @@
                 name: "Terminal", icon: "fas fa-terminal", 
                 content: `<div class="terminal-content p-1 flex-grow flex flex-col h-full"><div class="terminal-output flex-grow overflow-y-auto p-2 text-xs leading-normal"></div><div class="flex items-center p-1 border-t border-[var(--border-color)]"><span class="text-[var(--secondary-accent)] font-mono mr-1">user@osweb:~$</span><input type="text" class="terminal-input flex-grow bg-transparent outline-none text-[var(--text-primary)] text-xs"></div></div>`, 
                 allowMultiple: true, 
+                isPinnedToDock: true,
+                initFunction: initTerminal,
                 menuBar: [
                      { label: "Shell", items: [
                         { label: "New Window", icon: "fa-window-restore", action: () => createWindow('terminal') },
@@ -770,8 +1147,10 @@
             },
             "web-browser": { 
                 name: "OSWeb Browser", icon: "fas fa-globe-americas", 
-                content: `<div class="h-full flex flex-col bg-[var(--surface-bg)]"><div class="p-2 bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)] flex items-center space-x-2"><i id="browser-lock-icon" class="fas fa-info-circle px-1 text-[var(--icon-color)]"></i><input type="text" id="browser-address-bar" class="flex-grow bg-[var(--surface-bg)] border border-[var(--border-color)] rounded-full px-3 py-1 text-xs outline-none focus:ring-1 focus:ring-[var(--accent-color)] focus:border-[var(--accent-color)]" value="" placeholder="Type URL and press Enter"><button id="browser-go-button" class="p-1.5 rounded-full hover:bg-[var(--surface-active-bg)]" title="Go"><i class="fas fa-arrow-right text-xs"></i></button></div><iframe id="browser-content-frame" src="about:blank" title="Browser Content" class="w-full flex-grow border-0" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe></div>`, 
+                content: `<div class="h-full flex flex-col"><div class="p-2 bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)] flex items-center space-x-2"><i id="browser-lock-icon" class="fas fa-info-circle px-1 text-[var(--icon-color)]"></i><input type="text" id="browser-address-bar" class="flex-grow bg-[var(--surface-bg)] border border-[var(--border-color)] rounded-full px-3 py-1 text-xs outline-none focus:ring-1 focus:ring-[var(--accent-color)] focus:border-[var(--accent-color)]" value="" placeholder="Type URL and press Enter"><button id="browser-go-button" class="p-1.5 rounded-full hover:bg-[var(--surface-active-bg)]" title="Go"><i class="fas fa-arrow-right text-xs"></i></button></div><iframe id="browser-content-frame" src="about:blank" title="Browser Content" class="w-full flex-grow border-0" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe></div>`, 
                 allowMultiple: true, 
+                isPinnedToDock: true,
+                initFunction: (winEl, data) => initWebBrowser(winEl, data?.url),
                 menuBar: [
                     { label: "File", items: [
                         { label: "New Tab (mock)", icon: "fa-plus-square", action: (winEl) => showTemporaryMessage("New Tab (mock from menu)",1500) },
@@ -786,7 +1165,7 @@
                         { label: "Paste", icon: "fa-paste", action: () => showTemporaryMessage("Paste (mock)", 1500) },
                     ]},
                     { label: "View", items: [
-                        { label: "Reload Page", icon: "fa-sync", action: (winEl) => { showTemporaryMessage("Reload only affects internal placeholder.", 2000); const frame = winEl ? winEl.querySelector('#browser-content-frame') : null; if (frame && frame.src !== 'about:blank' && frame.src.startsWith('data:text/html')) { try { frame.src = frame.src; /* Re-set to reload data URI */ } catch(e){ console.error("Reload error:", e); }} } },
+                        { label: "Reload Page", icon: "fa-sync", action: (winEl) => { showTemporaryMessage("Reload only affects internal placeholder.", 2000); const frame = winEl ? winEl.querySelector('#browser-content-frame') : null; if (frame && frame.src !== 'about:blank' && frame.src.startsWith('data:text/html')) { try { frame.src = frame.src; } catch(e){ console.error("Reload error:", e); }} } },
                         { label: "Zoom In", icon: "fa-search-plus", action: () => showTemporaryMessage("Zoom In (mock)", 1500) },
                         { label: "Zoom Out", icon: "fa-search-minus", action: () => showTemporaryMessage("Zoom Out (mock)", 1500) },
                     ]},
@@ -802,6 +1181,7 @@
                 name: "Text Editor", icon: "fas fa-file-code", 
                 content: `<div class="code-editor-content h-full"><textarea class="w-full h-full p-4 text-sm border-0 outline-none resize-none" spellcheck="false">// Welcome to Text Editor\n\n</textarea></div>`, 
                 allowMultiple: true, 
+                isPinnedToDock: true,
                 menuBar: [
                     { label: "File", items: [
                         { label: "New File", icon: "fa-file", action: () => createWindow('text-editor') },
@@ -829,6 +1209,8 @@
                 name: "Notes", icon: "fas fa-sticky-note", 
                 content: `<div class="notepad-content flex-grow flex flex-col h-full"><textarea class="w-full flex-grow p-4 text-sm border-0 outline-none resize-none" placeholder="Start typing your note..."></textarea><div class="notepad-toolbar flex items-center justify-end space-x-2 p-2"><button class="notepad-action-button" id="summarize-note-btn">✨ Summarize</button><button class="notepad-action-button" id="suggest-title-btn">✨ Suggest Title</button></div></div>`, 
                 allowMultiple: true, 
+                isPinnedToDock: true,
+                initFunction: initNotepad,
                 menuBar: [
                     { label: "File", items: [
                         { label: "New Note", icon: "fa-plus", action: () => createWindow('notepad') },
@@ -844,15 +1226,84 @@
                 ],
                 contextMenuItems: [{label:"New Note", icon:"fa-plus", action:()=>createWindow('notepad')}, {label:"Save Note", icon:"fa-save", action:()=>showTemporaryMessage("Note Saved (mock)",1500)}, {isDivider: true}, {label:"✨ Summarize Note", icon:"fa-bolt", action:(winEl)=>handleNotepadSummarize(winEl)}, {label:"✨ Suggest Title", icon:"fa-lightbulb", action:(winEl)=>handleNotepadSuggestTitle(winEl)}] 
             },
-            "calculator": { name: "Calculator", icon: "fas fa-calculator", content: `<div class="p-4 flex flex-col h-full"><div id="calc-output" class="calc-display">0</div><div class="calculator-grid flex-grow"> <button class="calc-button" data-value="7">7</button> <button class="calc-button" data-value="8">8</button> <button class="calc-button" data-value="9">9</button> <button class="calc-button operator" data-op="/">÷</button> <button class="calc-button" data-value="4">4</button> <button class="calc-button" data-value="5">5</button> <button class="calc-button" data-value="6">6</button> <button class="calc-button operator" data-op="*">×</button> <button class="calc-button" data-value="1">1</button> <button class="calc-button" data-value="2">2</button> <button class="calc-button" data-value="3">3</button> <button class="calc-button operator" data-op="-">-</button> <button class="calc-button" data-value="0">0</button> <button class="calc-button" data-value=".">.</button> <button class="calc-button operator" data-op="C">C</button> <button class="calc-button operator" data-op="+">+</button> <button class="calc-button equals col-span-4" data-op="=">=</button> </div></div>`, allowMultiple: true, contextMenuItems:[{label: "Copy Result", icon:"fa-copy", action:(winEl)=>{ const res = winEl.querySelector('#calc-output').textContent; try { navigator.clipboard.writeText(res).then(() => showTemporaryMessage(`Copied: ${res}`, 1500)).catch(() => { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); }); } catch (err) { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); } }}]},
-            "settings": { name: "Settings", icon: "fas fa-cog", content: `<div class="p-4 text-sm"><h2 class="text-lg font-medium text-[var(--text-primary)] mb-4">System Settings</h2><div class="space-y-2"> <button class="w-full text-left p-3 bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] rounded-md transition-all" onclick="showTemporaryMessage('Opening Network & Internet settings...',1500)">Network & Internet</button> <button class="w-full text-left p-3 bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] rounded-md transition-all" onclick="showTemporaryMessage('Opening Display settings...',1500)">Display</button> <button class="w-full text-left p-3 bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] rounded-md transition-all" onclick="showTemporaryMessage('Opening Apps settings...',1500)">Apps</button></div></div>`, allowMultiple: true, contextMenuItems:[{label: "Reset All Settings", icon:"fa-undo", action:()=>showTemporaryMessage("Resetting all settings (mock)", 2000)}]},
-            "ai-assistant": { name: "Assistant", icon: "fas fa-robot", content: `<div class="p-4 flex flex-col h-full"><div class="flex-grow bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] rounded-md p-2 overflow-y-auto text-xs mb-2" id="ai-chat-log"></div><input type="text" id="ai-command-input" placeholder="Ask Assistant..." class="p-2.5 rounded-md bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] outline-none focus:border-[var(--accent-color)] focus:ring-1 focus:ring-[var(--accent-color)] text-sm"></div>`, allowMultiple: true, contextMenuItems:[{label: "Clear Chat History", icon:"fa-trash-alt", action:(winEl)=>{ winEl.querySelector('#ai-chat-log').innerHTML = ''; showTemporaryMessage("Chat history cleared.",1500);}}, {label:"Copy Last Response", icon:"fa-copy", action:(winEl)=> { const logs = winEl.querySelectorAll('#ai-chat-log > div > span'); if(logs.length > 0){ const lastResponse = logs[logs.length-1].textContent; try { navigator.clipboard.writeText(lastResponse).then(() => showTemporaryMessage("Copied last response.",1500)).catch(() => { const textArea = document.createElement("textarea"); textArea.value = lastResponse; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage("Copied last response (fallback).",1500); }); } catch (err) { const textArea = document.createElement("textarea"); textArea.value = lastResponse; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage("Copied last response (fallback).",1500); }} else {showTemporaryMessage("No response to copy.",1500);}}}]},
-            "mail-client": { name: "Mail", icon: "fas fa-envelope", content: `<div class="mail-grid"><div class="mail-sidebar"><div class="mail-sidebar-item active" onclick="selectMailFolder(this, 'Inbox')"><i class="fas fa-inbox mr-2 w-4"></i>Inbox <span class="text-xs ml-auto bg-[var(--accent-color)] text-[var(--primary-bg)] px-1.5 py-0.5 rounded-full">3</span></div><div class="mail-sidebar-item" onclick="selectMailFolder(this, 'Sent')"><i class="fas fa-paper-plane mr-2 w-4"></i>Sent</div><div class="mail-sidebar-item" onclick="selectMailFolder(this, 'Drafts')"><i class="fas fa-file-alt mr-2 w-4"></i>Drafts</div><div class="mail-sidebar-item" onclick="selectMailFolder(this, 'Archive')"><i class="fas fa-archive mr-2 w-4"></i>Archive</div><div class="mail-sidebar-item" onclick="selectMailFolder(this, 'Spam')"><i class="fas fa-exclamation-triangle mr-2 w-4"></i>Spam</div></div><div class="mail-content"><div class="mail-message-list flex-shrink-0 h-1/3 overflow-y-auto mb-2 border-b border-[var(--border-color)]"><div class="mail-message-list-item" onclick="showMailPreview('Update', 'System update available...')"><strong>System Update</strong> - Your OS needs an update...</div><div class="mail-message-list-item" onclick="showMailPreview('Meeting', 'Project discussion at 3 PM...')"><strong>Project Meeting</strong> - Discussion about project...</div><div class="mail-message-list-item" onclick="showMailPreview('Newsletter', 'Weekly tech news...')"><strong>Tech Newsletter</strong> - Latest in tech...</div></div><div class="mail-message-preview"><h3 id="mail-preview-subject" class="text-lg font-medium mb-1">Select a message</h3><p id="mail-preview-body" class="text-xs text-[var(--text-secondary)]">Message content will appear here.</p></div></div></div>`, allowMultiple: false, contextMenuItems:[{label:"Compose New Mail", icon:"fa-pen-nib", action:()=>showTemporaryMessage("Opening compose window (mock)...", 1500)}, {label:"Refresh Mailbox", icon:"fa-sync", action:()=>showTemporaryMessage("Checking for new mail (mock)...",1500)}, {label:"Archive Selected", icon:"fa-archive", action:()=>showTemporaryMessage("Archived (mock).",1500)}]},
-            "music-player": { name: "Music", icon: "fas fa-music", content: `<div class="music-player-content"><div class="music-track-info"><img src="https://placehold.co/128x128/2A2A2A/82AAFF?text=AlbumArt&font=roboto" alt="Album Art"><h3 class="text-lg font-medium" id="music-track-title">Future Beats</h3><p class="text-sm text-[var(--text-secondary)]" id="music-track-artist">Synthwave Artist</p></div><div class="music-controls"><button class="top-panel-item p-3 rounded-full text-xl"><i class="fas fa-step-backward"></i></button><button class="top-panel-item p-4 rounded-full text-2xl bg-[var(--accent-color)] !text-[var(--primary-bg)]"><i class="fas fa-play"></i></button><button class="top-panel-item p-3 rounded-full text-xl"><i class="fas fa-step-forward"></i></button></div><div class="music-playlist"><div class="music-playlist-item">Track 1 - Electro Funk</div><div class="music-playlist-item">Track 2 - Neon Drive</div><div class="music-playlist-item">Track 3 - Midnight Run</div></div></div>`, allowMultiple: false, contextMenuItems:[{label:"Play/Pause", icon:"fa-play-circle", action:()=>showTemporaryMessage("Toggled Play/Pause (mock)",1000)}, {label:"Next Track", icon:"fa-step-forward", action:()=>showTemporaryMessage("Next Track (mock)",1000)},{label:"Add to Queue", icon:"fa-plus", action:()=>showTemporaryMessage("Added to queue (mock)",1000)}]}
+            "calculator": { 
+                name: "Calculator", icon: "fas fa-calculator", 
+                content: `<div class="p-4 flex flex-col h-full"><div id="calc-output" class="calc-display">0</div><div class="calculator-grid flex-grow"> <button class="calc-button" data-value="7">7</button> <button class="calc-button" data-value="8">8</button> <button class="calc-button" data-value="9">9</button> <button class="calc-button operator" data-op="/">÷</button> <button class="calc-button" data-value="4">4</button> <button class="calc-button" data-value="5">5</button> <button class="calc-button" data-value="6">6</button> <button class="calc-button operator" data-op="*">×</button> <button class="calc-button" data-value="1">1</button> <button class="calc-button" data-value="2">2</button> <button class="calc-button" data-value="3">3</button> <button class="calc-button operator" data-op="-">-</button> <button class="calc-button" data-value="0">0</button> <button class="calc-button" data-value=".">.</button> <button class="calc-button operator" data-op="C">C</button> <button class="calc-button operator" data-op="+">+</button> <button class="calc-button equals col-span-4" data-op="=">=</button> </div></div>`, 
+                allowMultiple: true, 
+                isPinnedToDock: false, 
+                initFunction: initCalculator,
+                contextMenuItems:[{label: "Copy Result", icon:"fa-copy", action:(winEl)=>{ const res = winEl.querySelector('#calc-output').textContent; try { navigator.clipboard.writeText(res).then(() => showTemporaryMessage(`Copied: ${res}`, 1500)).catch(() => { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); }); } catch (err) { const textArea = document.createElement("textarea"); textArea.value = res; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage(`Copied (fallback): ${res}`, 1500); } }}]
+            },
+            "settings": { 
+                name: "Settings", icon: "fas fa-cog", 
+                content: `<div class="p-4 text-sm"><h2 class="text-lg font-medium text-[var(--text-primary)] mb-4">System Settings</h2><div class="space-y-2"> <button class="w-full text-left p-3 bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] rounded-md transition-all" onclick="showTemporaryMessage('Opening Network & Internet settings...',1500)">Network & Internet</button> <button class="w-full text-left p-3 bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] rounded-md transition-all" onclick="showTemporaryMessage('Opening Display settings...',1500)">Display</button> <button class="w-full text-left p-3 bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] rounded-md transition-all" onclick="showTemporaryMessage('Opening Apps settings...',1500)">Apps</button></div></div>`, 
+                allowMultiple: true, 
+                isPinnedToDock: true,
+                contextMenuItems:[
+                    {label: "Personalization", icon: "fa-palette", action:() => showTemporaryMessage("Opening Personalization (mock)...", 1500)},
+                    {label: "Network Settings", icon: "fa-wifi", action:() => showTemporaryMessage("Opening Network settings (mock)...", 1500)},
+                    {label: "Check for Updates", icon: "fa-sync-alt", action:() => showTemporaryMessage("Checking for updates (mock)...", 1500)},
+                    {isDivider: true},
+                    {label: "Reset All Settings", icon:"fa-undo", action:()=>showTemporaryMessage("Resetting all settings (mock)", 2000)}
+                ]
+            },
+            "ai-assistant": { 
+                name: "Assistant", icon: "fas fa-robot", 
+                content: `<div class="p-4 flex flex-col h-full"><div class="flex-grow bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] rounded-md p-2 overflow-y-auto text-xs mb-2" id="ai-chat-log"></div><input type="text" id="ai-command-input" placeholder="Ask Assistant..." class="p-2.5 rounded-md bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] outline-none focus:border-[var(--accent-color)] focus:ring-1 focus:ring-[var(--accent-color)] text-sm"></div>`, 
+                allowMultiple: true, 
+                isPinnedToDock: false,
+                initFunction: initAIAssistant,
+                contextMenuItems:[{label: "Clear Chat History", icon:"fa-trash-alt", action:(winEl)=>{ winEl.querySelector('#ai-chat-log').innerHTML = ''; showTemporaryMessage("Chat history cleared.",1500);}}, {label:"Copy Last Response", icon:"fa-copy", action:(winEl)=> { const logs = winEl.querySelectorAll('#ai-chat-log > div > span'); if(logs.length > 0){ const lastResponse = logs[logs.length-1].textContent; try { navigator.clipboard.writeText(lastResponse).then(() => showTemporaryMessage("Copied last response.",1500)).catch(() => { const textArea = document.createElement("textarea"); textArea.value = lastResponse; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage("Copied last response (fallback).",1500); }); } catch (err) { const textArea = document.createElement("textarea"); textArea.value = lastResponse; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showTemporaryMessage("Copied last response (fallback).",1500); }} else {showTemporaryMessage("No response to copy.",1500);}}}]
+            },
+            "mail-client": { 
+                name: "Mail", icon: "fas fa-envelope", 
+                content: `<div class="mail-grid"><div class="mail-sidebar"><div class="mail-sidebar-item active" onclick="selectMailFolder(this, 'Inbox')"><i class="fas fa-inbox mr-2 w-4"></i>Inbox <span class="text-xs ml-auto bg-[var(--accent-color)] text-[var(--primary-bg)] px-1.5 py-0.5 rounded-full">3</span></div><div class="mail-sidebar-item" onclick="selectMailFolder(this, 'Sent')"><i class="fas fa-paper-plane mr-2 w-4"></i>Sent</div><div class="mail-sidebar-item" onclick="selectMailFolder(this, 'Drafts')"><i class="fas fa-file-alt mr-2 w-4"></i>Drafts</div><div class="mail-sidebar-item" onclick="selectMailFolder(this, 'Archive')"><i class="fas fa-archive mr-2 w-4"></i>Archive</div><div class="mail-sidebar-item" onclick="selectMailFolder(this, 'Spam')"><i class="fas fa-exclamation-triangle mr-2 w-4"></i>Spam</div></div><div class="mail-content"><div class="mail-message-list flex-shrink-0 h-1/3 overflow-y-auto mb-2 border-b border-[var(--border-color)]"><div class="mail-message-list-item" onclick="showMailPreview(this.closest('.window'), 'Update', 'System update available...')"><strong>System Update</strong> - Your OS needs an update...</div><div class="mail-message-list-item" onclick="showMailPreview(this.closest('.window'),'Meeting', 'Project discussion at 3 PM...')"><strong>Project Meeting</strong> - Discussion about project...</div><div class="mail-message-list-item" onclick="showMailPreview(this.closest('.window'),'Newsletter', 'Weekly tech news...')"><strong>Tech Newsletter</strong> - Latest in tech...</div></div><div class="mail-message-preview"><h3 id="mail-preview-subject" class="text-lg font-medium mb-1">Select a message</h3><p id="mail-preview-body" class="text-xs text-[var(--text-secondary)]">Message content will appear here.</p></div></div></div>`, 
+                allowMultiple: false, 
+                isPinnedToDock: true,
+                initFunction: initMailClient,
+                contextMenuItems:[{label:"Compose New Mail", icon:"fa-pen-nib", action:()=>showTemporaryMessage("Opening compose window (mock)...", 1500)}, {label:"Refresh Mailbox", icon:"fa-sync", action:()=>showTemporaryMessage("Checking for new mail (mock)...",1500)}, {label:"Archive Selected", icon:"fa-archive", action:()=>showTemporaryMessage("Archived (mock).",1500)}]
+            },
+            "music-player": { 
+                name: "Music", icon: "fas fa-music", 
+                content: `<div class="music-player-content"><div class="music-track-info"><img src="https://placehold.co/128x128/2A2A2A/82AAFF?text=AlbumArt&font=roboto" alt="Album Art"><h3 class="text-lg font-medium" id="music-track-title">Future Beats</h3><p class="text-sm text-[var(--text-secondary)]" id="music-track-artist">Synthwave Artist</p></div><div class="music-controls"><button class="top-panel-item p-3 rounded-full text-xl"><i class="fas fa-step-backward"></i></button><button class="top-panel-item p-4 rounded-full text-2xl bg-[var(--accent-color)] !text-[var(--primary-bg)]"><i class="fas fa-play"></i></button><button class="top-panel-item p-3 rounded-full text-xl"><i class="fas fa-step-forward"></i></button></div><div class="music-playlist"><div class="music-playlist-item">Track 1 - Electro Funk</div><div class="music-playlist-item">Track 2 - Neon Drive</div><div class="music-playlist-item">Track 3 - Midnight Run</div></div></div>`, 
+                allowMultiple: false, 
+                isPinnedToDock: true,
+                contextMenuItems:[{label:"Play/Pause", icon:"fa-play-circle", action:()=>showTemporaryMessage("Toggled Play/Pause (mock)",1000)}, {label:"Next Track", icon:"fa-step-forward", action:()=>showTemporaryMessage("Next Track (mock)",1000)},{label:"Add to Queue", icon:"fa-plus", action:()=>showTemporaryMessage("Added to queue (mock)",1000)}]
+            },
+            "image-viewer": {
+                name: "Image Viewer", icon: "fas fa-image",
+                content: `<div class="p-2 flex flex-col items-center justify-center h-full bg-black/50"><img id="image-viewer-img" src="https://placehold.co/300x200/44475a/E0E0E0?text=No+Image+Loaded&font=roboto" alt="Loaded Image" class="max-w-full max-h-[80%] object-contain rounded shadow-lg"><div class="mt-3 flex space-x-2"><button class="action-button text-xs !px-3 !py-1.5" onclick="showTemporaryMessage('Mock: Previous Image', 1000)"><i class="fas fa-arrow-left mr-1"></i> Prev</button><button class="action-button text-xs !px-3 !py-1.5" onclick="showTemporaryMessage('Mock: Next Image', 1000)">Next <i class="fas fa-arrow-right ml-1"></i></button><button class="action-button text-xs !px-3 !py-1.5" onclick="showTemporaryMessage('Mock: Zoom In', 1000)"><i class="fas fa-search-plus"></i></button></div><p class="text-xs text-[var(--text-secondary)] mt-2">Right-click for more options.</p></div>`,
+                allowMultiple: true, initialWidth: 450, initialHeight: 350, isPinnedToDock: false,
+                menuBar: [ { label: "File", items: [ { label: "Open Image (mock)", icon: "fa-folder-open", action: () => showTemporaryMessage("Open Image (mock)", 1500) }, { isDivider: true }, { label: "Close", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : (activeWindowId ? closeWindow(activeWindowId) : null) } ]}, { label: "View", items: [ { label: "Zoom In (mock)", icon: "fa-search-plus", action: () => showTemporaryMessage("Zoom In (mock)", 1500) }, { label: "Zoom Out (mock)", icon: "fa-search-minus", action: () => showTemporaryMessage("Zoom Out (mock)", 1500) }, { label: "Actual Size (mock)", icon: "fa-compress-arrows-alt", action: () => showTemporaryMessage("Actual Size (mock)", 1500) }, ]} ],
+                contextMenuItems: [ {label: "Open Image (mock)", icon:"fa-folder-open", action:()=>showTemporaryMessage("Open Image (mock)",1500)}, {label: "Copy Image (mock)", icon:"fa-copy", action:()=>showTemporaryMessage("Copy Image (mock)",1500)}, {isDivider: true}, {label: "Zoom In (mock)", icon:"fa-search-plus", action:()=>showTemporaryMessage("Zoom In (mock)",1500)}, {label: "Properties (mock)", icon:"fa-info-circle", action:()=>showTemporaryMessage("Image Properties (mock)",1500)} ]
+            },
+            "weather-app": {
+                name: "Weather", icon: "fas fa-cloud-sun",
+                content: `<div class="p-4 flex flex-col items-center justify-center h-full text-center"><i class="fas fa-cloud-sun text-6xl text-yellow-400 mb-3"></i><h3 id="weather-city" class="text-2xl font-medium">Seaford, NY</h3><p id="weather-temp" class="text-5xl font-bold my-1">72°F</p><p id="weather-condition" class="text-lg text-[var(--text-secondary)]">Partly Cloudy</p><p class="text-xs text-[var(--text-secondary)] mt-3">Humidity: 60% | Wind: 5mph</p><button class="action-button mt-4 text-sm" onclick="showTemporaryMessage('Refreshing weather (mock)...', 1500)"><i class="fas fa-sync-alt mr-1.5"></i> Refresh</button></div>`,
+                allowMultiple: false, initialWidth: 320, initialHeight: 380, isPinnedToDock: false,
+                menuBar: [ { label: "File", items: [ { label: "Refresh Data", icon: "fa-sync-alt", action: () => showTemporaryMessage("Refreshing weather (mock)...", 1500) }, { label: "Change Location (mock)", icon: "fa-map-marker-alt", action: () => showTemporaryMessage("Change Location (mock)", 1500) }, { isDivider: true }, { label: "Close", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : (activeWindowId ? closeWindow(activeWindowId) : null) } ]}, { label: "Help", items: [{ label: "About Weather", action: () => showTemporaryMessage("OSWeb Weather v1.0 (Mock Data)", 1500) }] } ],
+                contextMenuItems: [ {label: "Refresh Data", icon:"fa-sync-alt", action:()=>showTemporaryMessage("Refreshing weather (mock)...",1500)}, {label: "Change Location (mock)", icon:"fa-map-marker-alt", action:()=>showTemporaryMessage("Change Location (mock)",1500)}, {label: "View Details (mock)", icon:"fa-info-circle", action:()=>showTemporaryMessage("Detailed forecast (mock)",1500)} ]
+            },
+            "clicker-game": {
+                name: "Clicker Game", icon: "fas fa-mouse-pointer",
+                content: `<div class="p-4 flex flex-col items-center justify-center h-full text-center"><h3 class="text-xl font-medium mb-2">Score: <span id="clicker-score">0</span></h3><button id="clicker-button" class="action-button text-lg px-8 py-4 my-4 !bg-[var(--secondary-accent)] hover:!bg-[color-mix(in_srgb,_var(--secondary-accent)_90%,_white)] active:transform active:scale-95 transition-transform">Click Me!</button><p class="text-xs text-[var(--text-secondary)]">How high can you score?</p></div>`,
+                allowMultiple: false, initialWidth: 300, initialHeight: 250, isPinnedToDock: false,
+                initFunction: initClickerGame,
+                menuBar: [ { label: "Game", items: [ { label: "Reset Score", icon: "fa-undo", action: (winEl) => { if(winEl) { const scoreEl = winEl.querySelector('#clicker-score'); if(scoreEl) scoreEl.textContent = '0'; const btn = winEl.querySelector('#clicker-button'); if(btn) btn.dataset.score = '0'; } showTemporaryMessage("Score Reset!", 1000); } }, { isDivider: true }, { label: "Close", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : (activeWindowId ? closeWindow(activeWindowId) : null) } ]}, { label: "Help", items: [{ label: "About Clicker", action: () => showTemporaryMessage("OSWeb Clicker Game v1.0", 1500) }] } ],
+                contextMenuItems: [ {label: "Reset Score", icon:"fa-undo", action:(winEl) => { if(winEl) { const scoreEl = winEl.querySelector('#clicker-score'); if(scoreEl) scoreEl.textContent = '0'; const btn = winEl.querySelector('#clicker-button'); if(btn) btn.dataset.score = '0'; } showTemporaryMessage("Score Reset!", 1000); }}, {label: "View High Scores (mock)", icon:"fa-trophy", action:()=>showTemporaryMessage("High Scores (mock)",1500)} ]
+            },
+            "system-monitor": {
+                name: "System Monitor", icon: "fas fa-chart-line",
+                content: `<div class="p-4 space-y-3 text-sm overflow-y-auto h-full"><div class="mb-2"><h3 class="font-medium mb-1">CPU Usage</h3><div class="w-full bg-[var(--surface-overlay-bg)] rounded-full h-5"><div id="sysmon-cpu-bar" class="bg-[var(--accent-color)] h-5 rounded-full text-xs text-white text-center leading-5" style="width: 30%;">30%</div></div></div><div class="mb-2"><h3 class="font-medium mb-1">Memory Usage</h3><div class="w-full bg-[var(--surface-overlay-bg)] rounded-full h-5"><div id="sysmon-mem-bar" class="bg-[var(--secondary-accent)] h-5 rounded-full text-xs text-black text-center leading-5" style="width: 55%;">4.4/8.0 GB</div></div></div><div class="mb-2"><h3 class="font-medium mb-1">Disk I/O (mock)</h3><p class="text-[var(--text-secondary)]">Read: 1.2 MB/s, Write: 300 KB/s</p></div><div class="mb-2"><h3 class="font-medium mb-1">Network Activity (mock)</h3><p class="text-[var(--text-secondary)]">Down: 5.6 Mbps, Up: 1.1 Mbps</p></div><button class="action-button text-xs mt-2" onclick="if(activeWindowId && openWindows[activeWindowId] && openWindows[activeWindowId].appId === 'system-monitor' && typeof initSystemMonitor === 'function') initSystemMonitor(openWindows[activeWindowId].element, true); showTemporaryMessage('Refreshing monitor data (mock)...', 1000);"><i class="fas fa-sync-alt mr-1"></i> Refresh</button></div>`,
+                allowMultiple: false, initialWidth: 380, initialHeight: 320, isPinnedToDock: false,
+                initFunction: initSystemMonitor,
+                menuBar: [ { label: "File", items: [ { label: "Refresh Data", icon: "fa-sync-alt", action: (winEl) => { if(winEl && typeof initSystemMonitor === 'function') initSystemMonitor(winEl, true); showTemporaryMessage("Refreshing monitor data (mock)...", 1000); } }, { isDivider: true }, { label: "Close", icon: "fa-times", action: (winEl) => winEl ? closeWindow(winEl.id) : (activeWindowId ? closeWindow(activeWindowId) : null) } ]}, { label: "View", items: [{ label: "Processes (mock)", icon: "fa-list-ul", action: () => showTemporaryMessage("Viewing processes (mock)", 1500) }] } ],
+                contextMenuItems: [ {label: "Refresh Data", icon:"fa-sync-alt", action:(winEl) => { if(winEl && typeof initSystemMonitor === 'function') initSystemMonitor(winEl, true); showTemporaryMessage("Refreshing monitor data (mock)...", 1000); }}, {label: "View Processes (mock)", icon:"fa-list-ul", action:()=>showTemporaryMessage("Viewing processes (mock)",1500)}, {label: "Resource History (mock)", icon:"fa-chart-area", action:()=>showTemporaryMessage("Resource history (mock)",1500)} ]
+            }
         };
         
         // --- DOM Element References (available after DOM loaded) ---
-        let desktopArea, dock, appMenuBarContainer, globalSearchInput, tempMsgContainer, themeToggleButton, userAvatarImg, cpuMeter, gpuMeter, showDesktopButton, appLauncherFolder, myFilesFolder, clockEl, sidebar, sidebarToggle, activitiesButton, vDesktopSwitcher, contextMenuEl, wallpaperContainer, loginModal, usernameInput, loginButton, topPanel, rightSidebar, osVersionInfoEl, userInfoEl, systemUptimeEl;
+        let desktopArea, dock, appMenuBarContainer, globalSearchInput, tempMsgContainer, themeToggleButton, userAvatarImg, cpuMeter, gpuMeter, showDesktopButton, appLauncherFolder, myFilesFolder, clockEl, sidebar, sidebarToggle, activitiesButton, vDesktopSwitcher, contextMenuEl, wallpaperContainer, loginModal, usernameInput, loginButton, topPanel, rightSidebar, osVersionInfoEl, userInfoEl, systemUptimeEl, addDesktopButtonEl;
 
         function assignGlobalElements() {
             desktopArea = document.getElementById('desktop-area');
@@ -882,6 +1333,7 @@
             osVersionInfoEl = document.getElementById('os-version-info');
             userInfoEl = document.getElementById('user-info');
             systemUptimeEl = document.getElementById('system-uptime');
+            addDesktopButtonEl = document.getElementById('add-desktop-button');
         }
         
         async function callGeminiAPI(prompt, type = "text") {
@@ -932,11 +1384,14 @@
             if (!userAvatarImg) return;
             const avatarSrcBase = "https://placehold.co/32x32";
             const usernameInitial = currentUsername ? currentUsername.charAt(0).toUpperCase() : 'U';
-            if (isLightMode) {
+            
+            if (document.body.classList.contains('light-mode')) {
                 userAvatarImg.src = `${avatarSrcBase}/1976D2/FFFFFF?text=${usernameInitial}&font=roboto`;
             } else if (document.body.classList.contains('indigo-magic-theme')) {
                 userAvatarImg.src = `${avatarSrcBase}/88C0D0/2E3440?text=${usernameInitial}&font=roboto`;
-            } else { // Default dark mode (if Indigo removed later)
+            } else if (document.body.classList.contains('crimson-peak-theme')) {
+                userAvatarImg.src = `${avatarSrcBase}/E53935/F5F5F5?text=${usernameInitial}&font=roboto`;
+            } else { // Default dark mode
                 userAvatarImg.src = `${avatarSrcBase}/82AAFF/1E1E1E?text=${usernameInitial}&font=roboto`;
             }
         }
@@ -955,25 +1410,55 @@
             showTemporaryMessage(`Dock glass set to: ${selectedTransparency.label}`, 1500);
         }
 
-        function createWindow(appId, initialData = {}) {
+        function applyWindowTransparency() {
+            const selectedLevel = windowTransparencyLevels[currentWindowTransparencyIndex];
+            const rootStyle = document.documentElement.style;
+            const rgbString = getComputedStyle(document.documentElement).getPropertyValue('--surface-bg-rgb').trim();
+
+            document.querySelectorAll('.window').forEach(win => win.classList.remove('glass-mode'));
+
+            if (selectedLevel.value <= 0.01) { // Glass mode
+                rootStyle.setProperty('--window-content-bg', 'transparent');
+                document.querySelectorAll('.window').forEach(win => {
+                    if (!win.classList.contains('minimized')) win.classList.add('glass-mode');
+                });
+            } else {
+                if (rgbString) {
+                    rootStyle.setProperty('--window-content-bg', `rgba(${rgbString}, ${selectedLevel.value})`);
+                } else {
+                    console.warn("Could not get RGB values for window transparency, defaulting to solid.");
+                    rootStyle.setProperty('--window-content-bg', `var(--surface-bg)`);
+                }
+            }
+            const labelEl = document.getElementById('window-transparency-label');
+            if (labelEl) labelEl.textContent = selectedLevel.label;
+        }
+
+        function toggleWindowTransparency() {
+            currentWindowTransparencyIndex = (currentWindowTransparencyIndex + 1) % windowTransparencyLevels.length;
+            applyWindowTransparency(); 
+            const selectedLevel = windowTransparencyLevels[currentWindowTransparencyIndex];
+            showTemporaryMessage(`Window glass set to: ${selectedLevel.label}`, 1500);
+        }
+
+        function createWindow(appId, initialData = {}, targetDesktopId = null) {
             const app = appConfig[appId]; if (!app) return null;
             
+            const desktopToOpenOn = targetDesktopId !== null ? targetDesktopId : currentVirtualDesktop;
+
             if (!app.allowMultiple) {
                 const existingInstanceId = Object.keys(openWindows).find(id => openWindows[id].appId === appId);
                 if (existingInstanceId) {
                     const existingWindowData = openWindows[existingInstanceId];
-                    if (existingWindowData.desktop !== currentVirtualDesktop) switchVirtualDesktop(existingWindowData.desktop, true);
+                    if (existingWindowData.desktop !== desktopToOpenOn) {
+                         moveWindowToDesktop(existingInstanceId, desktopToOpenOn, true); 
+                    } else if (existingWindowData.desktop !== currentVirtualDesktop) {
+                        switchVirtualDesktop(desktopToOpenOn, true); 
+                    }
                     if (existingWindowData.minimized) toggleMinimizeWindow(existingInstanceId);
                     focusWindow(existingInstanceId); 
-                    if (appId === 'web-browser' && initialData.url && existingWindowData.element) {
-                        const frame = existingWindowData.element.querySelector('#browser-content-frame');
-                        const addressBar = existingWindowData.element.querySelector('#browser-address-bar');
-                        if (frame && addressBar) {
-                            addressBar.value = initialData.url;
-                            try { // NavigateTo will handle the actual opening
-                                initWebBrowser(existingWindowData.element, initialData.url);
-                            } catch (e) { console.error("Error setting initial URL for existing browser:", e); }
-                        }
+                    if (appId === 'web-browser' && initialData.url && existingWindowData.element && app.initFunction) {
+                         app.initFunction(existingWindowData.element, initialData); 
                     }
                     return existingWindowData.element; 
                 }
@@ -986,6 +1471,10 @@
             windowEl.id = instanceId; 
             windowEl.className = 'window opening surface-card absolute flex flex-col overflow-hidden';
             windowEl.dataset.appId = appId;
+            if (windowTransparencyLevels[currentWindowTransparencyIndex].value <= 0.01) {
+                windowEl.classList.add('glass-mode');
+            }
+
 
             const desktopRect = desktopArea.getBoundingClientRect();
             let initialWidth = Math.min(app.initialWidth || desktopRect.width * 0.55, desktopRect.width - 40); 
@@ -994,10 +1483,14 @@
             if (appId === 'mail-client') { initialWidth = Math.min(800, desktopRect.width - 40) ; initialHeight = Math.min(600, desktopRect.height - 40); }
             if (appId === 'music-player') { initialWidth = 360 ; initialHeight = 500; }
             if (appId === 'app-launcher') { initialWidth = 500; initialHeight = 400; }
+            if (appId === 'image-viewer') { initialWidth = 450; initialHeight = 350; }
+            if (appId === 'weather-app') { initialWidth = 320; initialHeight = 380; }
+            if (appId === 'clicker-game') { initialWidth = 300; initialHeight = 250; }
+            if (appId === 'system-monitor') { initialWidth = 380; initialHeight = 320; }
 
 
             windowEl.style.width = `${initialWidth}px`; windowEl.style.height = `${initialHeight}px`;
-            const staggerOffset = (Object.values(openWindows).filter(w => w.appId === appId && w.desktop === currentVirtualDesktop).length) * 25; 
+            const staggerOffset = (Object.values(openWindows).filter(w => w.appId === appId && w.desktop === desktopToOpenOn).length) * 25; 
             windowEl.style.top = `${Math.max(20, (desktopRect.height - initialHeight) / 2 * (0.3 + Math.random()*0.2) + staggerOffset)}px`; 
             windowEl.style.left = `${Math.max(20, (desktopRect.width - initialWidth) / 2 * (0.3 + Math.random()*0.2) + staggerOffset)}px`;
             windowEl.style.zIndex = highestZIndex;
@@ -1009,24 +1502,27 @@
                     <div class="flex items-center"> <i class="${app.icon} app-icon text-base"></i> <span class="text-sm font-medium app-name">${app.name} ${app.allowMultiple && windowInstanceCounter[appId] > 1 ? ` (${windowInstanceCounter[appId]})` : ''}</span> </div>
                     <div class="space-x-1"> <button class="window-control p-2 rounded-full text-xs" title="Minimize" data-action="minimize"><i class="fas fa-minus"></i></button> <button class="window-control p-2 rounded-full text-xs" title="Maximize" data-action="maximize"><i class="far fa-square"></i></button> <button class="window-control p-2 rounded-full text-xs hover:!bg-[var(--error-color)] hover:!text-white" title="Close" data-action="close"><i class="fas fa-times"></i></button> </div>
                 </div>
-                <div class="window-content-area flex-grow bg-[var(--surface-bg)] overflow-hidden flex flex-col relative"> ${app.content} </div>
+                <div class="window-content-area flex-grow overflow-hidden flex flex-col relative"> ${app.content} </div>
             `;
             windowEl.querySelector('.window-content-area').appendChild(resizeHandle);
             desktopArea.appendChild(windowEl);
             
             void windowEl.offsetWidth; windowEl.classList.remove('opening');
-            showTemporaryMessage(`${app.name} initialized.`, 1200);
+            showTemporaryMessage(`${app.name} initialized on Desktop ${desktopToOpenOn}.`, 1200);
 
-            openWindows[instanceId] = { element: windowEl, name: app.name, minimized: false, originalRect: null, isMaximized: false, desktop: currentVirtualDesktop, appId: appId };
+            openWindows[instanceId] = { element: windowEl, name: app.name, minimized: false, originalRect: null, isMaximized: false, desktop: desktopToOpenOn, appId: appId, initialData: initialData };
             
-            makeInteractive(windowEl, instanceId); focusWindow(instanceId); updateWindowVisibility(); 
-            if (appId === 'calculator') initCalculator(windowEl);
-            if (appId === 'terminal') initTerminal(windowEl);
-            if (appId === 'ai-assistant') initAIAssistant(windowEl);
-            if (appId === 'notepad') initNotepad(windowEl);
-            if (appId === 'mail-client') initMailClient(windowEl);
-            if (appId === 'web-browser') initWebBrowser(windowEl, initialData.url); 
-            if (appId === 'app-launcher') initAppLauncher(windowEl);
+            makeInteractive(windowEl, instanceId); 
+            if (desktopToOpenOn === currentVirtualDesktop) {
+                focusWindow(instanceId);
+            } else {
+                 windowEl.classList.add('hidden-on-desktop'); 
+            }
+            updateWindowVisibility(); 
+            
+            if (app.initFunction) {
+                app.initFunction(windowEl, initialData);
+            }
             return windowEl; 
         }
         
@@ -1115,14 +1611,28 @@
             windowEl.querySelector('[data-action="close"]').addEventListener('click', (ev) => { ev.stopPropagation(); closeWindow(instanceId); });
             
             const app = appConfig[openWindows[instanceId].appId];
+            let windowContextMenuItems = [];
             if (app.contextMenuItems && app.contextMenuItems.length > 0) {
-                contentArea.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); displayContextMenu(e.clientX, e.clientY, app.contextMenuItems, windowEl); });
+                 windowContextMenuItems = [...app.contextMenuItems]; 
+            }
+            const moveToDesktopSubmenu = virtualDesktops.map(desktopNum => ({
+                label: `Desktop ${desktopNum}`,
+                icon: openWindows[instanceId].desktop === desktopNum ? "fa-check-circle" : "fa-desktop",
+                action: () => moveWindowToDesktop(instanceId, desktopNum)
+            }));
+            if (windowContextMenuItems.length > 0) windowContextMenuItems.push({ isDivider: true });
+            windowContextMenuItems.push({ label: "Move to Desktop...", icon: "fa-arrow-right-to-bracket", items: moveToDesktopSubmenu, isSubmenuPlaceholder: true });
+
+
+            if (windowContextMenuItems.length > 0) {
+                 const eventTargetForContextMenu = titleBar; 
+                 eventTargetForContextMenu.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); displayContextMenu(e.clientX, e.clientY, windowContextMenuItems, windowEl, `window-${instanceId}`); });
                 let appLongPressTimer = null;
-                contentArea.addEventListener('touchstart', (e) => {
-                    if (e.touches.length === 1) { clearTimeout(appLongPressTimer); appLongPressTimer = setTimeout(() => { e.preventDefault(); e.stopPropagation(); displayContextMenu(e.touches[0].clientX, e.touches[0].clientY, app.contextMenuItems, windowEl); }, LONG_PRESS_DURATION); }
+                eventTargetForContextMenu.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 1) { clearTimeout(appLongPressTimer); appLongPressTimer = setTimeout(() => { e.preventDefault(); e.stopPropagation(); displayContextMenu(e.touches[0].clientX, e.touches[0].clientY, windowContextMenuItems, windowEl, `window-${instanceId}`); }, LONG_PRESS_DURATION); }
                 }, { passive: true }); 
-                contentArea.addEventListener('touchmove', () => clearTimeout(appLongPressTimer));
-                contentArea.addEventListener('touchend', () => clearTimeout(appLongPressTimer));
+                eventTargetForContextMenu.addEventListener('touchmove', () => clearTimeout(appLongPressTimer));
+                eventTargetForContextMenu.addEventListener('touchend', () => clearTimeout(appLongPressTimer));
             }
         }
 
@@ -1254,16 +1764,46 @@
 
         function initializeDock() {
             if (!dock) return;
+            dock.innerHTML = ''; 
             Object.keys(appConfig).forEach(appId => {
                 if (appId === 'app-launcher') return; 
-                const app = appConfig[appId]; const button = document.createElement('button');
-                button.className = 'dock-icon p-2.5 md:p-3 rounded-full text-xl relative'; 
-                button.title = `Open ${app.name}`;
-                button.innerHTML = `<i class="${app.icon} ${app.color || 'text-[var(--icon-color)]'}"></i>`;
-                button.dataset.appId = appId; 
-                button.onclick = (event) => launchOrFocusApp(appId, event.currentTarget); 
-                dock.appendChild(button); app.dockElement = button;
+                const app = appConfig[appId];
+                if (app.isPinnedToDock === undefined) app.isPinnedToDock = true; 
+
+                if (app.isPinnedToDock || Object.values(openWindows).some(win => win.appId === appId)) {
+                    const button = document.createElement('button');
+                    button.className = 'dock-icon p-2.5 md:p-3 rounded-full text-xl relative'; 
+                    button.title = `Open ${app.name}`;
+                    button.innerHTML = `<i class="${app.icon} ${app.color || 'text-[var(--icon-color)]'}"></i>`;
+                    button.dataset.appId = appId; 
+                    button.onclick = (event) => launchOrFocusApp(appId, event.currentTarget); 
+                    
+                    button.oncontextmenu = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const isAppOpen = Object.values(openWindows).some(win => win.appId === appId && !win.minimized && win.desktop === currentVirtualDesktop);
+                        const dockContextMenu = [
+                            { label: "Open New Instance", icon: "fa-plus-circle", action: () => createWindow(appId, {}, currentVirtualDesktop) },
+                            app.isPinnedToDock 
+                                ? { label: "Unpin from Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = false; initializeDock(); updateDockActiveState(appId); showTemporaryMessage(`${app.name} unpinned.`, 1500); } }
+                                : { label: "Pin to Dock", icon: "fa-thumbtack", action: () => { app.isPinnedToDock = true; initializeDock(); updateDockActiveState(appId); showTemporaryMessage(`${app.name} pinned.`, 1500); } },
+                        ];
+                        if (isAppOpen) {
+                             dockContextMenu.push({ label: "Close All Instances", icon: "fa-times-circle", action: () => Object.values(openWindows).filter(w => w.appId === appId).forEach(win => closeWindow(win.element.id)) });
+                        }
+                        displayContextMenu(e.clientX, e.clientY, dockContextMenu, null, `dock-${appId}`);
+                    };
+
+                    dock.appendChild(button); 
+                    app.dockElement = button;
+                } else {
+                    if (app.dockElement) { 
+                        app.dockElement.remove();
+                        delete app.dockElement;
+                    }
+                }
             });
+            updateDockActiveState(activeWindowId ? openWindows[activeWindowId]?.appId : null);
         }
 
         function launchOrFocusApp(appId, dockButtonElement = null) {
@@ -1272,31 +1812,43 @@
 
             const allInstancesOfApp = Object.values(openWindows).filter(win => win.appId === appId);
 
-            if (allInstancesOfApp.length > 0 && dockButtonElement) { 
+            if (allInstancesOfApp.length > 0 && dockButtonElement) {
                 const instanceMenuItems = allInstancesOfApp.map(instance => {
                     const instanceNumber = instance.element.id.split('-').pop();
-                    let label = `${instance.name} ${app.allowMultiple ? `(${instanceNumber})` : ''} on D${instance.desktop}`;
-                    if (instance.minimized) label += " (min)";
+                    let label = `${instance.name} ${app.allowMultiple && allInstancesOfApp.length > 1 ? `(${instanceNumber})` : ''} on D${instance.desktop}`;
+                    if (instance.minimized) label += " (minimized)";
                     return {
                         label: label,
-                        icon: instance.minimized ? 'fa-window-maximize' : 'fa-external-link-alt',
+                        icon: instance.minimized ? 'fa-window-maximize' : (instance.desktop === currentVirtualDesktop ? 'fa-eye' : 'fa-external-link-alt'),
                         action: () => {
                             if (instance.desktop !== currentVirtualDesktop) {
                                 switchVirtualDesktop(instance.desktop, true);
                             }
-                            setTimeout(() => {
-                                if (instance.minimized) {
-                                    toggleMinimizeWindow(instance.element.id);
-                                } else {
-                                    focusWindow(instance.element.id);
-                                }
-                            }, 50); 
+                            setTimeout(() => { // Ensure desktop switch completes
+                                if (instance.minimized) toggleMinimizeWindow(instance.element.id);
+                                else focusWindow(instance.element.id);
+                            }, 50);
                         }
                     };
                 });
+
+                if (app.allowMultiple) {
+                    instanceMenuItems.push({ isDivider: true });
+                    instanceMenuItems.push({
+                        label: `Open New on Desktop ${currentVirtualDesktop}`,
+                        icon: "fa-plus-circle",
+                        action: () => createWindow(appId, {}, currentVirtualDesktop)
+                    });
+                    const openOnDesktopSubmenu = virtualDesktops.map(desktopNum => ({
+                        label: `Desktop ${desktopNum}`,
+                        icon: "fa-desktop",
+                        action: () => createWindow(appId, {}, desktopNum)
+                    }));
+                    instanceMenuItems.push({ label: "Open New on Desktop...", icon: "fa-ellipsis-h", items: openOnDesktopSubmenu, isSubmenuPlaceholder: true });
+                }
                 
                 const rect = dockButtonElement.getBoundingClientRect();
-                displayContextMenu(rect.left, rect.top - 10, instanceMenuItems, null, "dockAppInstancePicker", true);
+                displayContextMenu(rect.left, rect.top - 10, instanceMenuItems, null, `dockAppInstancePicker-${appId}`, true); // fromBottom = true
             
             } else if (allInstancesOfApp.length > 0 && !app.allowMultiple) { 
                  const instance = allInstancesOfApp[0];
@@ -1306,16 +1858,22 @@
                     else focusWindow(instance.element.id);
                  }, 50);
             } else { 
-                createWindow(appId); 
+                createWindow(appId, {}, currentVirtualDesktop); 
             }
-            updateDockActiveState(appId);
+            initializeDock(); 
         }
 
 
         function updateDockActiveState(activeAppIdParam) {
             Object.keys(appConfig).forEach(appId => {
                 if (appId === 'app-launcher') return;
-                const app = appConfig[appId]; if (!app.dockElement) return;
+                const app = appConfig[appId]; 
+                if (!app.dockElement && (app.isPinnedToDock || Object.values(openWindows).some(win => win.appId === appId))) {
+                    initializeDock();
+                    return; 
+                }
+                if (!app.dockElement) return; 
+
                 const hasOpenNotMinimizedInstanceOnCurrentDesktop = Object.values(openWindows).some(win => win.appId === appId && !win.minimized && win.desktop === currentVirtualDesktop);
                 const isCurrentlyFocusedAppType = activeWindowId && openWindows[activeWindowId] && openWindows[activeWindowId].appId === appId;
                 
@@ -1331,6 +1889,10 @@
                     } 
                 } else { 
                     if (dot) dot.remove(); 
+                    if (!app.isPinnedToDock && app.dockElement) { 
+                        app.dockElement.remove();
+                        delete app.dockElement;
+                    }
                 }
             });
         }
@@ -1349,20 +1911,40 @@
                 if (item.isDivider) { const divider = document.createElement('div'); divider.className = 'context-menu-divider'; contextMenuEl.appendChild(divider); return; }
                 const menuItemEl = document.createElement('div'); menuItemEl.className = 'context-menu-item';
                 menuItemEl.innerHTML = `<i class="fas ${item.icon || 'fa-empty-set'} fa-fw"></i><span>${item.label}</span>`;
-                menuItemEl.onclick = (e) => { 
-                    e.stopPropagation(); 
-                    const currentTargetWindow = targetWindowEl || (activeWindowId ? openWindows[activeWindowId].element : null);
-                    item.action(currentTargetWindow); 
-                    contextMenuEl.classList.remove('show'); 
-                    contextMenuEl.style.display = 'none'; 
-                    if (activeMenuBarDropdown === contextMenuEl) activeMenuBarDropdown = null; 
-                };
+                
+                if (item.items && item.items.length > 0) { 
+                    menuItemEl.classList.add('has-submenu');
+                    menuItemEl.onclick = (e) => {
+                        e.stopPropagation(); 
+                        const rect = menuItemEl.getBoundingClientRect();
+                        let subX = rect.right;
+                        if (subX + contextMenuEl.offsetWidth > window.innerWidth) {
+                            subX = rect.left - contextMenuEl.offsetWidth;
+                        }
+                        displayContextMenu(subX, rect.top, item.items, targetWindowEl, `${menuId}-sub-${item.label.replace(/\s+/g, '')}`, false);
+                    };
+                } else {
+                    menuItemEl.onclick = (e) => { 
+                        e.stopPropagation(); 
+                        const currentTargetWindow = targetWindowEl || (activeWindowId ? openWindows[activeWindowId].element : null);
+                        if (item.action) item.action(currentTargetWindow); 
+                        contextMenuEl.classList.remove('show'); 
+                        contextMenuEl.style.display = 'none'; 
+                        if (activeMenuBarDropdown === contextMenuEl) activeMenuBarDropdown = null; 
+                        let parentMenu = contextMenuEl.dataset.parentMenuId ? document.querySelector(`.context-menu[data-menu-id="${contextMenuEl.dataset.parentMenuId}"]`) : null;
+                        while(parentMenu) {
+                            parentMenu.classList.remove('show'); parentMenu.style.display = 'none';
+                            parentMenu = parentMenu.dataset.parentMenuId ? document.querySelector(`.context-menu[data-menu-id="${parentMenu.dataset.parentMenuId}"]`) : null;
+                        }
+                    };
+                }
                 contextMenuEl.appendChild(menuItemEl);
             });
             
             contextMenuEl.style.visibility = 'hidden';
             contextMenuEl.style.display = 'block';
             const menuHeight = contextMenuEl.offsetHeight;
+            const menuWidth = contextMenuEl.offsetWidth;
             contextMenuEl.style.visibility = 'visible'; 
             
             let finalY = y;
@@ -1370,14 +1952,17 @@
                  finalY = y - menuHeight; 
             }
             finalY = Math.max(10, Math.min(finalY, window.innerHeight - menuHeight - 10)); 
-            const finalX = Math.min(x, window.innerWidth - contextMenuEl.offsetWidth - 10);
+            let finalX = x;
+            if (finalX + menuWidth > window.innerWidth -10) finalX = window.innerWidth - menuWidth - 10;
+            finalX = Math.max(10, finalX);
+
 
             contextMenuEl.style.top = `${finalY}px`;
             contextMenuEl.style.left = `${finalX}px`;
             void contextMenuEl.offsetWidth; 
             contextMenuEl.classList.add('show'); 
             
-            if (menuId && menuId !== "dockAppInstancePicker" && menuId !== "desktopContextMenu") {
+            if (menuId && !menuId.startsWith("dockAppInstancePicker") && menuId !== "desktopContextMenu" && !menuId.includes("-sub-")) { 
                  activeMenuBarDropdown = contextMenuEl;
                  activeMenuBarDropdown.dataset.menuLabel = menuId; 
             }
@@ -1394,7 +1979,7 @@
         
         function changeWallpaperContext(fromSidebar = false, initialLoad = false) {
             if (!wallpaperContainer) return;
-            if (!initialLoad) { // Only cycle if not initial load
+            if (!initialLoad) { 
                 currentWallpaperIdx = (currentWallpaperIdx + 1) % wallpapers.length;
             }
             const selectedWallpaper = wallpapers[currentWallpaperIdx];
@@ -1458,11 +2043,94 @@
             }
         }
                         
+        function updateVirtualDesktopSwitcherUI() {
+            if (!vDesktopSwitcher) return;
+            vDesktopSwitcher.innerHTML = ''; 
+            virtualDesktops.forEach(desktopNum => {
+                const container = document.createElement('div');
+                container.className = 'vdesktop-button-container';
+
+                const button = document.createElement('button');
+                button.className = 'vdesktop-button px-3 py-1.5 text-xs';
+                button.dataset.desktop = desktopNum;
+                button.title = `Desktop ${desktopNum}`;
+                button.textContent = desktopNum;
+                if (desktopNum === currentVirtualDesktop) button.classList.add('active');
+                button.onclick = () => switchVirtualDesktop(desktopNum);
+                container.appendChild(button);
+
+                if (virtualDesktops.length > 1 && desktopNum !== 1) { 
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-desktop-btn top-panel-item !p-0.5 !absolute';
+                    removeBtn.innerHTML = '<i class="fas fa-times text-xs"></i>';
+                    removeBtn.title = `Remove Desktop ${desktopNum}`;
+                    removeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        removeVirtualDesktop(desktopNum);
+                    };
+                    container.appendChild(removeBtn);
+                }
+                vDesktopSwitcher.appendChild(container);
+            });
+        }
+
+        function addVirtualDesktop() {
+            if (virtualDesktops.length >= 8) { 
+                showTemporaryMessage("Maximum number of desktops reached.", 2000);
+                return;
+            }
+            virtualDesktops.push(nextDesktopId);
+            showTemporaryMessage(`Desktop ${nextDesktopId} added.`, 1500);
+            nextDesktopId++;
+            updateVirtualDesktopSwitcherUI();
+            switchVirtualDesktop(virtualDesktops[virtualDesktops.length - 1]); 
+        }
+
+        function removeVirtualDesktop(desktopIdToRemove) {
+            if (virtualDesktops.length <= 1) {
+                showTemporaryMessage("Cannot remove the last desktop.", 2000);
+                return;
+            }
+            if (desktopIdToRemove === 1 && virtualDesktops.includes(1)) {
+                 showTemporaryMessage("Cannot remove the primary desktop (Desktop 1).", 2000);
+                return;
+            }
+
+            const indexToRemove = virtualDesktops.indexOf(desktopIdToRemove);
+            if (indexToRemove === -1) return; 
+
+            const targetDesktopForWindows = virtualDesktops.find(d => d !== desktopIdToRemove) || virtualDesktops[0]; 
+            Object.values(openWindows).forEach(winData => {
+                if (winData.desktop === desktopIdToRemove) {
+                    moveWindowToDesktop(winData.element.id, targetDesktopForWindows, false); 
+                }
+            });
+
+            virtualDesktops.splice(indexToRemove, 1);
+            showTemporaryMessage(`Desktop ${desktopIdToRemove} removed.`, 1500);
+
+            if (currentVirtualDesktop === desktopIdToRemove) {
+                currentVirtualDesktop = virtualDesktops[0] || 1; 
+                switchVirtualDesktop(currentVirtualDesktop, true);
+            } else {
+                updateVirtualDesktopSwitcherUI(); 
+            }
+            updateWindowVisibility();
+        }
+
+
         function switchVirtualDesktop(newDesktopId, forceSwitch = false) {
+            if (!virtualDesktops.includes(newDesktopId)) { 
+                console.warn(`Attempted to switch to non-existent desktop: ${newDesktopId}`);
+                currentVirtualDesktop = virtualDesktops[0] || 1; 
+                updateVirtualDesktopSwitcherUI(); 
+                return;
+            }
+
             if (newDesktopId !== currentVirtualDesktop || forceSwitch) {
                 currentVirtualDesktop = newDesktopId;
                 if(!forceSwitch) showTemporaryMessage(`Switched to Desktop ${currentVirtualDesktop}.`,1500);
-                if (vDesktopSwitcher) vDesktopSwitcher.querySelectorAll('.vdesktop-button').forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.desktop) === currentVirtualDesktop));
+                updateVirtualDesktopSwitcherUI(); 
                 updateWindowVisibility();
                 if (activeWindowId && openWindows[activeWindowId] && openWindows[activeWindowId].desktop !== currentVirtualDesktop) focusDesktop();
                  else if (activeWindowId && openWindows[activeWindowId] && openWindows[activeWindowId].desktop === currentVirtualDesktop) {
@@ -1472,22 +2140,29 @@
                 }
             }
         }
+        
+        function moveWindowToDesktop(windowId, targetDesktopId, switchToTargetDesktop = true) {
+            const windowData = openWindows[windowId];
+            if (!windowData || !virtualDesktops.includes(targetDesktopId)) return;
+
+            windowData.desktop = targetDesktopId;
+            showTemporaryMessage(`${windowData.name} moved to Desktop ${targetDesktopId}.`, 1500);
+            
+            if (switchToTargetDesktop && currentVirtualDesktop !== targetDesktopId) {
+                switchVirtualDesktop(targetDesktopId, true); 
+                setTimeout(() => focusWindow(windowId), 50); 
+            } else {
+                updateWindowVisibility(); 
+                if (currentVirtualDesktop === targetDesktopId) {
+                    focusWindow(windowId); 
+                }
+            }
+        }
+
 
         function updateWindowVisibility() { Object.values(openWindows).forEach(winData => winData.element.classList.toggle('hidden-on-desktop', winData.desktop !== currentVirtualDesktop)); }
         
         let calcCurrentInput = '0'; let calcPreviousInput = ''; let calcOperation = null; let calcDisplayElement = null;
-        function initCalculator(windowEl) {
-            calcDisplayElement = windowEl.querySelector('#calc-output');
-            const buttons = windowEl.querySelectorAll('.calc-button');
-            buttons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const value = button.dataset.value; const op = button.dataset.op;
-                    if (value) calcAppend(value);
-                    else if (op) { if (op === 'C') calcClear(); else if (op === '=') calcEquals(); else calcPerformOp(op); }
-                });
-            });
-            calcClear();
-        }
         function calcUpdateDisplay() { if (calcDisplayElement) calcDisplayElement.textContent = calcCurrentInput.toLocaleString('en', { maximumFractionDigits: 8 }); }
         function calcAppend(number) { if (calcCurrentInput.length > 15 && number !== '.') return; if (calcCurrentInput === '0' && number !== '.') calcCurrentInput = ''; if (number === '.' && calcCurrentInput.includes('.')) return; calcCurrentInput += number; calcUpdateDisplay(); }
         function calcClear() { calcCurrentInput = '0'; calcPreviousInput = ''; calcOperation = null; calcUpdateDisplay(); }
@@ -1512,35 +2187,6 @@
             calcOperation = null; calcPreviousInput = ''; calcUpdateDisplay();
         }
 
-        function initNotepad(windowEl) {
-            const summarizeBtn = windowEl.querySelector('#summarize-note-btn');
-            const suggestTitleBtn = windowEl.querySelector('#suggest-title-btn');
-            const textarea = windowEl.querySelector('textarea');
-
-            if (summarizeBtn) {
-                summarizeBtn.onclick = async () => {
-                    const noteContent = textarea.value;
-                    if (!noteContent.trim()) { showTemporaryMessage("Note is empty, nothing to summarize.", 2000); return; }
-                    summarizeBtn.disabled = true; summarizeBtn.innerHTML = '✨ Summarizing<span class="loading-spinner"></span>';
-                    const summary = await callGeminiAPI(`Summarize the following note concisely:\n\n${noteContent}`);
-                    textarea.value += `\n\n--- Summary ---\n${summary.trim()}`;
-                    summarizeBtn.disabled = false; summarizeBtn.innerHTML = '✨ Summarize';
-                    showTemporaryMessage("Summary appended.", 2000);
-                };
-            }
-            if (suggestTitleBtn) {
-                suggestTitleBtn.onclick = async () => {
-                    const noteContent = textarea.value;
-                    if (!noteContent.trim()) { showTemporaryMessage("Note is empty, cannot suggest a title.", 2000); return; }
-                    suggestTitleBtn.disabled = true; suggestTitleBtn.innerHTML = '✨ Suggesting<span class="loading-spinner"></span>';
-                    const title = await callGeminiAPI(`Suggest a very short, concise title (3-5 words max) for the following note (title only, no extra explanation):\n\n${noteContent}`);
-                    if (!textarea.value.trim().toLowerCase().includes(title.trim().toLowerCase())) {
-                         textarea.value = `${title.trim()}\n--------------------\n${noteContent}`;
-                    } else { showTemporaryMessage(`Title Suggestion: ${title.trim()}`, 3000); }
-                    suggestTitleBtn.disabled = false; suggestTitleBtn.innerHTML = '✨ Suggest Title';
-                };
-            }
-        }
         async function handleNotepadSummarize(windowEl) { 
             if (!windowEl) windowEl = activeWindowId ? openWindows[activeWindowId].element : null;
             if (!windowEl) { showTemporaryMessage("No active note window.", 2000); return; }
@@ -1552,46 +2198,12 @@
             const suggestTitleBtn = windowEl.querySelector('#suggest-title-btn'); if (suggestTitleBtn) suggestTitleBtn.click(); 
         }
 
-        let lastTerminalCommand = ""; 
-        function initTerminal(windowEl) {
-            const inputEl = windowEl.querySelector('.terminal-input');
-            const outputEl = windowEl.querySelector('.terminal-output');
-            outputEl.innerHTML += `<div>Welcome to OS Terminal. Type 'help' for commands. Prefix with 'explain ' to get command details.</div>`;
-            inputEl.addEventListener('keypress', async (e) => {
-                if (e.key === 'Enter' && inputEl.value.trim() !== '') {
-                    const fullCommand = inputEl.value.trim();
-                    lastTerminalCommand = fullCommand; 
-                    inputEl.value = '';
-                    outputEl.innerHTML += `<div><span class="prompt">${currentUsername || 'user'}@osweb:~$ </span><span class="command">${fullCommand}</span></div>`;
-                    outputEl.scrollTop = outputEl.scrollHeight;
-
-                    if (fullCommand.toLowerCase().startsWith('explain ')) {
-                        const commandToExplain = fullCommand.substring(8).trim();
-                        if(commandToExplain){
-                            outputEl.innerHTML += `<div><span class="explanation">Requesting explanation for: ${commandToExplain}...</span></div>`;
-                            outputEl.scrollTop = outputEl.scrollHeight;
-                            const explanation = await callGeminiAPI(`Explain the following Linux/bash command simply and concisely: ${commandToExplain}`);
-                            outputEl.innerHTML += `<div><span class="explanation">${explanation.replace(/\n/g, "<br>")}</span></div>`;
-                        } else { outputEl.innerHTML += `<div><span class="error">Usage: explain [command]</span></div>`; }
-                    } else {
-                        let response = `Command not found: ${fullCommand}. Type 'help' or 'explain [command]'.`;
-                        if (fullCommand.toLowerCase() === 'help') response = "Commands: ls, date, clear, exit. Prefix with 'explain ' for details (e.g., explain ls).";
-                        else if (fullCommand.toLowerCase() === 'ls') response = "Desktop/  Documents/  Downloads/  Music/  Pictures/  Videos/";
-                        else if (fullCommand.toLowerCase() === 'date') response = new Date().toLocaleString();
-                        else if (fullCommand.toLowerCase() === 'clear') { outputEl.innerHTML = ''; return; }
-                        else if (fullCommand.toLowerCase() === 'exit') { closeWindow(windowEl.id); return; }
-                        outputEl.innerHTML += `<div><span class="response">${response}</span></div>`;
-                    }
-                    outputEl.scrollTop = outputEl.scrollHeight;
-                }
-            });
-        }
         async function handleTerminalExplain(windowEl) {
             if (!windowEl) windowEl = activeWindowId ? openWindows[activeWindowId].element : null;
             if (!windowEl) { showTemporaryMessage("No active terminal window.", 2000); return; }
             const outputEl = windowEl.querySelector('.terminal-output');
             if (lastTerminalCommand && !lastTerminalCommand.toLowerCase().startsWith('explain ')) {
-                 outputEl.innerHTML += `<div><span class="explanation">Requesting explanation for last command: ${lastTerminalCommand}...</span></div>`;
+                 outputEl.innerHTML += `<div><span class="explanation">Requesting explanation for last command: ${lastTerminalCommand.replace(/</g, "&lt;").replace(/>/g, "&gt;")}...</span></div>`;
                  outputEl.scrollTop = outputEl.scrollHeight;
                  const explanation = await callGeminiAPI(`Explain the following Linux/bash command simply and concisely: ${lastTerminalCommand}`);
                  outputEl.innerHTML += `<div><span class="explanation">${explanation.replace(/\n/g, "<br>")}</span></div>`;
@@ -1603,117 +2215,37 @@
         function mockTerminalAction(action, winEl) { 
             if (!winEl && activeWindowId) winEl = openWindows[activeWindowId].element;
             if (winEl && winEl.dataset.appId === "terminal") {
-                if (action === "Clear") {
+                if (action === "Clear" || action === "Clear Scrollback") { 
                     const outputEl = winEl.querySelector('.terminal-output');
-                    if (outputEl) outputEl.innerHTML = '';
-                } else if (action === "Clear Scrollback") {
-                     const outputEl = winEl.querySelector('.terminal-output');
-                    if (outputEl) outputEl.innerHTML = `<div>Scrollback cleared.</div>`; 
+                    if (outputEl) outputEl.innerHTML = (action === "Clear Scrollback" ? `<div>Scrollback cleared.</div>` : '');
                 }
             }
             showTemporaryMessage(`Terminal: ${action} (mocked for ${winEl ? winEl.id : 'unknown window'})`, 1500); 
         }
         function mockTextAction(action, winEl) { showTemporaryMessage(`Editor: ${action} (mocked for ${winEl ? winEl.id : 'unknown window'})`, 1500); }
 
-        function initAIAssistant(windowEl) {
-            const inputEl = windowEl.querySelector('#ai-command-input');
-            const chatLogEl = windowEl.querySelector('#ai-chat-log');
-            chatLogEl.innerHTML = `<div class="text-left my-1"><span class="bg-[var(--surface-overlay-bg)] text-[var(--text-primary)] px-2.5 py-1.5 rounded-lg text-xs inline-block">Hello! I'm your OS Assistant. How can I help?</span></div>`;
-            inputEl.addEventListener('keypress', async (e) => {
-                if (e.key === 'Enter' && inputEl.value.trim() !== '') {
-                    const query = inputEl.value.trim();
-                    chatLogEl.innerHTML += `<div class="text-right my-1.5"><span class="bg-[var(--accent-color)] text-[var(--primary-bg)] px-2.5 py-1.5 rounded-lg text-xs inline-block">${query}</span></div>`;
-                    inputEl.value = ''; inputEl.disabled = true; chatLogEl.scrollTop = chatLogEl.scrollHeight;
-                    const thinkingElId = `thinking-${Date.now()}`;
-                    chatLogEl.innerHTML += `<div class="text-left my-1.5" id="${thinkingElId}"><span class="bg-[var(--surface-overlay-bg)] text-[var(--text-primary)] px-2.5 py-1.5 rounded-lg text-xs inline-block">Assistant is thinking<span class="loading-spinner"></span></span></div>`;
-                    chatLogEl.scrollTop = chatLogEl.scrollHeight;
-                    const response = await callGeminiAPI(query);
-                    const thinkingEl = document.getElementById(thinkingElId); if(thinkingEl) thinkingEl.remove();
-                    chatLogEl.innerHTML += `<div class="text-left my-1.5"><span class="bg-[var(--surface-overlay-bg)] text-[var(--text-primary)] px-2.5 py-1.5 rounded-lg text-xs inline-block">${response.replace(/\n/g, "<br>")}</span></div>`;
-                    chatLogEl.scrollTop = chatLogEl.scrollHeight; inputEl.disabled = false; inputEl.focus();
-                }
-            });
-        }
-
-        function initWebBrowser(windowEl, initialUrl = null) {
-            const addressBar = windowEl.querySelector('#browser-address-bar');
-            const goButton = windowEl.querySelector('#browser-go-button');
-            const contentFrame = windowEl.querySelector('#browser-content-frame');
-            const lockIcon = windowEl.querySelector('#browser-lock-icon');
-
-            function navigateTo(urlToLoad) {
-                let url = urlToLoad.trim();
-                if (!url) return;
-                if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('data:')) {
-                    url = 'https://' + url;
-                }
-                addressBar.value = url; 
-                
-                if (url.startsWith('data:')) { // Handle data URIs directly in iframe
-                     try { contentFrame.src = url; } catch (e) { console.error("Error loading data URI:", e); contentFrame.src = 'about:blank';}
-                } else { // External URLs open in new tab
-                    window.open(url, '_blank'); 
-                    contentFrame.src = `data:text/html,
-                        <html style="height:100%;display:flex;align-items:center;justify-content:center;font-family:sans-serif;color:var(--text-secondary);background-color:var(--surface-bg);">
-                            <body style="text-align:center;padding:20px;">
-                                <p style="font-size:1.1em; color:var(--text-primary);">Opening in new tab:</p>
-                                <p style="font-size:0.9em; word-break:break-all; margin-bottom:15px;">${url}</p>
-                                <i class="fas fa-external-link-alt" style="font-size:2em; color:var(--accent-color); margin-bottom:15px;"></i>
-                                <p style="font-size:0.8em;">(If it didn't open, please check your pop-up blocker)</p>
-                            </body>
-                        </html>`;
-                }
-                
-                if (url.startsWith('https://')) {
-                    lockIcon.className = 'fas fa-lock px-1 text-[var(--secondary-accent)]'; 
-                } else if (url.startsWith('http://')) {
-                    lockIcon.className = 'fas fa-unlock-alt px-1 text-[var(--warning-color)]'; 
-                } else {
-                     lockIcon.className = 'fas fa-info-circle px-1 text-[var(--icon-color)]';
-                }
-            }
-
-            addressBar.addEventListener('keypress', (e) => { if (e.key === 'Enter') navigateTo(addressBar.value); });
-            goButton.addEventListener('click', () => navigateTo(addressBar.value));
-            
-            if(initialUrl) { 
-                navigateTo(initialUrl);
-            } else { 
-                contentFrame.src = `data:text/html,
-                    <html style="height:100%;display:flex;align-items:center;justify-content:center;font-family:sans-serif;color:var(--text-secondary);background-color:var(--surface-bg);">
-                        <body style="text-align:center;">
-                            <i class="fas fa-globe-americas" style="font-size:3em; color:var(--accent-color); margin-bottom:15px;"></i>
-                            <p style="font-size:1.2em;color:var(--text-primary);">OSWeb Browser Ready</p>
-                            <p style="font-size:0.9em;">Type a URL above and press Enter or click Go.</p>
-                        </body>
-                    </html>`;
-                lockIcon.className = 'fas fa-info-circle px-1 text-[var(--icon-color)]';
-            }
-        }
-
-
         function selectMailFolder(element, folderName) {
-            const sidebarItems = element.parentElement.querySelectorAll('.mail-sidebar-item');
+            const mailWindow = element.closest('.window');
+            if (!mailWindow) return;
+            const sidebarItems = mailWindow.querySelectorAll('.mail-sidebar-item');
             sidebarItems.forEach(item => item.classList.remove('active'));
             element.classList.add('active');
             showTemporaryMessage(`Selected folder: ${folderName}`, 1000);
-            const list = document.querySelector(`#${activeWindowId} .mail-message-list`);
-            const previewSubject = document.querySelector(`#${activeWindowId} #mail-preview-subject`);
-            const previewBody = document.querySelector(`#${activeWindowId} #mail-preview-body`);
+            
+            const list = mailWindow.querySelector('.mail-message-list');
+            const previewSubject = mailWindow.querySelector('#mail-preview-subject');
+            const previewBody = mailWindow.querySelector('#mail-preview-body');
 
-            if(list) list.innerHTML = `<div class="mail-message-list-item" onclick="showMailPreview('Mock Email 1 for ${folderName}', 'Content for email 1 in ${folderName}...')"><strong>Mock Email 1 for ${folderName}</strong> - Preview...</div><div class="mail-message-list-item" onclick="showMailPreview('Mock Email 2 for ${folderName}', 'Content for email 2 in ${folderName}...')"><strong>Mock Email 2 for ${folderName}</strong> - Preview...</div>`;
+            if(list) list.innerHTML = `<div class="mail-message-list-item" onclick="showMailPreview(this.closest('.window'), 'Mock Email 1 for ${folderName}', 'Content for email 1 in ${folderName}...')"><strong>Mock Email 1 for ${folderName}</strong> - Preview...</div><div class="mail-message-list-item" onclick="showMailPreview(this.closest('.window'), 'Mock Email 2 for ${folderName}', 'Content for email 2 in ${folderName}...')"><strong>Mock Email 2 for ${folderName}</strong> - Preview...</div>`;
             if(previewSubject) previewSubject.textContent = `Messages in ${folderName}`;
             if(previewBody) previewBody.textContent = `Select an email to view its content.`;
         }
-        function showMailPreview(subject, body) {
-            const previewSubject = document.querySelector(`#${activeWindowId} #mail-preview-subject`);
-            const previewBody = document.querySelector(`#${activeWindowId} #mail-preview-body`);
+        function showMailPreview(mailWindow, subject, body) {
+            if (!mailWindow) return;
+            const previewSubject = mailWindow.querySelector('#mail-preview-subject');
+            const previewBody = mailWindow.querySelector('#mail-preview-body');
             if(previewSubject) previewSubject.textContent = subject;
             if(previewBody) previewBody.textContent = body;
-        }
-        function initMailClient(windowEl) {
-            const firstFolder = windowEl.querySelector('.mail-sidebar-item');
-            if (firstFolder) firstFolder.classList.add('active');
         }
         
         let folderDragInfo = { dragging: false, offsetX: 0, offsetY: 0 };
@@ -1780,28 +2312,6 @@
             });
         }
         
-        function initAppLauncher(windowEl) {
-            const grid = windowEl.querySelector('#app-launcher-grid');
-            if (!grid) return;
-            grid.innerHTML = ''; 
-
-            Object.keys(appConfig).forEach(appId => {
-                if (appId === 'app-launcher') return; 
-                const app = appConfig[appId];
-                const itemEl = document.createElement('div');
-                itemEl.className = 'app-launcher-item';
-                itemEl.innerHTML = `<i class="${app.icon}"></i><span>${app.name}</span>`;
-                itemEl.onclick = () => {
-                    launchOrFocusApp(appId);
-                    const launcherWindowId = Object.keys(openWindows).find(id => openWindows[id].appId === 'app-launcher');
-                    if (launcherWindowId) {
-                        closeWindow(launcherWindowId);
-                    }
-                };
-                grid.appendChild(itemEl);
-            });
-        }
-
         function handleLogin() {
             currentUsername = usernameInput.value.trim();
             if (!currentUsername) {
@@ -1824,12 +2334,35 @@
             systemStartTime = Date.now(); 
             initializeDesktop();
         }
+
+        function updateSidebarWeather(showMsg = false) {
+            const cityEl = document.getElementById('sidebar-weather-city');
+            const tempEl = document.getElementById('sidebar-weather-temp');
+            const conditionEl = document.getElementById('sidebar-weather-condition');
+            const iconEl = document.getElementById('sidebar-weather-icon');
+
+            const weatherData = [
+                { city: "Seaford, NY", temp: "72°F", condition: "Partly Cloudy", icon: "fas fa-cloud-sun", iconColor: "text-yellow-400" },
+                { city: "Seaford, NY", temp: "75°F", condition: "Sunny", icon: "fas fa-sun", iconColor: "text-yellow-500" },
+                { city: "Seaford, NY", temp: "68°F", condition: "Cloudy", icon: "fas fa-cloud", iconColor: "text-gray-400" },
+                { city: "Seaford, NY", temp: "65°F", condition: "Rain Showers", icon: "fas fa-cloud-showers-heavy", iconColor: "text-blue-400" }
+            ];
+            const randomWeather = weatherData[Math.floor(Math.random() * weatherData.length)];
+
+            if (cityEl) cityEl.textContent = randomWeather.city;
+            if (tempEl) tempEl.textContent = randomWeather.temp;
+            if (conditionEl) conditionEl.textContent = randomWeather.condition;
+            if (iconEl) {
+                iconEl.className = `${randomWeather.icon} text-2xl mr-2 ${randomWeather.iconColor}`;
+            }
+            if (showMsg) {
+                showTemporaryMessage("Weather updated (mock data).", 1500);
+            }
+        }
         
         function initializeDesktopEventListeners() {
-            // Sidebar Toggle
             sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('translate-x-full'));
             
-            // Clicking on desktop area to close sidebar/menus
             desktopArea.addEventListener('click', (event) => {
                 if (!sidebar.classList.contains('translate-x-full') && !sidebar.contains(event.target) && !sidebarToggle.contains(event.target) && !event.target.closest('#sidebar-toggle')) {
                     sidebar.classList.add('translate-x-full');
@@ -1837,9 +2370,12 @@
                 if (activeMenuBarDropdown && !activeMenuBarDropdown.contains(event.target) && !appMenuBarContainer.contains(event.target)) {
                     closeActiveMenuBarDropdown();
                 }
+                if (contextMenuEl && contextMenuEl.classList.contains('show') && !contextMenuEl.contains(event.target) && !event.target.closest('.context-menu-item')) {
+                    contextMenuEl.classList.remove('show');
+                    contextMenuEl.style.display = 'none';
+                }
             });
             
-            // Context Menus (Desktop)
             desktopArea.addEventListener('contextmenu', (e) => { e.preventDefault(); displayContextMenu(e.clientX, e.clientY, desktopContextMenuItems, null, "desktopContextMenu"); });
             desktopArea.addEventListener('touchstart', (e) => {
                 if (e.touches.length === 1 && e.target === desktopArea) { clearTimeout(longPressTimer); longPressTimer = setTimeout(() => { displayContextMenu(e.touches[0].clientX, e.touches[0].clientY, desktopContextMenuItems, null, "desktopContextMenu"); }, LONG_PRESS_DURATION); }
@@ -1847,21 +2383,19 @@
             desktopArea.addEventListener('touchmove', () => clearTimeout(longPressTimer));
             desktopArea.addEventListener('touchend', () => clearTimeout(longPressTimer));
             
-            // Global click/touch to close context menu
             document.addEventListener('click', (e) => { 
-                if (contextMenuEl && !contextMenuEl.contains(e.target) && e.target !== contextMenuEl) { 
-                    if (activeMenuBarDropdown === contextMenuEl && appMenuBarContainer && appMenuBarContainer.contains(e.target)) { /* Keep open if clicking another menubar item */ } 
-                    else { closeActiveMenuBarDropdown(); }
+                if (contextMenuEl && contextMenuEl.classList.contains('show') && !contextMenuEl.contains(e.target) && e.target !== contextMenuEl) { 
+                    if (activeMenuBarDropdown === contextMenuEl && appMenuBarContainer && appMenuBarContainer.contains(e.target)) { /* Keep open */ } 
+                    else { closeActiveMenuBarDropdown(); contextMenuEl.classList.remove('show'); contextMenuEl.style.display = 'none'; }
                 }
             });
             document.addEventListener('touchstart', (e) => { 
-                 if (contextMenuEl && !contextMenuEl.contains(e.target) && e.target !== contextMenuEl) { 
+                 if (contextMenuEl && contextMenuEl.classList.contains('show') && !contextMenuEl.contains(e.target) && e.target !== contextMenuEl) { 
                     if (activeMenuBarDropdown === contextMenuEl && appMenuBarContainer && appMenuBarContainer.contains(e.target)) { /* Keep open */ } 
-                    else { closeActiveMenuBarDropdown(); }
+                    else { closeActiveMenuBarDropdown(); contextMenuEl.classList.remove('show'); contextMenuEl.style.display = 'none'; }
                 }
             }, { passive: true });
 
-            // Activities/Overview Button
             activitiesButton.addEventListener('click', () => {
                 if (!overviewActive) {
                     originalWindowsState.length = 0; let count = 0;
@@ -1879,21 +2413,23 @@
                     overviewActive = true; activitiesButton.classList.add('!bg-[var(--accent-color)]', '!text-[var(--primary-bg)]');
                 } else {
                     desktopArea.classList.remove('!bg-opacity-60', '!bg-black');
-                    originalWindowsState.forEach(orig => { const winEl = openWindows[orig.id].element; Object.assign(winEl.style, { transition: 'all 0.28s cubic-bezier(0.4,0,0.2,1)', top: orig.top, left: orig.left, width: orig.width, height: orig.height, zIndex: orig.zIndex }); if (orig.isMaximized) winEl.classList.add('maximized'); winEl.querySelector('.resize-handle').style.display = ''; });
+                    originalWindowsState.forEach(orig => { const winEl = openWindows[orig.id]?.element; if(winEl) {Object.assign(winEl.style, { transition: 'all 0.28s cubic-bezier(0.4,0,0.2,1)', top: orig.top, left: orig.left, width: orig.width, height: orig.height, zIndex: orig.zIndex }); if (orig.isMaximized) winEl.classList.add('maximized'); winEl.querySelector('.resize-handle').style.display = ''; }});
                     setTimeout(() => originalWindowsState.forEach(orig => {if(openWindows[orig.id] && openWindows[orig.id].element) openWindows[orig.id].element.style.transition = ''}), 280);
                     overviewActive = false; activitiesButton.classList.remove('!bg-[var(--accent-color)]', '!text-[var(--primary-bg)]');
                     if (activeWindowId && openWindows[activeWindowId]) focusWindow(activeWindowId); else focusDesktop();
                 }
             });
 
-            // Notification Dismissal
-            document.querySelectorAll('.dismiss-notification').forEach(btn => btn.addEventListener('click', (e) => { e.target.closest('.notification').remove(); showTemporaryMessage('Notification dismissed.',1500); }));
+            document.getElementById('notifications-container').addEventListener('click', (e) => {
+                if (e.target.classList.contains('dismiss-notification') || e.target.closest('.dismiss-notification')) {
+                    e.target.closest('.notification').remove();
+                    showTemporaryMessage('Notification dismissed.', 1500);
+                }
+            });
             
-            // Calendar Navigation
             document.getElementById('cal-prev').addEventListener('click', () => { currentCalDate.setMonth(currentCalDate.getMonth() - 1); renderCalendar(); });
             document.getElementById('cal-next').addEventListener('click', () => { currentCalDate.setMonth(currentCalDate.getMonth() + 1); renderCalendar(); });
             
-            // Global Search
             globalSearchInput.addEventListener('keypress', function(e) { 
                 if (e.key === 'Enter' && this.value.trim() !== '') { 
                     const query = this.value.trim();
@@ -1903,31 +2439,50 @@
                 } 
             });
 
-            // Virtual Desktop Switcher
-            vDesktopSwitcher.addEventListener('click', (e) => { const button = e.target.closest('.vdesktop-button'); if (button) switchVirtualDesktop(parseInt(button.dataset.desktop)); });
+            addDesktopButtonEl.addEventListener('click', addVirtualDesktop);
             
-            // Theme Toggle Button
             themeToggleButton.addEventListener('click', () => {
-                isLightMode = !isLightMode; 
+                currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+                document.body.classList.remove('light-mode', 'indigo-magic-theme', 'crimson-peak-theme'); // Remove all specific theme classes
+
+                const newThemeSlug = themes[currentThemeIndex];
+                let themeUserFriendlyName = "";
                 const themeIcon = themeToggleButton.querySelector('i');
-                if (isLightMode) {
+
+                if (newThemeSlug === 'light-mode') {
                     document.body.classList.add('light-mode');
-                    document.body.classList.remove('indigo-magic-theme');
-                    themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun');
-                    themeToggleButton.title = "Switch to Indigo Magic Theme";
-                    showTemporaryMessage("Switched to Light Mode", 1500);
-                } else {
-                    document.body.classList.remove('light-mode');
-                    document.body.classList.add('indigo-magic-theme'); 
-                    themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon');
-                    themeToggleButton.title = "Switch to Light Mode";
-                    showTemporaryMessage("Switched to Indigo Magic Theme", 1500);
+                    themeUserFriendlyName = "Light";
+                } else if (newThemeSlug === 'indigo-magic-theme') {
+                    document.body.classList.add('indigo-magic-theme');
+                    themeUserFriendlyName = "Indigo Magic";
+                } else if (newThemeSlug === 'crimson-peak-theme') {
+                    document.body.classList.add('crimson-peak-theme');
+                    themeUserFriendlyName = "Crimson Peak";
+                } else { // default-dark
+                    themeUserFriendlyName = "Default Dark";
                 }
+                
+                // Update icon based on whether the new theme is light or dark-ish
+                if (newThemeSlug === 'light-mode') {
+                    themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun');
+                } else {
+                    themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon');
+                }
+
+                const nextThemeIndex = (currentThemeIndex + 1) % themes.length;
+                const nextThemeSlug = themes[nextThemeIndex];
+                let nextThemeUserFriendlyName = nextThemeSlug.replace('-theme','').replace('-mode','').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                if (nextThemeSlug === 'default-dark') nextThemeUserFriendlyName = "Default Dark";
+
+
+                themeToggleButton.title = `Switch to ${nextThemeUserFriendlyName} Theme`;
+                showTemporaryMessage(`Switched to ${themeUserFriendlyName} Theme`, 1500);
+                
                 updateUserAvatar();
                 applyDockTransparency(); 
+                applyWindowTransparency(); 
             });
             
-            // Show Desktop Button
             showDesktopButton.addEventListener('click', () => {
                 let allWereMinimizedOrNoWindows = true;
                 let windowsToToggle = [];
@@ -1938,15 +2493,13 @@
                     }
                 });
 
-                if (!allWereMinimizedOrNoWindows) { // If there were open windows, minimize them
+                if (!allWereMinimizedOrNoWindows) { 
                     windowsToToggle.forEach(id => toggleMinimizeWindow(id));
                     showTemporaryMessage("Showing desktop...", 1500);
-                } else { // If all were minimized (or no windows), restore previously minimized ones
+                } else { 
                     let restoredAny = false;
                      Object.values(openWindows).forEach(winData => {
                         if (winData.desktop === currentVirtualDesktop && winData.minimized) {
-                           // This logic needs refinement if we want to restore *only* those minimized by "show desktop"
-                           // For now, it restores all minimized on current desktop
                             toggleMinimizeWindow(winData.element.id);
                             restoredAny = true;
                         }
@@ -1958,8 +2511,10 @@
         }
 
         function initializeDesktop() {
+            updateVirtualDesktopSwitcherUI(); 
             initializeDock(); 
             renderCalendar(); 
+            updateSidebarWeather(); 
             makeFolderDraggable(appLauncherFolder); 
             makeFolderDraggable(myFilesFolder, 'file-explorer');
             
@@ -1967,20 +2522,17 @@
             if (wallpaperContainer && initialWallpaper) {
                 if (initialWallpaper.url) {
                     wallpaperContainer.style.backgroundImage = `url('${initialWallpaper.url}')`;
-                    wallpaperContainer.style.backgroundSize = 'cover';
-                    wallpaperContainer.style.backgroundPosition = 'center center';
-                    wallpaperContainer.className = 'wallpaper';
                 } else {
                     wallpaperContainer.style.backgroundImage = '';
                     wallpaperContainer.className = `wallpaper ${initialWallpaper.class || ''}`;
                 }
             }
             
-            initializeDesktopEventListeners(); // Moved event listeners here
+            initializeDesktopEventListeners(); 
 
-            createWindow('file-explorer');
-            setTimeout(() => createWindow('web-browser'), 250);
-            setTimeout(() => createWindow('notepad'), 500);
+            createWindow('file-explorer', {}, 1); 
+            setTimeout(() => createWindow('web-browser', {}, 1), 250); 
+            setTimeout(() => createWindow('notepad', {}, 1), 500); 
             
             focusDesktop(); 
             const wifiButton = document.querySelector('#right-sidebar .sidebar-icon i.fa-wifi');
@@ -1997,34 +2549,45 @@
             setInterval(updateSystemUptime, 60000); 
             setInterval(updateClock, 1000); updateClock();
             setInterval(updateSystemMeters, 3000); updateSystemMeters();
+            applyWindowTransparency(); 
         }
 
 
         window.onload = () => {
-            assignGlobalElements(); // Assign all DOM elements first
+            assignGlobalElements(); 
 
-            // Hide main UI elements initially
             if(topPanel) topPanel.style.display = 'none';
             if(desktopArea) desktopArea.style.display = 'none';
             if(dock) dock.style.display = 'none';
             if(rightSidebar) rightSidebar.style.display = 'none';
-
+            
             // Set initial theme to Indigo Magic
-            document.body.classList.add('indigo-magic-theme');
-            document.body.classList.remove('light-mode');
-            isLightMode = false; 
-            if (themeToggleButton) {
-                const themeIcon = themeToggleButton.querySelector('i');
-                if (themeIcon) {
-                    themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon');
-                    themeToggleButton.title = "Switch to Light Mode";
-                }
+            currentThemeIndex = themes.indexOf('indigo-magic-theme');
+            if (currentThemeIndex === -1) currentThemeIndex = 0; // Fallback if not found
+            const initialThemeSlug = themes[currentThemeIndex];
+            
+            document.body.classList.remove('light-mode', 'crimson-peak-theme'); // Clear others
+            if (initialThemeSlug !== 'default-dark') {
+                document.body.classList.add(initialThemeSlug);
             }
+
+            const themeIcon = themeToggleButton.querySelector('i');
+            if (initialThemeSlug === 'light-mode') {
+                themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon');
+            }
+            const nextThemeIndex = (currentThemeIndex + 1) % themes.length;
+            let nextThemeUserFriendlyName = themes[nextThemeIndex].replace('-theme','').replace('-mode','').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            if (themes[nextThemeIndex] === 'default-dark') nextThemeUserFriendlyName = "Default Dark";
+            themeToggleButton.title = `Switch to ${nextThemeUserFriendlyName} Theme`;
+            
             updateUserAvatar(); 
             applyDockTransparency(); 
+            applyWindowTransparency(); 
 
             if (osVersionInfoEl) osVersionInfoEl.textContent = OS_VERSION;
-            if (systemUptimeEl) systemUptimeEl.textContent = "0d 0h 0m"; // Initial uptime display
+            if (systemUptimeEl) systemUptimeEl.textContent = "0d 0h 0m"; 
 
             if (loginButton) loginButton.addEventListener('click', handleLogin);
             if (usernameInput) {
@@ -2037,4 +2600,3 @@
     </script>
 </body>
 </html>
-
