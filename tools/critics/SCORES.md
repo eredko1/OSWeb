@@ -22,3 +22,9 @@ live Auto appearance, tiled drag-out restore. Not yet re-scored.
 5. Route all persisted state through an async OS.store adapter (27 raw localStorage uses remain) for cloud sync.
 6. Window manager: true full-screen Space, transform/rAF resize. Finder keyboard model (arrows/Enter/Space).
 7. Service-worker update prompt + fetch timeout; split the 8.6k-line inline script into ES modules.
+
+## Round 6 (user request): Mac mode is the default on iPad and iPhone
+- `OS.uiMode()` = 'mac' (default everywhere) or 'ios' (opt-in iPhone-style shell). Stored in `osweb_ui_mode`; switch in Settings > General > Interface (touch devices only).
+- iPhone in Mac mode: viewport meta becomes `width=1100`, so the browser scales the Mac desktop to the screen (pinch-zoom works, media queries see a desktop width).
+- 44pt sizing and phone chrome apply only to the iPhone shell. New windows are taller on portrait canvases.
+- Fixed: shared SVG gradient ids starved later icons when an earlier copy sat in a hidden element (empty outline folders in Finder/Dock); every generated icon now gets unique ids.
