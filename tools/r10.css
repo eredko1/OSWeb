@@ -1,0 +1,32 @@
+
+        /* ===================================================================
+         * Round 10 — touch-first lock screen: Unlock button, passcode dots + keypad, Face ID
+         * =================================================================== */
+        :root { --lk: 1; } body.device-phone { --lk: 1.3; } body.touch-small { --lk: 1.55; }
+        .lock-bottom { gap: calc(10px * var(--lk)); width: 100%; }
+        .lock-avatar { width: calc(64px * var(--lk)); height: calc(64px * var(--lk)); font-size: calc(28px * var(--lk)); }
+        .lock-name { font-size: calc(17px * var(--lk)); }
+        .lock-open { display: flex; flex-direction: column; align-items: center; gap: calc(10px * var(--lk)); }
+        .lock-big { min-width: calc(200px * var(--lk)); height: calc(44px * var(--lk)); border-radius: calc(22px * var(--lk)); padding: 0 calc(28px * var(--lk)); font-size: calc(17px * var(--lk)); font-weight: 600; color: #fff;
+            background: rgba(255,255,255,0.26); border: 0.5px solid rgba(255,255,255,0.35); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); touch-action: manipulation; }
+        .lock-big:active { background: rgba(255,255,255,0.4); }
+        .lock-hint { font-size: calc(12px * var(--lk)); max-width: 80vw; text-align: center; }
+        .lock-pin { display: flex; flex-direction: column; align-items: center; gap: calc(14px * var(--lk)); }
+        .lock-pin[hidden], .lock-open[hidden] { display: none; }
+        .lock-dots { display: flex; gap: calc(16px * var(--lk)); height: calc(14px * var(--lk)); }
+        .lock-dots i { width: calc(13px * var(--lk)); height: calc(13px * var(--lk)); border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.9); transition: background .1s; }
+        .lock-dots i.on { background: #fff; }
+        .lock-msg { font-size: calc(14px * var(--lk)); min-height: calc(18px * var(--lk)); color: rgba(255,255,255,0.92); text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+        .lock-keys { display: grid; grid-template-columns: repeat(3, calc(68px * var(--lk))); gap: calc(14px * var(--lk)) calc(20px * var(--lk)); margin-top: calc(4px * var(--lk)); }
+        .lk { width: calc(68px * var(--lk)); height: calc(68px * var(--lk)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: calc(30px * var(--lk)); font-weight: 400; color: #fff;
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+        .lk:active:not(:disabled) { background: rgba(255,255,255,0.5); } .lk:disabled { opacity: .4; }
+        .lk-ghost { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; } .lk-ghost:active { background: rgba(255,255,255,0.2) !important; }
+        .lk[hidden], .lk-gap[hidden] { display: none; }
+        .lk-gap { width: calc(68px * var(--lk)); height: calc(68px * var(--lk)); }
+        @keyframes lkShake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-12px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(5px); } }
+        .lock-pin.shake .lock-dots { animation: lkShake .4s; }
+        .lock-power { margin-top: calc(16px * var(--lk)); }
+        .lock-power button span { width: calc(36px * var(--lk)); height: calc(36px * var(--lk)); }
+        .lock-screen { padding-bottom: max(calc(28px * var(--lk)), env(safe-area-inset-bottom)); }
+        select.st-input { height: 24px; }

@@ -38,3 +38,10 @@ live Auto appearance, tiled drag-out restore. Not yet re-scored.
 - Virtual desktops: add/remove, Ctrl+arrows, drag windows between desktops in Mission Control (touch-capable), Mission Control launcher in Launchpad + Control Center, desktops persisted with the session.
 - System monitor: menu-bar item + popover and Activity Monitor graphs. Honest metrics only: tab load (timer-lateness heartbeat), JS heap (Chromium), GPU name via WebGL + frame rate, network info. System-wide CPU/GPU utilisation is not exposed to web pages. Toggle: Settings > Desktop & Dock.
 - Web proxy: `proxy/` (Vercel function or `node proxy/server.js`), HMAC-signed 5-minute URLs, SSRF block, no cookies, 10MB/15s limits. Client: Settings > Websites, Safari routes external sites through it. Tested against a local upstream that forbids framing. NOT deployed anywhere.
+
+## Round 10 (user request): better login on iPhone
+- Before: password field 122x17pt / arrow 13pt in Mac mode, keyboard auto-popped, any text unlocked.
+- Now: big Unlock button (no passcode) or iOS-style passcode keypad with dots (64-68pt keys), shake + haptic on error, 5-try lockout (30s, doubling), no on-screen keyboard, physical digits work on desktop.
+- Passcode: salted PBKDF2-SHA256 (150k), 4-6 digits, set/change/turn off in Settings > Lock Screen, re-lock after background (default 5 min).
+- Face ID / Touch ID via WebAuthn platform authenticator (needs https; tested with a virtual authenticator, not on real hardware). Local convenience gate only: there is no server, so it is not account security.
+- Display name is editable (Settings > Lock Screen).
