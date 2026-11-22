@@ -1560,6 +1560,21 @@
         .mc-space.drop .mc-space-thumb { box-shadow: 0 0 0 3px #0A84FF; transform: scale(1.04); }
         .mc-ghost { position: fixed; z-index: 30000; pointer-events: none; transform: translate(-50%, -50%) scale(.5); opacity: .85; border-radius: 10px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,0.5); }
         .mc-card { touch-action: none; }
+
+        /* ===================================================================
+         * Round 8B — system monitor (menu bar popover + Activity Monitor graphs)
+         * =================================================================== */
+        #sysmon-text { font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        body.device-phone #sysmon-menubar-button { display: none !important; }
+        #sysmon-pop { position: absolute; z-index: 12500; width: 300px; padding: 12px 14px 14px; border-radius: 12px; background: rgba(46,46,50,0.72); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); box-shadow: 0 0 0 0.5px rgba(255,255,255,0.18), 0 18px 50px rgba(0,0,0,0.45); color: var(--text-primary); font-size: 12px; }
+        body.light-mode #sysmon-pop { background: rgba(246,246,248,0.82); }
+        .sm-sec { margin-bottom: 12px; } .sm-h { display: flex; justify-content: space-between; margin-bottom: 4px; } .sm-h b { font-weight: 600; } .sm-h span { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+        .sm-sec canvas { width: 100%; height: 44px; display: block; border-radius: 6px; background: rgba(0,0,0,0.18); } .sm-sec small { display: block; margin-top: 4px; font-size: 10.5px; color: var(--text-secondary); line-height: 1.35; }
+        .sm-net { font-size: 11px; color: var(--text-secondary); margin-bottom: 10px; } .sm-open { width: 100%; justify-content: center; }
+        .am-graph { flex-shrink: 0; display: flex; gap: 16px; padding: 10px 16px; border-top: 0.5px solid var(--border-color); background: rgba(255,255,255,0.03); align-items: stretch; }
+        .am-graph canvas { flex: 1; min-width: 120px; height: 70px; border-radius: 6px; background: rgba(0,0,0,0.2); }
+        .am-graph .am-foot { border: 0; background: transparent; padding: 0; flex-wrap: wrap; align-content: center; max-width: 52%; gap: 8px 22px; }
+        .am-note { font-size: 10.5px; color: var(--text-secondary); flex-basis: 100%; }
     </style>
 </head>
 <body>
@@ -1588,6 +1603,7 @@
             <button id="wifi-menubar-button" class="menubar-item" role="menuitem" aria-label="Wi-Fi">
                 <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" transform="translate(0 1)"><path d="M6.4 10.4a5 5 0 0 1 7.2 0"/><path d="M3.6 7.6a9 9 0 0 1 12.8 0"/><path d="M.9 4.9a12.8 12.8 0 0 1 18.2 0"/></g><circle cx="10" cy="13.4" r="1.5" fill="currentColor"/></svg>
             </button>
+            <button id="sysmon-menubar-button" class="menubar-item" role="menuitem" aria-haspopup="true" aria-label="System monitor" hidden><span id="sysmon-text">CPU —</span></button>
             <button id="spotlight-menubar-button" class="menubar-item" role="menuitem" aria-label="Spotlight Search">
                 <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" fill="currentColor" aria-hidden="true"><circle cx="8.6" cy="7.2" r="4.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 10.6l3.6 3.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
             </button>
@@ -7383,6 +7399,7 @@ function renderActivityMonitorContent() {
                 <div class="fx-seg" role="tablist" aria-label="Category">
                     <button class="fx-seg-btn on am-tab" data-tab="cpu" role="tab" aria-selected="true" style="width:auto;padding:0 12px">CPU</button>
                     <button class="fx-seg-btn am-tab" data-tab="memory" role="tab" aria-selected="false" style="width:auto;padding:0 12px">Memory</button>
+                    <button class="fx-seg-btn am-tab" data-tab="gpu" role="tab" aria-selected="false" style="width:auto;padding:0 12px">GPU</button>
                 </div>
                 <span class="fx-spacer"></span>
                 <label class="fx-search">${sf('magnifyingglass', 12)}<input data-role="proc-filter" type="search" placeholder="Search" aria-label="Search processes"/></label>
@@ -7393,7 +7410,7 @@ function renderActivityMonitorContent() {
                     <tbody data-role="proc-tbody"></tbody>
                 </table>
             </div>
-            <div class="am-foot" data-role="am-foot"></div>
+            <div class="am-graph"><canvas data-role="am-canvas"></canvas><div class="am-foot" data-role="am-foot"></div></div>
         </div>
     `;
 }
@@ -7405,6 +7422,8 @@ function initActivityMonitor(winEl, windowData) {
     const quitBtn = winEl.querySelector('[data-role="quit-proc-btn"]');
     const foot = winEl.querySelector('[data-role="am-foot"]');
     const mb = n => (n / 1048576).toFixed(1) + ' MB';
+    const canvas = winEl.querySelector('[data-role="am-canvas"]');
+    OS.perf.start();
 
     // Processes are the real things that exist: the OSWeb page itself plus one entry per open app window.
     const procs = () => {
@@ -7424,9 +7443,14 @@ function initActivityMonitor(winEl, windowData) {
                 <td class="num">—</td><td class="num">${p.pid}</td><td>${escapeHtml(currentUsername || 'user')}</td>
             </tr>`).join('');
         tbody.querySelectorAll('[data-pid]').forEach(row => { row.onclick = () => { selectedPid = Number(row.dataset.pid); renderTable(); }; });
+        const L = OS.perf.latest || { load: 0, fps: 0, heapMB: null }, g = OS.perf.gpu(), net = OS.perf.net();
         foot.innerHTML = tab === 'cpu'
-            ? `<div><b>Logical processors</b><span>${OS.sys.cores() ?? 'Not exposed'}</span></div><div><b>Per-process CPU</b><span>Not available to web pages</span></div><div><b>Processes</b><span>${rows.length}</span></div>`
-            : `<div><b>JS heap used</b><span>${h ? mb(h.used) : 'Not exposed by this browser'}</span></div><div><b>JS heap limit</b><span>${h ? mb(h.limit) : '—'}</span></div><div><b>Device memory</b><span>${OS.sys.memLine()}</span></div>`;
+            ? `<div><b>Tab load (estimated)</b><span>${L.load}%</span></div><div><b>Logical processors</b><span>${OS.sys.cores() ?? 'Not exposed'}</span></div><div><b>Processes</b><span>${rows.length}</span></div><div class="am-note">System-wide and per-process CPU aren't available to web pages.</div>`
+            : tab === 'memory'
+            ? `<div><b>JS heap used</b><span>${h ? mb(h.used) : 'Not exposed'}</span></div><div><b>JS heap limit</b><span>${h ? mb(h.limit) : '—'}</span></div><div><b>Device memory</b><span>${OS.sys.memLine()}</span></div>`
+            : `<div><b>Frame rate</b><span>${L.fps} fps</span></div><div><b>GPU</b><span>${g ? escapeHtml(g) : 'Not exposed'}</span></div>${net ? `<div><b>Network</b><span>${escapeHtml(String(net.type))} · ${net.down} Mbps</span></div>` : ''}<div class="am-note">GPU utilization isn't available to web pages.</div>`;
+        const H = OS.perf.hist;
+        if (tab === 'cpu') drawSeries(canvas, H.load, 100, '#30D158'); else if (tab === 'memory') drawSeries(canvas, H.heap, 0, '#0A84FF'); else drawSeries(canvas, H.fps, Math.max(60, ...H.fps), '#FF9F0A');
     };
     winEl.querySelectorAll('.am-tab').forEach(b => b.onclick = () => { tab = b.dataset.tab; winEl.querySelectorAll('.am-tab').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', String(x === b)); }); renderTable(); });
     quitBtn.onclick = () => {
@@ -7436,8 +7460,8 @@ function initActivityMonitor(winEl, windowData) {
         closeWindow(p.winId); selectedPid = null; renderTable();
     };
     filterInput.oninput = renderTable;
-    const timer = setInterval(() => { if (!document.hidden) renderTable(); }, 2000);
-    windowData.abortController.signal.addEventListener('abort', () => clearInterval(timer));
+    const timer = setInterval(() => { if (!document.hidden) renderTable(); }, 1000);
+    windowData.abortController.signal.addEventListener('abort', () => { clearInterval(timer); OS.perf.stop(); });
     OS.bus.addEventListener('proc:change', renderTable, { signal: windowData.abortController.signal });
     renderTable();
 }
@@ -7747,13 +7771,14 @@ function initSettings(winEl) {
         } else if (activePane === 'dock') {
             const curSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--dock-base-size')) || 56;
             const widgetsOn = !document.getElementById('desktop-widgets-container')?.classList.contains('hidden');
-            paneEl.innerHTML = group(row('Size', `<input id="set-dock-size" type="range" min="38" max="64" value="${curSize}" aria-label="Dock size"/>`)) + group(row('Show Widgets on Desktop', sw('sw-widgets', widgetsOn)));
+            paneEl.innerHTML = group(row('Size', `<input id="set-dock-size" type="range" min="38" max="64" value="${curSize}" aria-label="Dock size"/>`)) + group(row('Show Widgets on Desktop', sw('sw-widgets', widgetsOn)), row('System monitor in menu bar', sw('sw-sysmon', sysmonEnabled()), 'CPU load, memory and frame rate for this tab'));
             paneEl.querySelector('#set-dock-size').oninput = (e) => {
                 const dock = document.getElementById('dock'); const n = (dock && dock.querySelectorAll('.dock-icon').length) || 16; const b = OS.viewport.getDesktopBounds();
                 const maxFit = Math.max(34, Math.floor(((b.width || 1180) - 80 - (n - 1) * 4) / Math.max(1, n)));
                 document.documentElement.style.setProperty('--dock-base-size', `${Math.min(Number(e.target.value) || 56, maxFit)}px`);
             };
             bindSwitch('sw-widgets', () => toggleDesktopWidgets());
+            bindSwitch('sw-sysmon', (on) => { try { localStorage.setItem('osweb_sysmon', on ? '1' : '0'); } catch (_) {} applySysmonSetting(); });
         } else if (activePane === 'accessibility') {
             const rt = document.body.classList.contains('reduce-transparency');
             paneEl.innerHTML = group(row('Reduce transparency', sw('sw-rt', rt), 'Makes windows, the Dock and menus solid'));
@@ -8560,6 +8585,54 @@ const appSwitcher = { el: null, list: [], idx: 0,
  * OS.store (namespaced per user, versioned, JSON). Today the adapter is localStorage; a remote
  * (cloud) adapter can replace get/set without touching any caller.
  * ============================================================================ */
+OS.perf = {
+    hist: { load: [], fps: [], heap: [] }, users: 0, raf: 0, timer: 0, hb: 0, hbPrev: 0, lateSum: 0, lastSample: 0, last: 0, frames: 0, acc: 0, base: Infinity, longMs: 0, lt: null, listeners: new Set(),
+    start() {
+        if (this.users++ > 0) return;
+        this.last = performance.now();
+        const loop = (t) => { const d = t - this.last; this.last = t; if (d > 4 && d < 1000) { this.frames++; this.acc += d; if (d < this.base) this.base = d; } this.raf = requestAnimationFrame(loop); };
+        this.raf = requestAnimationFrame(loop);
+        // Heartbeat: a ~4ms timer is late by however long the main thread was busy, so summed lateness ~ busy time.
+        this.hbPrev = performance.now(); this.lastSample = this.hbPrev; this.lateSum = 0;
+        const beat = () => { const now = performance.now(); const late = now - this.hbPrev - 4; if (late > 0.6) this.lateSum += late; this.hbPrev = now; this.hb = setTimeout(beat, 4); };
+        this.hb = setTimeout(beat, 4);
+        try { if (window.PerformanceObserver && PerformanceObserver.supportedEntryTypes?.includes('longtask')) { this.lt = new PerformanceObserver(l => l.getEntries().forEach(e => { this.longMs += e.duration; })); this.lt.observe({ type: 'longtask', buffered: false }); } } catch (_) {}
+        this.timer = setInterval(() => this.sample(), 1000);
+    },
+    stop() { if (--this.users > 0) return; this.users = 0; cancelAnimationFrame(this.raf); clearInterval(this.timer); clearTimeout(this.hb); try { this.lt && this.lt.disconnect(); } catch (_) {} this.lt = null; this.frames = 0; this.acc = 0; },
+    sample() {
+        const nowT = performance.now(), elapsed = Math.max(1, nowT - this.lastSample); this.lastSample = nowT;
+        if (document.hidden) { this.frames = 0; this.acc = 0; this.longMs = 0; this.lateSum = 0; return; }
+        const n = this.frames, avg = n ? this.acc / n : 0, base = isFinite(this.base) ? this.base : 16.7;
+        let load = avg ? Math.round((1 - base / avg) * 100) : 0;                       // frame-time saturation
+        load = Math.max(load, Math.round(this.lateSum / elapsed * 100));                // timer lateness ~ main-thread busy time
+        load = Math.max(load, Math.min(100, Math.round(this.longMs / 10)));            // long tasks (>50ms)
+        this.lateSum = 0;
+        load = Math.max(0, Math.min(100, load)); this.frames = 0; this.acc = 0; this.longMs = 0;
+        const h = OS.sys.heap();
+        const push = (a, v) => { a.push(v); if (a.length > 60) a.shift(); };
+        push(this.hist.load, load); push(this.hist.fps, n); push(this.hist.heap, h ? h.used / 1048576 : 0);
+        this.latest = { load, fps: n, heapMB: h ? h.used / 1048576 : null };
+        this.listeners.forEach(fn => { try { fn(this.latest); } catch (_) {} });
+    },
+    gpu() {
+        if (this._gpu !== undefined) return this._gpu;
+        try { const c = document.createElement('canvas'); const gl = c.getContext('webgl') || c.getContext('experimental-webgl'); const ext = gl && gl.getExtension('WEBGL_debug_renderer_info'); this._gpu = gl ? String(ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)) : null; } catch (_) { this._gpu = null; }
+        return this._gpu;
+    },
+    net() { const c = navigator.connection; return c ? { type: c.effectiveType, down: c.downlink, rtt: c.rtt } : null; }
+};
+function drawSeries(canvas, arr, max, color) {
+    const dpr = window.devicePixelRatio || 1, w = canvas.clientWidth || 200, h = canvas.clientHeight || 40;
+    if (canvas.width !== w * dpr) { canvas.width = w * dpr; canvas.height = h * dpr; }
+    const ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = 'rgba(128,128,128,0.25)'; ctx.lineWidth = 0.5; for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(0, h * i / 4); ctx.lineTo(w, h * i / 4); ctx.stroke(); }
+    if (!arr.length) return;
+    const m = max || Math.max(1, ...arr), step = w / 59; ctx.beginPath();
+    arr.forEach((v, i) => { const x = w - (arr.length - 1 - i) * step, y = h - Math.min(1, v / m) * (h - 3) - 1.5; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.strokeStyle = color; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
+    ctx.lineTo(w, h); ctx.lineTo(w - (arr.length - 1) * step, h); ctx.closePath(); ctx.fillStyle = color + '33'; ctx.fill();
+}
 OS.sys = {
     cores() { return navigator.hardwareConcurrency || null; },
     memGB() { return navigator.deviceMemory || null; },
@@ -8720,7 +8793,42 @@ function initContentContextMenu() {
     });
 }
 
+// ---- Optional system monitor in the menu bar (honest, browser-measurable metrics) ----
+function sysmonEnabled() { try { return localStorage.getItem('osweb_sysmon') !== '0'; } catch (_) { return true; } }
+function applySysmonSetting() {
+    const btn = document.getElementById('sysmon-menubar-button'); if (!btn) return;
+    const on = sysmonEnabled();
+    btn.hidden = !on;
+    if (on && !btn._on) {
+        btn._on = true; OS.perf.start();
+        OS.perf.listeners.add((l) => { const t = document.getElementById('sysmon-text'); if (t) t.textContent = `CPU ${l.load}%` + (l.heapMB != null ? ` · ${Math.round(l.heapMB)} MB` : ` · ${l.fps} fps`); updateSysmonPopover(); });
+        btn.addEventListener('click', (e) => { e.stopPropagation(); toggleSysmonPopover(btn); });
+    } else if (!on && btn._on) { btn._on = false; OS.perf.stop(); OS.perf.listeners.clear(); document.getElementById('sysmon-pop')?.remove(); }
+}
+function toggleSysmonPopover(btn) {
+    const ex = document.getElementById('sysmon-pop'); if (ex) { ex.remove(); return; }
+    const pop = document.createElement('div'); pop.id = 'sysmon-pop'; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', 'System monitor');
+    const r = btn.getBoundingClientRect(); pop.style.top = (r.bottom + 6) + 'px'; pop.style.right = Math.max(8, innerWidth - r.right - 40) + 'px';
+    const g = OS.perf.gpu(), n = OS.perf.net();
+    pop.innerHTML = `<div class="sm-sec"><div class="sm-h"><b>Tab load</b><span data-sm="load">—</span></div><canvas data-sm-c="load"></canvas><small>Estimated from how busy this page's main thread is. Browsers can't read system-wide CPU.</small></div>
+        <div class="sm-sec"><div class="sm-h"><b>Memory</b><span data-sm="heap">—</span></div><canvas data-sm-c="heap"></canvas><small>${OS.sys.heap() ? 'JavaScript heap for this tab.' : 'Heap size is not exposed by this browser.'} Device memory: ${escapeHtml(OS.sys.memLine())}.</small></div>
+        <div class="sm-sec"><div class="sm-h"><b>GPU</b><span data-sm="fps">—</span></div><canvas data-sm-c="fps"></canvas><small>${g ? escapeHtml(g) + '. ' : ''}Frame rate shown; GPU utilization isn't available to web pages.</small></div>
+        ${n ? `<div class="sm-net">Network: ${escapeHtml(String(n.type))}, ${n.down} Mbps, ${n.rtt} ms RTT</div>` : ''}
+        <button class="mac-btn-secondary sm-open">Open Activity Monitor</button>`;
+    document.getElementById('macos-viewport-root').appendChild(pop);
+    pop.querySelector('.sm-open').onclick = () => { pop.remove(); launchOrFocusApp('system-monitor'); };
+    setTimeout(() => document.addEventListener('pointerdown', function off(e) { if (!pop.contains(e.target) && !btn.contains(e.target)) { pop.remove(); document.removeEventListener('pointerdown', off); } }), 0);
+    updateSysmonPopover();
+}
+function updateSysmonPopover() {
+    const pop = document.getElementById('sysmon-pop'); if (!pop || !OS.perf.latest) return; const l = OS.perf.latest, H = OS.perf.hist;
+    const set = (k, v) => { const e = pop.querySelector(`[data-sm="${k}"]`); if (e) e.textContent = v; };
+    set('load', `${l.load}%`); set('heap', l.heapMB != null ? `${l.heapMB.toFixed(1)} MB` : 'n/a'); set('fps', `${l.fps} fps`);
+    drawSeries(pop.querySelector('[data-sm-c="load"]'), H.load, 100, '#30D158'); drawSeries(pop.querySelector('[data-sm-c="heap"]'), H.heap, 0, '#0A84FF'); drawSeries(pop.querySelector('[data-sm-c="fps"]'), H.fps, Math.max(60, ...H.fps), '#FF9F0A');
+}
+
 function initKeyboardShortcuts() {
+    applySysmonSetting();
     document.addEventListener('focusin', (e) => { if (e.target.closest && e.target.closest('.window-content')) OS._lastContentFocus = e.target; });
     window.addEventListener('keydown', (e) => { if (isLocked()) return; if (OS.menu.layers.length) menuKeyNav(e); }, true);
     initContentContextMenu();
