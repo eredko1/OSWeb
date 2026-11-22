@@ -1518,6 +1518,24 @@
         .sf-priv { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 10px; background: rgba(255,255,255,0.06); color: var(--text-secondary); }
         .sf-priv b { display: block; color: var(--text-primary); font-weight: 600; } .sf-priv small { font-size: 12px; }
         @media (max-width: 600px) { .sf-toolbar { height: 44px; padding: 0 8px; pointer-events: auto; } .sf-hide-phone { display: none; } .sf-pill { flex-basis: 100%; } }
+
+        /* ===================================================================
+         * Round 4D — Calculator (Big Sur+ flat keypad), Mail compose, Music slider, desktop icons
+         * =================================================================== */
+        .window[data-app="calculator"] .window-content > div { padding: 0 !important; background: #2a2a2c !important; }
+        .window[data-app="calculator"] [data-role="calc-hist"], .window[data-app="calculator"] [data-role="calc-sci-toggle"] { display: none; }
+        .window[data-app="calculator"] #calc-output { font-family: var(--font-sans) !important; font-size: 52px; font-weight: 200; padding: 20px 16px 8px; margin: 0; text-align: right; letter-spacing: -0.02em; }
+        .window[data-app="calculator"] .calc-grid { gap: 1px; background: #1c1c1e; }
+        .window[data-app="calculator"] .calc-button { border-radius: 0; border: 0; height: auto; font-size: 22px; font-weight: 400; background: #636366; color: #fff; }
+        .window[data-app="calculator"] .calc-button.fn-btn { background: #505054; font-size: 20px; }
+        .window[data-app="calculator"] .calc-button.op-btn { background: #FF9F0A; font-size: 26px; font-weight: 400; }
+        .window[data-app="calculator"] .calc-button:active { filter: brightness(1.3); transform: none; }
+        .window[data-app="mail-client"] [data-role="compose-btn"] { font-size: 0; width: 34px; height: 24px; min-height: 0; padding: 0; margin: 0 0 8px auto; display: flex; align-items: center; justify-content: center; }
+        .window[data-app="mail-client"] [data-role="compose-btn"] i { font-size: 13px; }
+        .window[data-app="music-player"] .window-content * { min-width: 0; }
+        .window[data-app="music-player"] [data-role="vol-slider"] { width: 100%; }
+        .desktop-icon span { max-width: 88px; }
+        #my-files-folder[hidden] { display: none !important; }
     </style>
 </head>
 <body>
@@ -1592,7 +1610,7 @@
         <div id="wm-snap-preview"></div>
 
         <!-- Primary Backward-Compatible Desktop Icon (#my-files-folder) + Dynamic VFS Desktop Icons -->
-        <div id="my-files-folder" class="desktop-icon" data-path="/Users/eugene" style="top: 18px; left: 18px;">
+        <div id="my-files-folder" hidden class="desktop-icon" data-path="/Users/eugene" style="top: 18px; left: 18px;">
             <div class="icon-art" id="my-files-folder-art"></div>
             <span>My Files</span>
         </div>
@@ -2030,17 +2048,8 @@ function getAppIconSVG(appId) {
             <circle cx="32" cy="32" r="2.2" fill="#E5E5EA"/>
         </svg>`,
 
-        'ai-assistant': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="aiBg" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#FF2D55"/><stop offset="35%" stop-color="#5856D6"/><stop offset="70%" stop-color="#007AFF"/><stop offset="100%" stop-color="#34C759"/>
-                </linearGradient>
-            </defs>
-            <rect x="4" y="4" width="56" height="56" rx="13" fill="url(#aiBg)"/>
-            <rect x="7" y="7" width="50" height="50" rx="10.5" fill="#12131A"/>
-            <path d="M32 15 C21 15 13 21.8 13 30.2 C13 35 15.8 39.2 20.2 42 L18 49 L25.8 44.8 C27.8 45.2 29.8 45.5 32 45.5 C43 45.5 51 38.7 51 30.2 C51 21.8 43 15 32 15 Z" fill="url(#aiBg)"/>
-            <path d="M32 21 L34.2 27.5 L41 29.5 L34.2 31.8 L32 38.2 L29.8 31.8 L23 29.5 L29.8 27.5 Z" fill="#FFFFFF"/>
-        </svg>`,
+        'ai-assistant': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="aiBg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b5f6b"/><stop offset="1" stop-color="#2a2d36"/></linearGradient></defs>
+            <rect x="4" y="4" width="56" height="56" rx="13" fill="url(#aiBg2)"/><path d="M32 14l4.2 11.8L48 30l-11.8 4.2L32 46l-4.2-11.8L16 30l11.8-4.2z" fill="#fff"/><path d="M47 40l1.6 4.4L53 46l-4.4 1.6L47 52l-1.6-4.4L41 46l4.4-1.6z" fill="#fff" opacity=".85"/></svg>`,
 
         'mail-client': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
             <defs><linearGradient id="mailBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5AC8FA"/><stop offset="100%" stop-color="#007AFF"/></linearGradient></defs>
@@ -2144,13 +2153,10 @@ function getAppIconSVG(appId) {
             <path d="M32 15 L18 44 M32 15 L46 44 M19 37 H45" fill="none" stroke="#FFFFFF" stroke-width="4.4" stroke-linecap="round"/>
         </svg>`,
 
-        'settings': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <defs><linearGradient id="setBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#AEAEB2"/><stop offset="100%" stop-color="#636366"/></linearGradient></defs>
-            <rect x="4" y="4" width="56" height="56" rx="13" fill="url(#setBg)"/>
-            <circle cx="32" cy="32" r="17" fill="#3A3A3C" stroke="#E5E5EA" stroke-width="2.5"/>
-            <circle cx="32" cy="32" r="11" fill="none" stroke="#E5E5EA" stroke-width="4" stroke-dasharray="4 3.4"/>
-            <circle cx="32" cy="32" r="5" fill="#AEAEB2"/>
-        </svg>`,
+        'settings': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="setBg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9bcc4"/><stop offset="1" stop-color="#6e717a"/></linearGradient><linearGradient id="gearG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f5f7"/><stop offset="1" stop-color="#9a9da6"/></linearGradient></defs>
+            <rect x="4" y="4" width="56" height="56" rx="13" fill="url(#setBg2)"/>
+            <g transform="translate(32 32)" fill="url(#gearG)"><circle r="14.5"/>${[0,45,90,135].map(a => `<rect x="-4.2" y="-21" width="8.4" height="42" rx="2.4" transform="rotate(${a})"/>`).join('')}</g>
+            <circle cx="32" cy="32" r="6.5" fill="#5d6068"/><circle cx="32" cy="32" r="3.6" fill="#8b8e96"/></svg>`,
 
         'chrome': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
             <rect x="4" y="4" width="56" height="56" rx="13" fill="#FFFFFF"/>
@@ -4163,12 +4169,11 @@ function onDeviceClassChange(phone) {
 })();
 
 // Parabolic Magnifying macOS Sequoia Dock
-const phoneDockApps = ['web-browser', 'ai-assistant', 'mail-client', 'notepad'];
+const phoneDockApps = ['web-browser', 'mail-client', 'notepad', 'settings'];
 const pinnedDockApps = [
     'file-explorer',
     'app-launcher',
     'web-browser',
-    'ai-assistant',
     'mail-client',
     'image-viewer',
     'calendar-app',
@@ -6532,7 +6537,7 @@ function renderMailContent() {
                     <button data-box="vip" class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[var(--surface-overlay-bg)]"><span><i class="fas fa-star text-amber-400 mr-1.5"></i>VIP</span></button>
                     <button data-box="sent" class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[var(--surface-overlay-bg)]"><span><i class="fas fa-paper-plane text-emerald-400 mr-1.5"></i>Sent</span></button>
                 </div>
-                <div class="text-[10px] opacity-60 px-2">iCloud Mail • Connected</div>
+                <div class="text-[10px] opacity-60 px-2">Sample mailbox</div>
             </div>
 
             <!-- Message List -->
@@ -7698,7 +7703,7 @@ const appConfig = {
         init: (winEl, winData, opts) => initSlack(winEl, winData, opts)
     },
     'ai-assistant': {
-        title: 'Messages & AI',
+        title: 'Assistant',
         width: 720,
         height: 520,
         content: () => renderAIAssistantContent(),
@@ -7830,22 +7835,20 @@ function renderDesktopIcons() {
         desktopEntries = OS.vfs.readdir('/Users/eugene/Desktop');
     } catch (_) {}
 
-    // Always include Macintosh HD + Developer folder + live files in /Users/eugene/Desktop
-    const fixedIcons = [
-        { name: 'Macintosh HD', path: '/', isDir: true, top: 112, left: 18, art: getMacFolderSVG('#64D2FF') },
-        { name: 'Developer', path: '/Users/eugene/Developer', isDir: true, top: 206, left: 18, art: getMacFolderSVG('#5E5CE6') }
-    ];
-
+    const fixedIcons = [];
+    const aw = (document.getElementById('desktop-area') || {}).clientWidth || 1200, ah = (document.getElementById('desktop-area') || {}).clientHeight || 700;
+    const perCol = Math.max(1, Math.floor((ah - 24) / 94));
+    const mid = (n, max = 14) => n.length <= max ? n : n.slice(0, Math.ceil((max - 1) * 0.6)) + '…' + n.slice(-Math.floor((max - 1) * 0.4));
     const dynamicIcons = desktopEntries.map((node, idx) => {
-        const col = Math.floor((idx + 3) / 5);
-        const row = (idx + 3) % 5;
+        const col = Math.floor(idx / perCol), row = idx % perCol;
         const ext = (node.name.split('.').pop() || '').toLowerCase();
         return {
-            name: node.name,
+            name: mid(node.name),
+            full: node.name,
             path: node.path,
             isDir: node.type === 'dir',
-            top: 18 + row * 94,
-            left: 18 + col * 98,
+            top: 14 + row * 94,
+            left: aw - 94 - col * 98,
             art: node.type === 'dir' ? getMacFolderSVG() : getFileDocSVG(ext)
         };
     });
@@ -7853,7 +7856,7 @@ function renderDesktopIcons() {
     layer.innerHTML = [...fixedIcons, ...dynamicIcons].map(ic => `
         <div class="desktop-icon" data-path="${escapeHtml(ic.path)}" style="top:${ic.top}px; left:${ic.left}px;">
             <div class="icon-art">${ic.art}</div>
-            <span>${escapeHtml(ic.name)}</span>
+            <span title="${escapeHtml(ic.full || ic.name)}">${escapeHtml(ic.name)}</span>
         </div>
     `).join('');
 
@@ -8154,8 +8157,8 @@ function updateClockAndTelemetry() {
     // Lockscreen clock
     const lsTime = document.getElementById('lockscreen-time');
     const lsDate = document.getElementById('lockscreen-date');
-    const iosT = document.getElementById('ios-time'); if (iosT) iosT.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: false });
-    if (lsTime) lsTime.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: false });
+    const iosT = document.getElementById('ios-time'); if (iosT) iosT.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).replace(/\s?[AP]M/i, '');
+    if (lsTime) lsTime.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).replace(/\s?[AP]M/i, '');
     if (lsDate) lsDate.textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
     // Desktop Calendar Widget
