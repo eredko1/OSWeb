@@ -30,7 +30,7 @@ const url = 'file://' + path.resolve(__dirname, '..', 'index.html');
   await p.evaluate(() => toggleSpotlight(true, 'safari')); await shot(p, '20-spotlight'); await p.evaluate(() => toggleSpotlight(false));
   await p.click('#apple-menu-button'); await shot(p, '21-apple-menu'); await p.keyboard.press('Escape'); await p.mouse.click(700, 500);
   await p.evaluate(() => openAboutThisMacModal()); await shot(p, '22-about'); await p.keyboard.press('Escape');
-  await p.evaluate(() => document.body.classList.add('light-mode')); await shot(p, '23-light-mode');
+  await p.evaluate(() => { document.querySelectorAll('.window').forEach(w => w.remove()); applyThemeByIndex(1); launchOrFocusApp('file-explorer'); launchOrFocusApp('notepad'); }); await p.waitForTimeout(800); await shot(p, '23-light-mode');
   p = await page({ width: 1180, height: 820, touch: true, mobile: true }); await unlock(p); await app(p, 'notepad'); await shot(p, '24-ipad');
   p = await page({ width: 390, height: 844, touch: true, mobile: true, dsf: 2 }); await shot(p, '25-iphone-lock'); await unlock(p); await shot(p, '26-iphone-home');
   await app(p, 'notepad'); await shot(p, '27-iphone-app');
