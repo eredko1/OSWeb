@@ -28,3 +28,8 @@ live Auto appearance, tiled drag-out restore. Not yet re-scored.
 - iPhone in Mac mode: viewport meta becomes `width=1100`, so the browser scales the Mac desktop to the screen (pinch-zoom works, media queries see a desktop width).
 - 44pt sizing and phone chrome apply only to the iPhone shell. New windows are taller on portrait canvases.
 - Fixed: shared SVG gradient ids starved later icons when an earlier copy sat in a hidden element (empty outline folders in Finder/Dock); every generated icon now gets unique ids.
+
+## Round 7 (user report): touch on iPhone could not change/select Settings
+- Cause (most likely): Mac mode on a phone laid the page out at 1100px, so controls were ~10pt on screen. Now portrait lays out at 640px (landscape 960), rows are 40-46px, windows open full-screen (`body.touch-small`).
+- Escape hatch that does not need Settings: open the site with `?ui=ios` (iPhone-style shell) or `?ui=mac`; the choice is remembered.
+- Verified with Chromium touch emulation only; real iOS Safari still needs a device check.

@@ -1534,6 +1534,18 @@
         .window[data-app="music-player"] [data-role="vol-slider"] { width: 100%; }
         .desktop-icon span { max-width: 88px; }
         #my-files-folder[hidden] { display: none !important; }
+
+        /* ===================================================================
+         * Touch-first sizing for Mac mode on phones (body.touch-small): same Mac look, bigger hit areas
+         * =================================================================== */
+        body.touch-small .st-item, body.touch-small .fx-side-item, body.touch-small .nt-row, body.touch-small .wx-loc { min-height: 40px; }
+        body.touch-small .st-row { min-height: 46px; } body.touch-small .st-switch { transform: scale(1.15); transform-origin: right center; }
+        body.touch-small .os-menu-item { height: 34px; line-height: 34px; } body.touch-small .menubar-item { height: 24px; padding: 0 9px; }
+        body.touch-small .fx-tb, body.touch-small .fx-seg-btn { min-width: 38px; min-height: 32px; }
+        body.touch-small .mac-btn-secondary, body.touch-small .action-button { min-height: 32px; }
+        body.touch-small .tl-btn::after { inset: -14px -8px; }
+        body.touch-small .window-title-bar { min-height: 34px; }
+        body.touch-small button, body.touch-small [role="button"], body.touch-small .st-item, body.touch-small .finder-item { touch-action: manipulation; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -1865,6 +1877,7 @@
 </div>
 
 <script>
+(function () { try { const q = new URLSearchParams(location.search).get('ui'); if (q === 'ios' || q === 'mac') localStorage.setItem('osweb_ui_mode', q); } catch (_) {} })();
 /* ============================================================================
  * macOS Sequoia 15.1 — OSWeb Principal Desktop Systems Architecture
  * Runs 100% Fidelity Desktop UI across Mac, PC, iPad, and iPhone
@@ -2392,6 +2405,7 @@ window.OS = {
             const uiMode = OS.uiMode();
             this.applyViewportMeta(coarse, uiMode);
             const phone = uiMode === 'ios' && (vw < 600 || (coarse && Math.min(vw, vh) < 500));
+            document.body.classList.toggle('touch-small', !!coarse && uiMode === 'mac' && Math.min(screen.width || 9999, screen.height || 9999) < 700);
             const tablet = !phone && coarse;
             const wasPhone = document.body.classList.contains('device-phone');
             document.body.classList.toggle('device-phone', phone);
@@ -2428,7 +2442,8 @@ window.OS = {
         applyViewportMeta(coarse, uiMode) {
             const meta = document.querySelector('meta[name="viewport"]'); if (!meta) return;
             const shortSide = Math.min(screen.width || 9999, screen.height || 9999);
-            const content = (coarse && uiMode === 'mac' && shortSide < 700) ? 'width=1100, viewport-fit=cover' : 'width=device-width, initial-scale=1, viewport-fit=cover';
+            const portrait = !window.matchMedia || matchMedia('(orientation: portrait)').matches;
+            const content = (coarse && uiMode === 'mac' && shortSide < 700) ? `width=${portrait ? 640 : 960}, viewport-fit=cover` : 'width=device-width, initial-scale=1, viewport-fit=cover';
             if (meta.getAttribute('content') !== content) meta.setAttribute('content', content);
         },
 
@@ -3573,9 +3588,10 @@ function createWindow(appId, options = {}) {
     const areaW = area ? area.clientWidth : 1200;
     const areaH = area ? area.clientHeight : 720;
 
+    const touchSmall = document.body.classList.contains('touch-small');
     const tall = areaH > areaW * 1.2;                      // portrait canvas (iPhone/iPad in Mac mode)
-    const defaultW = Math.min(tall ? Math.round((config.width || 820) * 1.12) : (config.width || 820), areaW - 24);
-    const defaultH = Math.min(tall ? Math.round((config.height || 540) * 1.8) : (config.height || 540), areaH - 24);
+    const defaultW = touchSmall ? areaW - 16 : Math.min(tall ? Math.round((config.width || 820) * 1.12) : (config.width || 820), areaW - 24);
+    const defaultH = touchSmall ? Math.min(areaH - 16, Math.round(areaW * 1.45)) : Math.min(tall ? Math.round((config.height || 540) * 1.8) : (config.height || 540), areaH - 24);
     const offset = ((Object.keys(openWindows).length % 7) * 24);
     const widgetsEl = document.getElementById('desktop-widgets-container');
     const widgetsVisible = widgetsEl && !widgetsEl.classList.contains('hidden');
@@ -3583,8 +3599,9 @@ function createWindow(appId, options = {}) {
     const usableW = Math.max(defaultW + 24, areaW - rightReserve);
     const idealLeft = Math.round((usableW - defaultW) / 2) + offset;
     const minLeft = areaW >= 1120 ? 108 : 14;
-    const startX = Math.max(minLeft, Math.min(areaW - defaultW - 14, idealLeft));
-    const startY = Math.max(12, Math.min(areaH - defaultH - 12, Math.round((areaH - defaultH) / 2 - 26 + offset)));
+    let startX = Math.max(minLeft, Math.min(areaW - defaultW - 14, idealLeft));
+    let startY = Math.max(12, Math.min(areaH - defaultH - 12, Math.round((areaH - defaultH) / 2 - 26 + offset)));
+    if (touchSmall) { startX = 8; startY = 8; }
 
     const winEl = document.createElement('div');
     winEl.id = windowId;
