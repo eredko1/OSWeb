@@ -1490,6 +1490,34 @@
             .st-pane { padding: 8px 16px 24px; } .st-row { min-height: 44px; font-size: 17px; } .st-ctl input[type="range"] { width: 130px; }
         }
         body.device-phone .st-item.sel { background: transparent; color: inherit; }
+
+        /* ===================================================================
+         * Round 4C — Safari
+         * =================================================================== */
+        .sf-root { display: flex; flex-direction: column; height: 100%; font-size: 13px; }
+        .sf-toolbar { height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 4px; padding: 0 12px 0 84px; pointer-events: none; position: relative; z-index: 5; }
+        .sf-toolbar > * { pointer-events: auto; } .sf-toolbar .fx-spacer { pointer-events: none !important; }
+        .sf-pill { display: flex; align-items: center; gap: 6px; flex: 0 1 460px; width: 100%; min-width: 120px; height: 28px; padding: 0 8px; border-radius: 7px; background: rgba(255,255,255,0.1); color: var(--text-secondary); }
+        body.light-mode .sf-pill { background: rgba(0,0,0,0.06); }
+        .sf-pill input { flex: 1; min-width: 0; text-align: center; background: transparent; border: 0; outline: none !important; font-size: 13px; color: var(--text-primary); font-family: var(--font-sans) !important; }
+        .sf-pill:focus-within { box-shadow: 0 0 0 3px rgba(10,132,255,0.55); background: rgba(255,255,255,0.14); } .sf-pill:focus-within input { text-align: left; }
+        .sf-reload { color: var(--text-secondary); display: flex; }
+        .sf-tabs { display: flex; height: 28px; flex-shrink: 0; background: rgba(255,255,255,0.04); border-top: 0.5px solid var(--border-color); border-bottom: 0.5px solid var(--border-color); }
+        .sf-tabs-list { display: flex; flex: 1; }
+        .sf-tab { position: relative; flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 0 28px; font-size: 12px; color: var(--text-secondary); border-right: 0.5px solid var(--border-color); }
+        .sf-tab.on { background: var(--window-content-bg); color: var(--text-primary); } .sf-tab-t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sf-tab-x { position: absolute; left: 8px; top: 50%; transform: translateY(-50%) rotate(45deg); opacity: 0; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; border-radius: 50%; } .sf-tab:hover .sf-tab-x { opacity: 1; background: rgba(255,255,255,0.12); }
+        .sf-view { flex: 1; min-height: 0; display: flex; border-top: 0.5px solid var(--border-color); }
+        .sf-viewport { flex: 1; overflow: auto; background: var(--window-content-bg); }
+        .sf-start { max-width: 640px; margin: 0 auto; padding: 36px 24px; }
+        .sf-start h2 { font-size: 15px; font-weight: 700; margin: 0 0 14px; }
+        .sf-favs { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 18px; margin-bottom: 34px; }
+        .sf-fav { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .sf-fav span { width: 60px; height: 60px; border-radius: 14px; color: #fff; font-size: 26px; font-weight: 600; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.35), inset 0 0.5px 0 rgba(255,255,255,0.3); }
+        .sf-fav em { font-style: normal; font-size: 12px; color: var(--text-primary); }
+        .sf-priv { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 10px; background: rgba(255,255,255,0.06); color: var(--text-secondary); }
+        .sf-priv b { display: block; color: var(--text-primary); font-weight: 600; } .sf-priv small { font-size: 12px; }
+        @media (max-width: 600px) { .sf-toolbar { height: 44px; padding: 0 8px; pointer-events: auto; } .sf-hide-phone { display: none; } .sf-pill { flex-basis: 100%; } }
     </style>
 </head>
 <body>
@@ -1922,6 +1950,8 @@ const SF_PATHS = {
     'circle.lefthalf': 'M8 14.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM8 1.5v13',
     'dock.rectangle': 'M2 3h12v9H2zM4.5 10h7',
     'accessibility': 'M8 4.5a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4zM3 5.8l5 1 5-1M8 6.8v3M6 14l2-4 2 4',
+    'square.and.arrow.up': 'M8 10V2M5 4.8L8 2l3 2.8M4.5 7H4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-.5',
+    'plus': 'M8 3v10M3 8h10', 'lock': 'M4.5 7.5V5.5a3.5 3.5 0 0 1 7 0v2M3.5 7.5h9v6h-9z', 'rectangle.on.rectangle': 'M5.5 5.5h8v8h-8zM2.5 10.5v-8h8', 'arrow.clockwise': 'M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3',
     'square.and.pencil': 'M7 3H3.5A1.5 1.5 0 0 0 2 4.5v8A1.5 1.5 0 0 0 3.5 14h8a1.5 1.5 0 0 0 1.5-1.5V9M12.2 2.3a1.4 1.4 0 0 1 2 2L8 10.5 5.5 11l.5-2.5z',
     'trash': 'M2.5 4.5h11M6 4.5V3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.5M4 4.5l.6 8.3a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9l.6-8.3M6.8 7v4M9.2 7v4',
     'sparkles': 'M7 2.5l1.2 3.3 3.3 1.2-3.3 1.2L7 11.5 5.8 8.2 2.5 7l3.3-1.2zM12.2 10l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z',
@@ -4917,46 +4947,23 @@ function initFinder(winEl, windowData, options = {}) {
 
 // --- 8.2 Safari 18 (`web-browser`) & Google Chrome (`chrome`) Multi-Tab Browser Engine ---
 function renderBrowserContent(isChrome = false) {
-    const brandName = isChrome ? 'Google Chrome' : 'Safari 18';
-    const accent = isChrome ? 'bg-blue-600' : 'bg-sky-500';
     return `
-        <div class="flex flex-col h-full text-xs">
-            <!-- Multi-Tab Strip -->
-            <div class="flex items-center gap-1 px-2 pt-1.5 bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)] overflow-x-auto">
-                <div data-role="tabs-list" class="flex items-center gap-1"></div>
-                <button data-role="new-tab-btn" class="px-2 py-1 rounded-md hover:bg-[var(--surface-active-bg)]" title="New Tab (⌘T)">+</button>
+        <div class="sf-root">
+            <div class="sf-toolbar">
+                <button class="fx-tb" data-role="nav-home" title="Start Page" aria-label="Show sidebar">${sf('sidebar.left')}</button>
+                <button class="fx-tb" data-role="nav-back" title="Back" aria-label="Back">${sf('chevron.left')}</button>
+                <button class="fx-tb" data-role="nav-fwd" title="Forward" aria-label="Forward">${sf('chevron.right')}</button>
+                <span class="fx-spacer"></span>
+                <label class="sf-pill">${sf('lock', 11)}<input data-role="url-input" type="text" placeholder="Search or enter website name" aria-label="Address and search" spellcheck="false" autocomplete="off"/><button class="sf-reload" data-role="nav-reload" title="Reload" aria-label="Reload">${sf('arrow.clockwise', 12)}</button></label>
+                <span class="fx-spacer"></span>
+                <button class="fx-tb sf-hide-phone" data-role="ext-btn" title="Share" aria-label="Share">${sf('square.and.arrow.up')}</button>
+                <button class="fx-tb" data-role="new-tab-btn" title="New Tab" aria-label="New Tab">${sf('plus')}</button>
+                <button hidden data-role="go-btn"></button><button hidden data-role="devtools-btn"></button>
             </div>
-            <!-- Navigation & Unified Address Bar -->
-            <div class="flex items-center gap-2 px-3 py-1.5 bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)]">
-                <button data-role="nav-home" class="mac-btn-secondary !py-1 !px-2" title="Start Page"><i class="fas fa-house"></i></button>
-                <button data-role="nav-reload" class="mac-btn-secondary !py-1 !px-2" title="Reload"><i class="fas fa-rotate-right"></i></button>
-                <div class="flex-1 flex items-center bg-black/20 border border-[var(--border-color)] rounded-lg px-2.5 py-1 gap-2">
-                    <i class="fas fa-lock text-[10px] text-emerald-400"></i>
-                    <input data-role="url-input" type="text" placeholder="Search or enter website name / vfs:///Users/eugene/Developer/synth_webapp.html"
-                        class="w-full bg-transparent outline-none text-xs font-mono"/>
-                </div>
-                <button data-role="go-btn" class="action-button !py-1 !px-2.5 ${accent}">Go</button>
-                <button data-role="devtools-btn" class="mac-btn-secondary !py-1 !px-2" title="Toggle DevTools Inspector"><i class="fas fa-code"></i></button>
-                <button data-role="ext-btn" class="mac-btn-secondary !py-1 !px-2" title="Open in External Browser Tab">↗</button>
-            </div>
-            <!-- Favorites / Bookmarks Bar -->
-            <div class="flex items-center gap-1.5 px-3 py-1 bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)] overflow-x-auto text-[11px]">
-                <button data-bm="start://home" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">⭐ ${brandName} Start</button>
-                <button data-bm="vfs:///Users/eugene/Developer/synth_webapp.html" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">⚡ Synth WebApp (VFS)</button>
-                <button data-bm="wiki://macOS_Sequoia" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">📖 Wikipedia: macOS Sequoia</button>
-                <button data-bm="wiki://Apple_M3" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">🔬 Apple silicon Docs</button>
-                <button data-bm="vfs:///Users/eugene/Desktop/Project Roadmap.md" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">📋 Project Roadmap</button>
-            </div>
-            <!-- Viewport + Optional DevTools Drawer -->
-            <div class="flex-1 flex overflow-hidden relative">
-                <div data-role="browser-viewport" class="flex-1 h-full overflow-auto bg-[var(--window-content-bg)]"></div>
-                <div data-role="devtools-drawer" class="w-72 border-l border-[var(--border-color)] bg-[#0d1117] text-slate-200 font-mono text-[11px] p-2.5 hidden flex-col">
-                    <div class="flex justify-between items-center pb-1.5 mb-2 border-b border-white/10">
-                        <span class="font-bold text-sky-400">DevTools Inspector</span>
-                        <span class="text-[10px] text-emerald-400">200 OK</span>
-                    </div>
-                    <div data-role="devtools-log" class="flex-1 overflow-y-auto space-y-1 text-[10px]"></div>
-                </div>
+            <div class="sf-tabs" data-role="tabs-bar"><div data-role="tabs-list" class="sf-tabs-list"></div></div>
+            <div class="sf-view">
+                <div data-role="browser-viewport" class="sf-viewport"></div>
+                <div data-role="devtools-drawer" class="hidden"><div data-role="devtools-log"></div></div>
             </div>
         </div>
     `;
@@ -4986,11 +4993,11 @@ function initBrowser(winEl, windowData, options = {}, isChrome = false) {
     };
 
     const renderTabs = () => {
+        winEl.querySelector('[data-role="tabs-bar"]').style.display = tabs.length > 1 ? '' : 'none';
         tabsList.innerHTML = tabs.map(t => `
-            <div class="flex items-center gap-2 px-3 py-1 rounded-t-lg cursor-pointer border-t border-x ${t.id === activeTabId ? 'bg-[var(--window-content-bg)] border-[var(--border-color)] font-semibold' : 'bg-transparent border-transparent opacity-70 hover:opacity-100'}"
-                data-tab="${t.id}">
-                <span class="truncate max-w-[130px]">${escapeHtml(t.title)}</span>
-                ${tabs.length > 1 ? `<button data-close-tab="${t.id}" class="opacity-60 hover:opacity-100">×</button>` : ''}
+            <div class="sf-tab${t.id === activeTabId ? ' on' : ''}" data-tab="${t.id}" role="tab" aria-selected="${t.id === activeTabId}">
+                ${tabs.length > 1 ? `<button data-close-tab="${t.id}" class="sf-tab-x" aria-label="Close Tab">${sf('plus', 9)}</button>` : ''}
+                <span class="sf-tab-t">${escapeHtml(t.title)}</span>
             </div>
         `).join('');
 
@@ -5017,50 +5024,20 @@ function initBrowser(winEl, windowData, options = {}, isChrome = false) {
 
     const renderViewport = () => {
         const tab = activeTab();
-        urlInput.value = tab.url;
+        urlInput.value = tab.url === 'start://home' ? '' : tab.url;
         logDev(`GET ${tab.url}`);
 
         if (tab.url === 'start://home') {
             tab.title = isChrome ? 'Chrome Start' : 'Safari Start Page';
-            viewport.innerHTML = `
-                <div class="p-6 max-w-2xl mx-auto">
-                    <div class="text-center mb-6">
-                        <div class="w-14 h-14 mx-auto mb-2">${getAppIconSVG(isChrome ? 'chrome' : 'web-browser')}</div>
-                        <h2 class="text-xl font-bold">${isChrome ? 'Google Chrome for macOS Sequoia' : 'Safari 18 Start Page'}</h2>
-                        <p class="text-xs opacity-70 mt-1">Instant VFS HTML execution, Wikipedia Reader & Privacy Protection</p>
+viewport.innerHTML = `
+                <div class="sf-start">
+                    <h2>Favorites</h2>
+                    <div class="sf-favs">
+                        ${[['vfs:///Users/eugene/Developer/synth_webapp.html', 'Synth', '#5e5ce6', 'M'], ['wiki://macOS_Sequoia', 'macOS', '#0a84ff', 'W'], ['vfs:///Users/eugene/Desktop/Project Roadmap.md', 'Roadmap', '#30d158', 'R'], ['https://duckduckgo.com', 'DuckDuckGo', '#ff9f0a', 'D']].map(([u, n, c, l]) => `
+                            <button class="sf-fav" data-quick="${u}"><span style="background:${c}">${l}</span><em>${n}</em></button>`).join('')}
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                        <div data-quick="vfs:///Users/eugene/Developer/synth_webapp.html" class="p-3 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] hover:border-sky-400 cursor-pointer text-center">
-                            <div class="text-2xl mb-1">⚡</div>
-                            <div class="font-semibold">Synth WebApp</div>
-                            <div class="text-[10px] opacity-65">Live VFS HTML</div>
-                        </div>
-                        <div data-quick="wiki://macOS_Sequoia" class="p-3 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] hover:border-sky-400 cursor-pointer text-center">
-                            <div class="text-2xl mb-1">📖</div>
-                            <div class="font-semibold">macOS Sequoia</div>
-                            <div class="text-[10px] opacity-65">Encyclopedia</div>
-                        </div>
-                        <div data-quick="wiki://Apple_M3" class="p-3 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] hover:border-sky-400 cursor-pointer text-center">
-                            <div class="text-2xl mb-1">🧠</div>
-                            <div class="font-semibold">Apple silicon</div>
-                            <div class="text-[10px] opacity-65">Architecture</div>
-                        </div>
-                        <div data-quick="vfs:///Users/eugene/Desktop/Project Roadmap.md" class="p-3 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] hover:border-sky-400 cursor-pointer text-center">
-                            <div class="text-2xl mb-1">🚀</div>
-                            <div class="font-semibold">Roadmap.md</div>
-                            <div class="text-[10px] opacity-65">VFS Document</div>
-                        </div>
-                    </div>
-                    <div class="p-4 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-shield-halved text-2xl text-emerald-400"></i>
-                            <div>
-                                <div class="font-semibold">Intelligent Tracking Prevention Active</div>
-                                <div class="text-[11px] opacity-70">0 cross-site trackers allowed • Sandboxed VFS Execution</div>
-                            </div>
-                        </div>
-                        <span class="text-xs font-mono text-emerald-400">100% Secure</span>
-                    </div>
+                    <h2>Privacy Report</h2>
+                    <div class="sf-priv">${sf('lock', 18)}<div><b>Pages open in a private sandbox</b><small>Sites you visit here can't see the rest of your files.</small></div></div>
                 </div>
             `;
             viewport.querySelectorAll('[data-quick]').forEach(card => {
@@ -5119,11 +5096,13 @@ function initBrowser(winEl, windowData, options = {}, isChrome = false) {
         renderTabs();
     };
 
+    const hist = [tabs[0].url]; let hi = 0;
     const loadUrl = (raw) => {
         let u = String(raw || '').trim();
         if (!u) return;
         if (u.startsWith('/')) u = 'vfs://' + u;
         activeTab().url = u;
+        hist.length = hi + 1; hist.push(u); hi = hist.length - 1;
         renderViewport();
     };
 
@@ -5136,6 +5115,8 @@ function initBrowser(winEl, windowData, options = {}, isChrome = false) {
         renderViewport();
     };
     winEl.querySelector('[data-role="nav-home"]').onclick = () => loadUrl('start://home');
+    winEl.querySelector('[data-role="nav-back"]').onclick = () => { if (hi > 0) { hi--; activeTab().url = hist[hi]; renderViewport(); } };
+    winEl.querySelector('[data-role="nav-fwd"]').onclick = () => { if (hi < hist.length - 1) { hi++; activeTab().url = hist[hi]; renderViewport(); } };
     winEl.querySelector('[data-role="nav-reload"]').onclick = () => renderViewport();
     winEl.querySelector('[data-role="go-btn"]').onclick = () => loadUrl(urlInput.value);
     winEl.querySelector('[data-role="devtools-btn"]').onclick = () => {
@@ -7688,6 +7669,7 @@ const appConfig = {
         init: (winEl, winData, opts) => initBrowser(winEl, winData, opts, true)
     },
     'web-browser': {
+        unified: true,
         title: 'Safari',
         width: 880,
         height: 560,
