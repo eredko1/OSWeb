@@ -1,0 +1,38 @@
+
+        /* ===================================================================
+         * Round 2A — iPhone shell (body.device-phone), PWA safe areas, dvh
+         * =================================================================== */
+        :root { --ios-top: max(env(safe-area-inset-top, 0px), 44px); --ios-bottom: max(env(safe-area-inset-bottom, 0px), 16px); }
+        #macos-viewport-root, #os-viewport-wrapper { height: 100vh; height: 100dvh; }
+        #ios-status, #ios-home, #ios-indicator { display: none; }
+        #ios-home[hidden], #ios-indicator[hidden] { display: none !important; }
+        body.device-phone #top-panel { display: none; }
+        body.device-phone #desktop-icons-layer, body.device-phone #my-files-folder, body.device-phone #desktop-widgets-container { display: none !important; }
+        body.device-phone #ios-status { display: flex; position: absolute; top: 0; left: 0; right: 0; height: var(--ios-top); padding: 0 30px 9px; align-items: flex-end; justify-content: space-between;
+            font-size: 15px; font-weight: 600; color: #fff; z-index: 9500; pointer-events: none; letter-spacing: -0.01em; }
+        body.device-phone #ios-status .ios-right { display: flex; gap: 6px; align-items: center; }
+        body.device-phone.light-mode.app-open #ios-status { color: #000; }
+        body.device-phone #desktop-area { position: absolute; inset: 0; }
+        body.device-phone #ios-home:not([hidden]) { display: block; position: absolute; inset: 0; z-index: 1; overflow-y: auto; padding: calc(var(--ios-top) + 22px) 14px 150px; -webkit-overflow-scrolling: touch; }
+        body.device-phone #ios-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px 6px; justify-items: center; }
+        .ios-app { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 76px; color: #fff; font-size: 11px; touch-action: manipulation; }
+        .ios-app-icon { width: 60px; height: 60px; display: block; } .ios-app-icon svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
+        .ios-app:active .ios-app-icon { transform: scale(0.92); }
+        .ios-app-name { max-width: 76px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 3px rgba(0,0,0,0.55); }
+        body.device-phone #dock-wrapper { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 12px calc(var(--ios-bottom) + 14px); z-index: 9400; }
+        body.device-phone #dock { width: 100%; max-width: none; height: auto; padding: 12px 14px; gap: 0; border-radius: 34px; justify-content: space-around; --dock-base-size: 60px; }
+        body.device-phone .dock-icon { transform: none !important; margin: 0 !important; width: 60px; height: 60px; }
+        body.device-phone .dock-tooltip, body.device-phone .dock-running-dot { display: none; }
+        body.device-phone.app-open #dock-wrapper { display: none; }
+        body.device-phone .window { position: absolute !important; inset: 0 !important; left: 0 !important; top: 0 !important; width: 100% !important; height: 100% !important;
+            min-width: 0 !important; min-height: 0 !important; border-radius: 0 !important; border: none !important; box-shadow: none !important; padding-top: var(--ios-top); background: var(--window-titlebar-bg); }
+        body.device-phone .window-title-bar { height: 44px; min-height: 44px; cursor: default; border-bottom-width: 0.5px; }
+        body.device-phone .traffic-lights, body.device-phone .wm-resize-handle, body.device-phone #wm-snap-preview { display: none !important; }
+        body.device-phone .window-title-text { left: 16px; right: 16px; font-size: 17px; font-weight: 600; }
+        body.device-phone .window-content { padding-bottom: calc(var(--ios-bottom) + 8px); }
+        body.device-phone #ios-indicator { display: block; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 170px; height: 30px; z-index: 9600; background: none; border: 0; }
+        body.device-phone #ios-indicator::after { content: ''; position: absolute; left: 18px; right: 18px; bottom: 8px; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.92); box-shadow: 0 0 0 0.5px rgba(0,0,0,0.25); }
+        body.device-phone.light-mode.app-open #ios-indicator::after { background: rgba(0,0,0,0.85); }
+        body.device-phone .lock-time { font-size: 82px; }
+        /* minimum 44pt hit targets on touch devices */
+        @media (pointer: coarse) { .dock-icon, .menubar-item, .tl-btn::after { min-height: 44px; } .tl-btn { position: relative; } .tl-btn::after { content: ''; position: absolute; inset: -16px -6px; min-height: 0; } }
