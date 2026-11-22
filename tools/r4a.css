@@ -1,0 +1,13 @@
+
+        /* ===================================================================
+         * Round 4A — menu keyboard state, coarse-pointer sizing, forced-colors
+         * =================================================================== */
+        .os-menu-item.kb:not(.disabled) { background: #0A60FF; color: #fff !important; }
+        .os-menu-item.kb .os-menu-shortcut { color: rgba(255,255,255,0.88); }
+        @media (pointer: coarse) {
+            button, [role="button"], .nt-row, .fx-side-item, .wx-loc, .wx-res, .am-table td { min-height: 44px; }
+            .am-table td { height: 44px; } .mac-btn-secondary, .action-button { min-height: 44px; padding: 0 16px; }
+            input[type="range"] { min-height: 44px; }
+            .window .window-title-bar { min-height: 44px; }
+        }
+        @media (forced-colors: active) { .window, #dock, #top-panel, .os-menu-layer { border: 1px solid CanvasText; } .os-menu-item.kb, .os-menu-item:hover { forced-color-adjust: none; background: Highlight; color: HighlightText; } }

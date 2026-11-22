@@ -1429,6 +1429,19 @@
         .wx-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; } .wx-tiles .wx-card { margin: 0; } .wx-big { font-size: 30px; font-weight: 300; } .wx-big small { font-size: 13px; }
         .wx-attr { font-size: 11px; opacity: .7; text-align: center; margin-top: 12px; }
         @media (max-width: 600px) { .wx-side { display: none; } .wx-main { padding-top: 20px; } .wx-temp { font-size: 80px; } }
+
+        /* ===================================================================
+         * Round 4A — menu keyboard state, coarse-pointer sizing, forced-colors
+         * =================================================================== */
+        .os-menu-item.kb:not(.disabled) { background: #0A60FF; color: #fff !important; }
+        .os-menu-item.kb .os-menu-shortcut { color: rgba(255,255,255,0.88); }
+        @media (pointer: coarse) {
+            button, [role="button"], .nt-row, .fx-side-item, .wx-loc, .wx-res, .am-table td { min-height: 44px; }
+            .am-table td { height: 44px; } .mac-btn-secondary, .action-button { min-height: 44px; padding: 0 16px; }
+            input[type="range"] { min-height: 44px; }
+            .window .window-title-bar { min-height: 44px; }
+        }
+        @media (forced-colors: active) { .window, #dock, #top-panel, .os-menu-layer { border: 1px solid CanvasText; } .os-menu-item.kb, .os-menu-item:hover { forced-color-adjust: none; background: Highlight; color: HighlightText; } }
     </style>
 </head>
 <body>
@@ -2402,7 +2415,7 @@ window.OS = {
     music: {
         tracks: [
             { id: 't1', title: 'Sequoia Dawn', artist: 'Apple Silicon Synth', album: 'macOS 15 Sessions', bpm: 108, duration: 164, color: '#FF2D55', notes: [261.63, 329.63, 392.00, 523.25, 392.00, 329.63, 293.66, 349.23] },
-            { id: 't2', title: 'Cupertino Pulse', artist: 'M3 Max Neural Trio', album: 'Infinite Loop', bpm: 122, duration: 198, color: '#5856D6', notes: [220.00, 261.63, 329.63, 440.00, 392.00, 329.63, 261.63, 246.94] },
+            { id: 't2', title: 'Cupertino Pulse', artist: 'Apple silicon Neural Trio', album: 'Infinite Loop', bpm: 122, duration: 198, color: '#5856D6', notes: [220.00, 261.63, 329.63, 440.00, 392.00, 329.63, 261.63, 246.94] },
             { id: 't3', title: 'Midnight Silicon', artist: 'Unified Memory', album: 'Space Black LP', bpm: 96, duration: 212, color: '#0A84FF', notes: [196.00, 246.94, 293.66, 392.00, 349.23, 293.66, 246.94, 220.00] },
             { id: 't4', title: 'Pacific Horizon', artist: 'Big Sur Collective', album: 'California Coast', bpm: 114, duration: 185, color: '#30D158', notes: [293.66, 369.99, 440.00, 587.33, 493.88, 440.00, 369.99, 329.63] },
             { id: 't5', title: 'Zebra Enterprise Flow', artist: 'TC5 & TC7 Labs', album: 'Rugged Flagship', bpm: 126, duration: 176, color: '#FF9F0A', notes: [329.63, 392.00, 493.88, 659.25, 587.33, 493.88, 392.00, 349.23] }
@@ -2624,11 +2637,11 @@ window.OS = {
 
             const files = {
                 '/Users/eugene/.zshrc': `# macOS Sequoia zsh configuration\nexport USER="eugene"\nexport HOST="MacBook-Pro"\nexport PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"\nalias ll="ls -la"\n`,
-                '/Users/eugene/Desktop/Project Roadmap.md': `# macOS Sequoia & Zebra TC5/TC7 Product Roadmap\n\n## Q4 Executive Priorities\n- **macOS Sequoia 15.1 Desktop Engine**: 100% fidelity VFS, Parabolic Dock, Window Tiling & Top 10 Desktop Apps.\n- **Zebra TC5 / TC7 Next-Gen Portfolio**: 5G rugged flagship ergonomics, AI vision scanner pipeline, and battery telemetry.\n- **Cross-Device Viewport Scaling**: Seamless desktop experience across MacBook Pro M3 Max, iPad Pro, and iPhone.\n\n## Key Action Items\n1. Verify POSIX VFS synchronization between Terminal, Finder, VS Code, and Notes.\n2. Run multi-track Web Audio synthesizer in Apple Music & Spotify.\n3. Ship zero-XSS hardened build to GitHub Pages.\n`,
-                '/Users/eugene/Desktop/Sequoia Architecture.txt': `macOS Sequoia 15.1 (Build 24B83)\nKernel: Darwin 24.1.0 ARM64_T6031 (Apple M3 Max)\nUnified Memory: 64 GB LPDDR5X\nVFS Storage: IndexedDB Persistent POSIX Tree\n`,
+                '/Users/eugene/Desktop/Project Roadmap.md': `# macOS Sequoia & Zebra TC5/TC7 Product Roadmap\n\n## Q4 Executive Priorities\n- **macOS Sequoia 15.1 Desktop Engine**: 100% fidelity VFS, Parabolic Dock, Window Tiling & Top 10 Desktop Apps.\n- **Zebra TC5 / TC7 Next-Gen Portfolio**: 5G rugged flagship ergonomics, AI vision scanner pipeline, and battery telemetry.\n- **Cross-Device Viewport Scaling**: Seamless desktop experience across MacBook Pro Apple silicon, iPad Pro, and iPhone.\n\n## Key Action Items\n1. Verify POSIX VFS synchronization between Terminal, Finder, VS Code, and Notes.\n2. Run multi-track Web Audio synthesizer in Apple Music & Spotify.\n3. Ship zero-XSS hardened build to GitHub Pages.\n`,
+                '/Users/eugene/Desktop/Sequoia Architecture.txt': `macOS Sequoia 15.1 (Build 24B83)\nRuns in your web browser\nVFS Storage: IndexedDB Persistent POSIX Tree\n`,
                 '/Users/eugene/Documents/Welcome to Sequoia.md': `# Welcome to macOS Sequoia 15.1\n\nEvery application in this desktop reads and writes to the real **IndexedDB POSIX Virtual File System (\`OS.vfs\`)**.\n\nTry creating or editing a file in **Terminal**, **VS Code**, **Xcode**, **Notes**, or **Finder** — changes reflect live everywhere!`,
                 '/Users/eugene/Documents/Meeting Notes - TC7 Rugged.md': `# Zebra TC7 & TC5 Product Strategy Sync\n\n- Target enterprise shift durability: IP68 + 8ft drop spec\n- Hot-swappable 7000mAh BLE beacon battery\n- Hardware-accelerated OCR & barcode symbology engine\n- Android Enterprise Recommended + zero-touch staging`,
-                '/Users/eugene/Developer/playground.js': `// macOS Sequoia JavaScript & Apple Silicon Playground\nconst hardware = {\n  chip: "Apple M3 Max",\n  cores: 16,\n  gpuCores: 40,\n  memoryGB: 64\n};\n\nfunction benchmarkMatrix(size = 128) {\n  const t0 = performance.now();\n  let acc = 0;\n  for (let i = 0; i < size * size; i++) {\n    acc += Math.sin(i) * Math.cos(i * 0.5);\n  }\n  const dt = (performance.now() - t0).toFixed(2);\n  return { chip: hardware.chip, ops: size * size, elapsedMs: dt, checksum: acc.toFixed(4) };\n}\n\nconsole.log("Running M3 Max Neural Benchmark...");\nconsole.log(JSON.stringify(benchmarkMatrix(256), null, 2));\n`,
+                '/Users/eugene/Developer/playground.js': `// macOS Sequoia JavaScript & Apple Silicon Playground\nconst hardware = {\n  chip: navigator.platform,\n  cores: navigator.hardwareConcurrency,\n  memoryGB: navigator.deviceMemory || null\n};\n\nfunction benchmarkMatrix(size = 128) {\n  const t0 = performance.now();\n  let acc = 0;\n  for (let i = 0; i < size * size; i++) {\n    acc += Math.sin(i) * Math.cos(i * 0.5);\n  }\n  const dt = (performance.now() - t0).toFixed(2);\n  return { chip: hardware.chip, ops: size * size, elapsedMs: dt, checksum: acc.toFixed(4) };\n}\n\nconsole.log("Running Apple silicon Neural Benchmark...");\nconsole.log(JSON.stringify(benchmarkMatrix(256), null, 2));\n`,
                 '/Users/eugene/Developer/synth_webapp.html': `<!DOCTYPE html>\n<html>\n<head>\n<style>\n  body { margin: 0; font-family: -apple-system, sans-serif; background: linear-gradient(135deg, #0f172a, #1e1b4b); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }\n  .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.2); padding: 24px 32px; border-radius: 18px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }\n  button { background: #0A84FF; color: #fff; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 12px; }\n  button:hover { background: #409CFF; }\n</style>\n</head>\n<body>\n  <div class="card">\n    <h2>✨ Live VFS Web Application</h2>\n    <p>Rendered directly from <code>/Users/eugene/Developer/synth_webapp.html</code></p>\n    <div id="counter" style="font-size: 32px; font-weight: 700; margin: 10px 0;">0</div>\n    <button onclick="document.getElementById('counter').textContent = Number(document.getElementById('counter').textContent) + 1">Increment Pulse</button>\n  </div>\n</body>\n</html>`,
                 '/Users/eugene/Developer/main.py': `# Python 3.12 Apple Silicon Script\ndef fibonacci(n: int) -> list[int]:\n    seq = [0, 1]\n    for _ in range(2, n):\n        seq.append(seq[-1] + seq[-2])\n    return seq\n\nprint("Fibonacci(12):", fibonacci(12))\n`,
                 '/Users/eugene/Pictures/Sequoia_Sunset.svg': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A1F4B"/><stop offset="45%" stop-color="#8B2F5F"/><stop offset="80%" stop-color="#F27A54"/><stop offset="100%" stop-color="#F9C772"/></linearGradient></defs><rect width="800" height="500" fill="url(#g1)"/><circle cx="400" cy="280" r="85" fill="#FFE8A3" opacity="0.9"/><path d="M0 380 L180 260 L340 350 L540 220 L700 320 L800 270 V500 H0 Z" fill="#231934"/><path d="M0 420 L230 320 L450 400 L640 300 L800 370 V500 H0 Z" fill="#120E1E"/></svg>`,
@@ -2881,16 +2894,18 @@ window.OS = {
             const layer = document.createElement('div');
             layer.className = 'os-menu-layer';
             layer.dataset.depth = String(depth);
+            layer.setAttribute('role', 'menu');
 
             items.forEach(item => {
                 if (item.separator) {
                     const sep = document.createElement('div');
-                    sep.className = 'os-menu-sep';
+                    sep.className = 'os-menu-sep'; sep.setAttribute('role', 'separator');
                     layer.appendChild(sep);
                     return;
                 }
                 const row = document.createElement('div');
                 row.className = 'os-menu-item' + (item.disabled ? ' disabled' : '');
+                row.setAttribute('role', 'menuitem'); if (item.disabled) row.setAttribute('aria-disabled', 'true'); if (item.submenu) row.setAttribute('aria-haspopup', 'menu');
 
                 const labelSpan = document.createElement('span');
                 labelSpan.className = 'flex items-center gap-2';
@@ -3321,7 +3336,7 @@ function minimizeWindow(windowId) {
 
 // Key-window hand-off (macOS): same app's next window first, then the front-most window of the space.
 function focusNextAfter(excludeId, appId) {
-    const cand = Object.values(openWindows).filter(w => w.id !== excludeId && !w.isMinimized && !w.isHidden && w.virtualDesktop === currentVirtualDesktop && w.element);
+    const cand = Object.values(openWindows).filter(w => w.id !== excludeId && !w.isClosing && !w.isMinimized && !w.isHidden && w.virtualDesktop === currentVirtualDesktop && w.element);
     cand.sort((a, b) => (parseInt(b.element.style.zIndex) || 0) - (parseInt(a.element.style.zIndex) || 0));
     const next = cand.find(w => w.appId === appId) || cand[0];
     if (next) focusWindow(next.id); else updateTopAppMenuBar(appId && Object.values(openWindows).some(w => w.appId === appId && w.id !== excludeId) ? appId : null);
@@ -3343,6 +3358,7 @@ function restoreWindow(windowId) {
 function closeWindow(windowId, skipAnim = false) {
     const winData = openWindows[windowId];
     if (!winData) return;
+    winData.isClosing = true;
 
     let cleaned = false;
     const finalizeClose = () => {
@@ -3395,7 +3411,7 @@ function launchOrFocusApp(appId, options = {}) {
     }
     // Check if an instance already exists on current space (unless forceNew)
     if (!options.forceNew) {
-        const existingId = Object.keys(openWindows).find(id => openWindows[id].appId === appId);
+        const existingId = Object.keys(openWindows).find(id => openWindows[id].appId === appId && !openWindows[id].isClosing);
         if (existingId) {
             const win = openWindows[existingId];
             if (win.virtualDesktop !== currentVirtualDesktop) {
@@ -3645,30 +3661,30 @@ function setupWindowDragAndResize(winEl, titleBar, windowId) {
 
         const winData = openWindows[windowId];
         const area = document.getElementById('desktop-area');
-        const startPt = OS.viewport.toDesktopCoords(e.clientX, e.clientY);
 
-        // If window was maximized, un-maximize proportionally under cursor, back to its previous size
-        if (winData && winData.isMaximized) {
+        let startPt = OS.viewport.toDesktopCoords(e.clientX, e.clientY);
+        let startLeft = winEl.offsetLeft, startTop = winEl.offsetTop;
+        let armed = !(winData && winData.isMaximized);        // a plain click on a maximized title bar must not un-maximize it
+        const unmaxUnderCursor = (pt) => {
             const areaW = area.clientWidth;
             const pre = winData.preTileRect;
             const restoreW = Math.min(pre ? parseFloat(pre.width) || 820 : 820, areaW - 40);
             winEl.style.width = `${restoreW}px`;
             winEl.style.height = `${Math.min(pre ? parseFloat(pre.height) || 540 : 540, area.clientHeight - 40)}px`;
-            winData.preTileRect = null;
-            winEl.style.left = `${Math.max(10, startPt.x - restoreW / 2)}px`;
-            winEl.style.top = `10px`;
-            winData.isMaximized = false;
-        }
-
-        const startLeft = winEl.offsetLeft;
-        const startTop = winEl.offsetTop;
+            winData.preTileRect = null; winData.isMaximized = false;
+            winEl.style.left = `${Math.max(10, pt.x - restoreW / 2)}px`; winEl.style.top = '10px';
+            startLeft = winEl.offsetLeft; startTop = winEl.offsetTop; startPt = pt; nextL = startLeft; nextT = startTop;
+            armed = true;
+        };
         document.body.classList.add('wm-dragging');
         try { titleBar.setPointerCapture(e.pointerId); } catch (_) {}
-        let nextL = startLeft, nextT = startTop, rafId = 0;
+        let nextL = startLeft, nextT = startTop;
+        let rafId = 0;
         const paint = () => { rafId = 0; winEl.style.transform = `translate3d(${nextL - startLeft}px, ${nextT - startTop}px, 0)`; };
 
         const onMove = (ev) => {
             const pt = OS.viewport.toDesktopCoords(ev.clientX, ev.clientY);
+            if (!armed) { if (Math.hypot(pt.x - startPt.x, pt.y - startPt.y) < 4) return; unmaxUnderCursor(pt); }
             const dx = pt.x - startPt.x;
             const dy = pt.y - startPt.y;
             const areaW = area.clientWidth;
@@ -3722,7 +3738,8 @@ function setupWindowDragAndResize(winEl, titleBar, windowId) {
             if (rafId) cancelAnimationFrame(rafId);
             winEl.style.transition = 'none';
             winEl.style.transform = '';
-            winEl.style.left = `${nextL}px`; winEl.style.top = `${nextT}px`;
+            if (pendingSnap) { winEl.style.left = `${startLeft}px`; winEl.style.top = `${startTop}px`; }   // snap records the frame from before the drag
+            else { winEl.style.left = `${nextL}px`; winEl.style.top = `${nextT}px`; }
             void winEl.offsetWidth; requestAnimationFrame(() => { winEl.style.transition = ''; });
             document.body.classList.remove('wm-dragging');
             window.removeEventListener('pointermove', onMove);
@@ -3958,6 +3975,8 @@ function openAboutThisMacModal() {
         </dl>
         <button class="mac-btn-secondary about-more" onclick="document.getElementById('about-mac-modal').remove(); launchOrFocusApp('settings');">More Info…</button>`;
     document.getElementById('macos-viewport-root').appendChild(modal);
+    const release = trapFocus(modal); new MutationObserver((_, o) => { if (!modal.isConnected) { release(); o.disconnect(); } }).observe(document.getElementById('macos-viewport-root'), { childList: true });
+    modal.addEventListener('keydown', (e) => { if (e.key === 'Escape') modal.remove(); });
 }
 
 // Force Quit Applications Dialog (Cmd+Opt+Esc)
@@ -4873,7 +4892,7 @@ function renderBrowserContent(isChrome = false) {
                 <button data-bm="start://home" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">⭐ ${brandName} Start</button>
                 <button data-bm="vfs:///Users/eugene/Developer/synth_webapp.html" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">⚡ Synth WebApp (VFS)</button>
                 <button data-bm="wiki://macOS_Sequoia" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">📖 Wikipedia: macOS Sequoia</button>
-                <button data-bm="wiki://Apple_M3" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">🔬 Apple M3 Max Docs</button>
+                <button data-bm="wiki://Apple_M3" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">🔬 Apple silicon Docs</button>
                 <button data-bm="vfs:///Users/eugene/Desktop/Project Roadmap.md" class="px-2 py-0.5 rounded hover:bg-[var(--surface-active-bg)]">📋 Project Roadmap</button>
             </div>
             <!-- Viewport + Optional DevTools Drawer -->
@@ -4971,7 +4990,7 @@ function initBrowser(winEl, windowData, options = {}, isChrome = false) {
                         </div>
                         <div data-quick="wiki://Apple_M3" class="p-3 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] hover:border-sky-400 cursor-pointer text-center">
                             <div class="text-2xl mb-1">🧠</div>
-                            <div class="font-semibold">Apple M3 Max</div>
+                            <div class="font-semibold">Apple silicon</div>
                             <div class="text-[10px] opacity-65">Architecture</div>
                         </div>
                         <div data-quick="vfs:///Users/eugene/Desktop/Project Roadmap.md" class="p-3 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] hover:border-sky-400 cursor-pointer text-center">
@@ -5017,8 +5036,8 @@ function initBrowser(winEl, windowData, options = {}, isChrome = false) {
                     body: `macOS Sequoia (version 15) is the twenty-first major release of Apple's desktop operating system for Macintosh computers. Named after Sequoia National Park in California, it introduces seamless automatic Window Tiling, deeply integrated Apple Intelligence Writing Tools, iPhone Mirroring & cross-device continuity, and a redesigned Calculator & Passwords experience.`
                 },
                 'Apple_M3': {
-                    heading: 'Apple M3 Max System-on-Chip',
-                    body: `The Apple M3 Max features a 16-core CPU (12 performance cores and 4 efficiency cores), a 40-core GPU with hardware-accelerated ray tracing and mesh shading, a 16-core Neural Engine capable of over 18 TOPS, and up to 128 GB of high-bandwidth unified LPDDR5X memory (400 GB/s).`
+                    heading: 'Apple silicon System-on-Chip',
+                    body: `The Apple silicon features a 16-core CPU (12 performance cores and 4 efficiency cores), a 40-core GPU with hardware-accelerated ray tracing and mesh shading, a 16-core Neural Engine capable of over 18 TOPS, and up to 128 GB of high-bandwidth unified LPDDR5X memory (400 GB/s).`
                 }
             };
             const art = articles[topic] || { heading: topic, body: `Interactive encyclopedic reader article for ${topic}.` };
@@ -5161,7 +5180,7 @@ function renderIDEContent(isVSCode = true) {
                 <div class="flex items-center gap-3">
                     <span data-role="cursor-pos">Ln 1, Col 1</span>
                     <span>UTF-8</span>
-                    <span>Apple M3 Max</span>
+                    <span>Apple silicon</span>
                 </div>
             </div>
         </div>
@@ -5388,7 +5407,7 @@ function initTerminal(winEl, windowData) {
         outputEl.scrollTop = outputEl.scrollHeight;
     };
 
-    printLine(`Last login: ${new Date().toDateString()} on ttys001 — macOS Sequoia 15.1 (Darwin 24.1.0 ARM64_T6031)`);
+    printLine(`Last login: ${new Date().toDateString()} on ttys001 — macOS Sequoia 15.1 (Darwin 24.1.0 ARM64)`);
     printLine(`Type 'help' for 35+ POSIX & macOS commands, 'neofetch' for system info, or '? <intent>' for Apple Intelligence.`);
 
     const runSingleCommand = async (rawCmd, stdinText = '') => {
@@ -5435,7 +5454,7 @@ function initTerminal(winEl, windowData) {
 
             case 'uname':
                 return args.includes('-a')
-                    ? 'Darwin MacBook-Pro.local 24.1.0 Darwin Kernel Version 24.1.0: RELEASE_ARM64_T6031 arm64'
+                    ? 'Darwin MacBook-Pro.local 24.1.0 Darwin Kernel Version 24.1.0: RELEASE_ARM64 arm64'
                     : 'Darwin';
 
             case 'sw_vers':
@@ -6103,7 +6122,7 @@ function initSlack(winEl) {
             topic: 'Zebra TC5 & TC7 Flagship Portfolio Roadmap & Field Telemetry',
             messages: [
                 { author: 'Sarah Chen (Hardware Lead)', avatar: 'SC', time: '9:42 AM', text: 'DVT units for TC5/TC7 passed 8ft drop & IP68 thermal chamber testing with 100% battery retention!', reactions: { '🚀': 5, '🔥': 3 } },
-                { author: 'Marcus Vance (OS Architect)', avatar: 'MV', time: '10:15 AM', text: 'macOS Sequoia 15.1 Desktop Emulation is live on iPad, iPhone, and M3 Max with full IndexedDB VFS sync.', reactions: { '❤️': 4 } },
+                { author: 'Marcus Vance (OS Architect)', avatar: 'MV', time: '10:15 AM', text: 'macOS Sequoia 15.1 Desktop Emulation is live on iPad, iPhone, and Apple silicon with full IndexedDB VFS sync.', reactions: { '❤️': 4 } },
                 { author: 'Apple Intelligence Bot', avatar: 'AI', time: '10:18 AM', text: 'All Q4 roadmap milestones in `/Users/eugene/Desktop/Project Roadmap.md` are on track.', reactions: { '✨': 6 } }
             ]
         },
@@ -6229,7 +6248,7 @@ function renderAIAssistantContent() {
                         <div class="text-[10px] opacity-75">OS Syscall Executor • Window Tiling • VFS File Creator • Live App Forge</div>
                     </div>
                 </div>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">M3 Max Neural Engine</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">Apple silicon Neural Engine</span>
             </div>
 
             <!-- Quick Syscall Chips -->
@@ -7403,7 +7422,7 @@ function renderAppStoreContent() {
 
                 <!-- Apple Arcade: Silicon Clicker (Backward Compatible IDs) -->
                 <div data-role="as-arcade" class="hidden flex-col items-center justify-center text-center py-4">
-                    <div class="text-xs uppercase font-bold text-emerald-400">Apple Arcade • M3 Max Neural Simulator</div>
+                    <div class="text-xs uppercase font-bold text-emerald-400">Apple Arcade • Apple silicon Neural Simulator</div>
                     <h2 class="text-xl font-bold mt-1 mb-2">Silicon TFLOPS Clicker</h2>
                     <div class="text-3xl font-mono font-bold text-sky-400 my-2"><span id="clicker-score" data-role="clicker-score">0</span> TFLOPS</div>
                     <button id="clicker-main-btn" data-role="clicker-btn" class="action-button !py-3 !px-6 !rounded-2xl !text-sm my-3 shadow-xl">
@@ -8233,6 +8252,7 @@ async function initRealStatusItems() {
 function lockScreen() {
     const loginModal = document.getElementById('login-modal');
     if (loginModal) loginModal.classList.remove('hidden');
+    setLockedState(true);
 }
 
 function unlockDesktop() {
@@ -8248,6 +8268,7 @@ function unlockDesktop() {
     if (userInfoEl) userInfoEl.textContent = `${name} (Admin)`;
 
     if (loginModal) loginModal.classList.add('hidden');
+    setLockedState(false);
     OS.audio.playChime();
 
     // Launch Finder on initial unlock if no windows are open yet
@@ -8282,6 +8303,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     else applyThemeByIndex(0);
 
     applyDefaultWallpaperForTheme();
+    setLockedState(true);
     try { const n = localStorage.getItem('osweb_username') || 'Eugene Redko'; document.getElementById('lockscreen-username').textContent = n; document.getElementById('lockscreen-initial').textContent = n.trim().charAt(0).toUpperCase() || 'U'; } catch (_) {}
 
     // 5. Render Menu Bar, Virtual Spaces, Desktop Icons, Widgets & Parabolic Dock
@@ -8527,14 +8549,88 @@ function initSessionPersistence() {
 }
 
 // Give every icon-only control an accessible name (title / data-role fallback).
+function labelFields(root = document) {
+    root.querySelectorAll('input:not([aria-label]):not([type=hidden]), textarea:not([aria-label]), select:not([aria-label])').forEach(f => {
+        const n = f.getAttribute('placeholder') || f.getAttribute('title') || (f.dataset && f.dataset.role) || f.type || 'field';
+        f.setAttribute('aria-label', String(n).replace(/[-_]/g, ' '));
+    });
+}
 function labelButtons(root = document) {
+    labelFields(root);
     root.querySelectorAll('button:not([aria-label]), [role="button"]:not([aria-label])').forEach(b => {
         if ((b.textContent || '').trim()) return;
         const n = b.getAttribute('title') || (b.dataset && (b.dataset.role || b.dataset.tile)) || '';
         if (n) b.setAttribute('aria-label', n.replace(/[-_]/g, ' '));
     });
 }
+// Keyboard model for open menus (menu bar, Apple menu, context menus): arrows, Home/End, Enter, Esc, type-ahead.
+function menuKeyNav(e) {
+    const layers = OS.menu.layers; if (!layers.length) return false;
+    const layer = layers[layers.length - 1];
+    const rows = [...layer.querySelectorAll('.os-menu-item:not(.disabled)')];
+    let i = rows.findIndex(r => r.classList.contains('kb'));
+    const mark = (n) => { rows.forEach(r => r.classList.remove('kb')); if (rows[n]) { rows[n].classList.add('kb'); rows[n].scrollIntoView({ block: 'nearest' }); } };
+    const top = [...document.querySelectorAll('#app-menu-bar-container .menubar-item, #apple-menu-button')];
+    const topIdx = top.findIndex(b => b.classList.contains('active'));
+    switch (e.key) {
+        case 'ArrowDown': mark(i < 0 ? 0 : (i + 1) % rows.length); break;
+        case 'ArrowUp': mark(i < 0 ? rows.length - 1 : (i - 1 + rows.length) % rows.length); break;
+        case 'Home': mark(0); break; case 'End': mark(rows.length - 1); break;
+        case 'ArrowRight': if (i >= 0 && rows[i].getAttribute('aria-haspopup')) { rows[i].dispatchEvent(new PointerEvent('pointerenter')); const sub = OS.menu.layers[OS.menu.layers.length - 1]; sub?.querySelector('.os-menu-item:not(.disabled)')?.classList.add('kb'); }
+            else if (topIdx >= 0 && layers.length === 1) top[(topIdx + 1) % top.length].click(); break;
+        case 'ArrowLeft': if (layers.length > 1) OS.menu.closeFromDepth(layers.length - 1); else if (topIdx >= 0) top[(topIdx - 1 + top.length) % top.length].click(); break;
+        case 'Enter': case ' ': if (i >= 0) rows[i].click(); break;
+        case 'Escape': if (layers.length > 1) OS.menu.closeFromDepth(layers.length - 1); else OS.menu.closeAll(); break;
+        default:
+            if (e.key.length === 1 && !e.metaKey && !e.ctrlKey) { const k = e.key.toLowerCase(); const n = rows.findIndex((r, j) => j > i && r.textContent.trim().toLowerCase().startsWith(k)); const m = n >= 0 ? n : rows.findIndex(r => r.textContent.trim().toLowerCase().startsWith(k)); if (m >= 0) mark(m); else return false; }
+            else return false;
+    }
+    e.preventDefault(); e.stopPropagation(); return true;
+}
+
+// Focus management for modal surfaces: trap Tab, restore focus on close.
+function trapFocus(container, { restore = document.activeElement } = {}) {
+    const sel = 'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
+    const onKey = (e) => { if (e.key !== 'Tab') return; const f = [...container.querySelectorAll(sel)].filter(x => x.offsetParent !== null); if (!f.length) return; const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } };
+    container.addEventListener('keydown', onKey);
+    (container.querySelector(sel) || container).focus?.();
+    return () => { container.removeEventListener('keydown', onKey); try { restore && restore.focus && restore.focus(); } catch (_) {} };
+}
+
+// While locked, everything behind the lock screen is inert (no Tab/AT/pointer access).
+function setLockedState(locked) {
+    ['top-panel', 'desktop-area', 'dock-wrapper', 'ios-status', 'ios-home', 'ios-indicator', 'right-sidebar'].forEach(id => { const el = document.getElementById(id); if (el) { if (locked) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } });
+    if (locked) setTimeout(() => document.getElementById('username-input')?.focus(), 60);
+}
+
+// Context menus inside app content (text: Cut/Copy/Paste/Select All; elsewhere: Copy/Select All).
+function initContentContextMenu() {
+    document.addEventListener('contextmenu', (e) => {
+        if (e.defaultPrevented) return;
+        const t = e.target; if (!t.closest || !t.closest('.window-content')) return;
+        e.preventDefault();
+        const editable = t.closest('input:not([type=checkbox]):not([type=range]), textarea, [contenteditable="true"]');
+        const sel = String(window.getSelection ? window.getSelection() : '');
+        const hasSel = !!sel || (editable && editable.selectionStart !== editable.selectionEnd);
+        const items = editable ? [
+            { label: 'Cut', shortcut: '⌘X', disabled: !hasSel, action: () => { editable.focus(); document.execCommand('cut'); } },
+            { label: 'Copy', shortcut: '⌘C', disabled: !hasSel, action: () => { editable.focus(); document.execCommand('copy'); } },
+            { label: 'Paste', shortcut: '⌘V', action: async () => { editable.focus(); try { const tx = await navigator.clipboard.readText(); document.execCommand('insertText', false, tx); } catch (_) { showTemporaryMessage('Use ⌘V to paste (clipboard permission needed).', 2000); } } },
+            { separator: true },
+            { label: 'Select All', shortcut: '⌘A', action: () => { editable.focus(); document.execCommand('selectAll'); } }
+        ] : [
+            { label: 'Copy', shortcut: '⌘C', disabled: !hasSel, action: () => document.execCommand('copy') },
+            { label: 'Select All', shortcut: '⌘A', action: () => document.execCommand('selectAll') }
+        ];
+        const c = OS.viewport.toDesktopCoords(e.clientX, e.clientY);
+        OS.menu.open(items, c.x, c.y, 0);
+    });
+}
+
 function initKeyboardShortcuts() {
+    window.addEventListener('keydown', (e) => { if (OS.menu.layers.length) menuKeyNav(e); }, true);
+    initContentContextMenu();
     window.addEventListener('keydown', (e) => {
         const key = (e.key || '').toLowerCase();
         if (e.key === 'Escape') {
