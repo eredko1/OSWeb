@@ -1,0 +1,42 @@
+
+        /* ===================================================================
+         * Round 3B — Notes on the unified shell; phone navigation stack
+         * =================================================================== */
+        :root { --unified-top: 52px; }
+        body.device-phone { --unified-top: 0px; }
+        .fx-sidebar, .nt-list { padding-top: var(--unified-top); }
+        body.device-phone .window.unified .window-title-bar { position: relative; height: 44px; min-height: 44px; background: var(--window-titlebar-bg); border-bottom: 0.5px solid var(--border-color); }
+        body.device-phone .window.unified .window-title-text { display: flex; }
+        body.device-phone .window.unified .window-content { background: var(--window-content-bg); }
+
+        .nt-root { display: flex; height: 100%; font-size: 13px; }
+        .nt-list { width: 270px; flex-shrink: 0; display: flex; flex-direction: column; background: rgba(40,40,44,0.55); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border-right: 0.5px solid rgba(255,255,255,0.08); }
+        body.light-mode .nt-list { background: rgba(240,240,242,0.75); border-right-color: rgba(0,0,0,0.1); }
+        .nt-list-head { display: flex; align-items: baseline; justify-content: space-between; padding: 0 16px 6px 84px; height: 30px; }
+        .nt-list-head h2 { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; } .nt-count { font-size: 11px; color: var(--text-muted); }
+        .nt-search { display: flex; align-items: center; gap: 5px; margin: 6px 12px 8px; height: 24px; padding: 0 8px; border-radius: 6px; background: rgba(255,255,255,0.1); color: var(--text-muted); }
+        body.light-mode .nt-search { background: rgba(0,0,0,0.06); }
+        .nt-search input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none !important; font-size: 13px; color: var(--text-primary); }
+        .nt-rows { flex: 1; overflow-y: auto; padding: 0 8px 8px; }
+        .nt-row { padding: 7px 10px; border-radius: 8px; cursor: default; }
+        .nt-row-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .nt-row-sub { font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .nt-row:hover { background: rgba(255,255,255,0.05); } body.light-mode .nt-row:hover { background: rgba(0,0,0,0.04); }
+        .nt-row.sel { background: #8a6d12; color: #fff; } .nt-row.sel .nt-row-sub { color: rgba(255,255,255,0.75); }
+        body.light-mode .nt-row.sel { background: #f6cf3d; color: #1d1d1f; } body.light-mode .nt-row.sel .nt-row-sub { color: rgba(0,0,0,0.6); }
+        .nt-editor { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; }
+        .nt-toolbar { height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 12px; pointer-events: none; position: relative; z-index: 5; }
+        .nt-toolbar > * { pointer-events: auto; } .nt-toolbar .fx-spacer { pointer-events: none !important; }
+        .nt-back { display: none; width: auto; padding: 0 6px; gap: 2px; color: var(--accent-color); font-size: 15px; }
+        .nt-date { text-align: center; font-size: 11px; color: var(--text-muted); padding: 2px 0 8px; }
+        .nt-text, .nt-preview { flex: 1; width: 100%; padding: 4px 28px 24px; background: transparent; border: 0; outline: none !important; resize: none; font-size: 14px; line-height: 1.5; color: var(--text-primary); font-family: var(--font-sans); overflow-y: auto; }
+        .nt-preview h1 { font-size: 22px; font-weight: 700; margin: 4px 0 8px; } .nt-preview h2 { font-size: 17px; font-weight: 700; margin: 10px 0 4px; color: inherit; } .nt-preview code { background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 4px; font-family: var(--font-mono); font-size: 12px; color: inherit; }
+        @media (max-width: 600px) {
+            .nt-root .nt-list, .nt-root .nt-editor { width: 100%; flex: 1; }
+            .nt-list-head { padding-left: 16px; height: auto; padding-top: 8px; } .nt-list-head h2 { font-size: 34px; }
+            .nt-row { padding: 10px 14px; min-height: 56px; } .nt-row-title { font-size: 17px; } .nt-row-sub { font-size: 15px; }
+            .nt-root[data-view="list"] .nt-editor, .nt-root[data-view="edit"] .nt-list { display: none; }
+            .nt-back { display: flex; align-items: center; } .nt-toolbar { height: 44px; pointer-events: auto; }
+            .nt-text, .nt-preview { padding: 4px 16px 24px; font-size: 17px; }
+        }
+        @media (pointer: coarse) { .fx-tb, .fx-seg-btn { min-width: 44px; min-height: 44px; } .fx-side-item { min-height: 44px; } }

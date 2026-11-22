@@ -1349,6 +1349,48 @@
         .window[data-app="file-explorer"] .finder-item { border-radius: 6px; font-size: 12px; }
         .window[data-app="file-explorer"] .finder-item .border-sky-400 { border-color: transparent; }
         @media (max-width: 600px) { .fx-sidebar { display: none; } .fx-search { width: 110px; } .fx-toolbar { padding-left: 12px; } .window.unified .traffic-lights { display: none !important; } }
+
+        /* ===================================================================
+         * Round 3B — Notes on the unified shell; phone navigation stack
+         * =================================================================== */
+        :root { --unified-top: 52px; }
+        body.device-phone { --unified-top: 0px; }
+        .fx-sidebar, .nt-list { padding-top: var(--unified-top); }
+        body.device-phone .window.unified .window-title-bar { position: relative; height: 44px; min-height: 44px; background: var(--window-titlebar-bg); border-bottom: 0.5px solid var(--border-color); }
+        body.device-phone .window.unified .window-title-text { display: flex; }
+        body.device-phone .window.unified .window-content { background: var(--window-content-bg); }
+
+        .nt-root { display: flex; height: 100%; font-size: 13px; }
+        .nt-list { width: 270px; flex-shrink: 0; display: flex; flex-direction: column; background: rgba(40,40,44,0.55); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border-right: 0.5px solid rgba(255,255,255,0.08); }
+        body.light-mode .nt-list { background: rgba(240,240,242,0.75); border-right-color: rgba(0,0,0,0.1); }
+        .nt-list-head { display: flex; align-items: baseline; justify-content: space-between; padding: 0 16px 6px 84px; height: 30px; }
+        .nt-list-head h2 { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; } .nt-count { font-size: 11px; color: var(--text-muted); }
+        .nt-search { display: flex; align-items: center; gap: 5px; margin: 6px 12px 8px; height: 24px; padding: 0 8px; border-radius: 6px; background: rgba(255,255,255,0.1); color: var(--text-muted); }
+        body.light-mode .nt-search { background: rgba(0,0,0,0.06); }
+        .nt-search input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none !important; font-size: 13px; color: var(--text-primary); }
+        .nt-rows { flex: 1; overflow-y: auto; padding: 0 8px 8px; }
+        .nt-row { padding: 7px 10px; border-radius: 8px; cursor: default; }
+        .nt-row-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .nt-row-sub { font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .nt-row:hover { background: rgba(255,255,255,0.05); } body.light-mode .nt-row:hover { background: rgba(0,0,0,0.04); }
+        .nt-row.sel { background: #8a6d12; color: #fff; } .nt-row.sel .nt-row-sub { color: rgba(255,255,255,0.75); }
+        body.light-mode .nt-row.sel { background: #f6cf3d; color: #1d1d1f; } body.light-mode .nt-row.sel .nt-row-sub { color: rgba(0,0,0,0.6); }
+        .nt-editor { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; }
+        .nt-toolbar { height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 12px; pointer-events: none; position: relative; z-index: 5; }
+        .nt-toolbar > * { pointer-events: auto; } .nt-toolbar .fx-spacer { pointer-events: none !important; }
+        .nt-back { display: none; width: auto; padding: 0 6px; gap: 2px; color: var(--accent-color); font-size: 15px; }
+        .nt-date { text-align: center; font-size: 11px; color: var(--text-muted); padding: 2px 0 8px; }
+        .nt-text, .nt-preview { flex: 1; width: 100%; padding: 4px 28px 24px; background: transparent; border: 0; outline: none !important; resize: none; font-size: 14px; line-height: 1.5; color: var(--text-primary); font-family: var(--font-sans); overflow-y: auto; }
+        .nt-preview h1 { font-size: 22px; font-weight: 700; margin: 4px 0 8px; } .nt-preview h2 { font-size: 17px; font-weight: 700; margin: 10px 0 4px; color: inherit; } .nt-preview code { background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 4px; font-family: var(--font-mono); font-size: 12px; color: inherit; }
+        @media (max-width: 600px) {
+            .nt-root .nt-list, .nt-root .nt-editor { width: 100%; flex: 1; }
+            .nt-list-head { padding-left: 16px; height: auto; padding-top: 8px; } .nt-list-head h2 { font-size: 34px; }
+            .nt-row { padding: 10px 14px; min-height: 56px; } .nt-row-title { font-size: 17px; } .nt-row-sub { font-size: 15px; }
+            .nt-root[data-view="list"] .nt-editor, .nt-root[data-view="edit"] .nt-list { display: none; }
+            .nt-back { display: flex; align-items: center; } .nt-toolbar { height: 44px; pointer-events: auto; }
+            .nt-text, .nt-preview { padding: 4px 16px 24px; font-size: 17px; }
+        }
+        @media (pointer: coarse) { .fx-tb, .fx-seg-btn { min-width: 44px; min-height: 44px; } .fx-side-item { min-height: 44px; } }
     </style>
 </head>
 <body>
@@ -1776,7 +1818,13 @@ const SF_PATHS = {
     'chevron.left.forwardslash.chevron.right': 'M5 4L1.5 8 5 12M11 4l3.5 4L11 12M9.2 3l-2.4 10', 'photo': 'M2.5 3h11v10h-11zM2.5 11l3.5-3.5 3 3 2-2 2.5 2.5M10.5 6.2h.01',
     'music.note': 'M6 12V3.5l7-1.5V10.5M6 12a1.8 1.8 0 1 1-3.6 0A1.8 1.8 0 0 1 6 12zM13 10.5a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0z',
     'arrow.down.circle': 'M8 14.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM8 4.5v6M5.5 8.2L8 10.7l2.5-2.5', 'internaldrive': 'M2 9.5l1.7-5.2A1 1 0 0 1 4.6 3.5h6.8a1 1 0 0 1 .9.8L14 9.5v2.2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 9.5h12M11.5 11.2h.01',
-    'app': 'M8 2L3 12.5M8 2l5 10.5M4.4 9.5h7.2M2.5 12.5h.01'
+    'app': 'M8 2L3 12.5M8 2l5 10.5M4.4 9.5h7.2M2.5 12.5h.01',
+    'square.and.pencil': 'M7 3H3.5A1.5 1.5 0 0 0 2 4.5v8A1.5 1.5 0 0 0 3.5 14h8a1.5 1.5 0 0 0 1.5-1.5V9M12.2 2.3a1.4 1.4 0 0 1 2 2L8 10.5 5.5 11l.5-2.5z',
+    'trash': 'M2.5 4.5h11M6 4.5V3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.5M4 4.5l.6 8.3a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9l.6-8.3M6.8 7v4M9.2 7v4',
+    'sparkles': 'M7 2.5l1.2 3.3 3.3 1.2-3.3 1.2L7 11.5 5.8 8.2 2.5 7l3.3-1.2zM12.2 10l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z',
+    'textformat': 'M2 12.5L6 3l4 9.5M3.4 9.5h5.2M11 12.5l2-5 2 5',
+    'checklist': 'M2.5 4l1.2 1.2L5.8 3M2.5 9l1.2 1.2L5.8 8M8 4.5h6M8 9.5h6M2.8 13.5h.01M8 14h6',
+    'sidebar.left': 'M2.5 3h11v10h-11zM6.2 3v10'
 };
 function sf(name, size = 16, cls = '') {
     return `<svg class="sf ${cls}" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${SF_PATHS[name] || ''}"/></svg>`;
@@ -5765,42 +5813,27 @@ function initTerminal(winEl, windowData) {
 // --- 8.5 Apple Notes (`notepad`) with VFS Auto-Save & Apple Intelligence Writing Tools ---
 function renderNotepadContent() {
     return `
-        <div class="flex h-full text-xs">
-            <!-- Left Sidebar: VFS Notes List -->
-            <div class="w-52 border-r border-[var(--border-color)] bg-[var(--surface-overlay-bg)] flex flex-col">
-                <div class="p-2.5 border-b border-[var(--border-color)] flex items-center justify-between">
-                    <span class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fas fa-note-sticky"></i> iCloud Notes</span>
-                    <button data-role="new-note-btn" class="action-button !bg-amber-500 hover:!bg-amber-400 !text-black !py-0.5 !px-2 !text-[11px] font-bold">+ New</button>
+        <div class="nt-root" data-view="list">
+            <aside class="nt-list" aria-label="Notes">
+                <div class="nt-list-head"><h2>Notes</h2><span class="nt-count" data-role="notes-count"></span></div>
+                <label class="nt-search">${sf('magnifyingglass', 12)}<input data-role="note-search" type="search" placeholder="Search" aria-label="Search notes"/></label>
+                <div data-role="notes-list" class="nt-rows" role="listbox" aria-label="Notes"></div>
+            </aside>
+            <section class="nt-editor">
+                <div class="nt-toolbar">
+                    <button class="fx-tb nt-back" data-role="nt-back" aria-label="Notes" title="Notes">${sf('chevron.left')}<span>Notes</span></button>
+                    <span class="fx-spacer"></span>
+                    <button data-role="new-note-btn" class="fx-tb" title="New Note" aria-label="New Note">${sf('square.and.pencil')}</button>
+                    <button data-role="delete-note" class="fx-tb" title="Delete" aria-label="Delete Note">${sf('trash')}</button>
+                    <button data-role="toggle-preview" class="fx-tb" title="Formatted View" aria-label="Formatted View">${sf('textformat')}</button>
+                    <button data-role="writing-tools" class="fx-tb" title="Writing Tools" aria-label="Writing Tools" aria-haspopup="menu">${sf('sparkles')}</button>
                 </div>
-                <div class="p-2 border-b border-[var(--border-color)]">
-                    <input data-role="note-search" type="search" placeholder="Search Notes..." class="w-full px-2.5 py-1 rounded-lg bg-black/20 border border-[var(--border-color)] outline-none text-xs"/>
-                </div>
-                <div data-role="notes-list" class="flex-1 overflow-y-auto p-1.5 space-y-1"></div>
-            </div>
-
-            <!-- Right Editor + Apple Intelligence Toolbar -->
-            <div class="flex-1 flex flex-col overflow-hidden">
-                <div class="flex items-center justify-between px-3 py-2 bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)] flex-wrap gap-1.5">
-                    <div class="flex items-center gap-1.5">
-                        <button id="summarize-note-btn" data-role="ai-summarize" class="action-button !py-1 !px-2.5 !text-[11px]">✨ Summarize</button>
-                        <button id="suggest-title-btn" data-role="ai-title" class="mac-btn-secondary !py-1 !px-2.5 !text-[11px]">✨ Suggest Title</button>
-                        <button data-role="ai-bullets" class="mac-btn-secondary !py-1 !px-2 !text-[11px]">✨ Action Items</button>
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <button data-role="toggle-preview" class="mac-btn-secondary !py-1 !px-2 !text-[11px]"><i class="fas fa-eye"></i> Preview</button>
-                        <button data-role="delete-note" class="mac-btn-secondary !py-1 !px-2 !text-[11px] !text-rose-400" title="Delete Note"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-
-                <textarea data-role="note-textarea" placeholder="Start writing your note..."
-                    class="flex-1 w-full p-4 bg-transparent text-sm leading-relaxed outline-none resize-none font-sans"></textarea>
-                <div data-role="note-preview" class="flex-1 w-full p-5 overflow-y-auto hidden prose prose-invert max-w-none text-sm leading-relaxed"></div>
-
-                <div class="flex items-center justify-between px-3 py-1 border-t border-[var(--border-color)] bg-[var(--surface-overlay-bg)] text-[11px] opacity-70">
-                    <span data-role="note-path" class="font-mono">/Users/eugene/Documents/Welcome to Sequoia.md</span>
-                    <span data-role="note-stats">0 words • Saved to IndexedDB VFS</span>
-                </div>
-            </div>
+                <div class="nt-date" data-role="note-stats"></div>
+                <textarea data-role="note-textarea" placeholder="" aria-label="Note" class="nt-text"></textarea>
+                <div data-role="note-preview" class="nt-preview hidden"></div>
+                <span data-role="note-path" hidden></span>
+                <button hidden data-role="ai-summarize" id="summarize-note-btn"></button><button hidden data-role="ai-title" id="suggest-title-btn"></button><button hidden data-role="ai-bullets"></button>
+            </section>
         </div>
     `;
 }
@@ -5813,6 +5846,12 @@ function initNotepad(winEl, windowData, options = {}) {
     const searchEl = winEl.querySelector('[data-role="note-search"]');
     const textarea = winEl.querySelector('[data-role="note-textarea"]');
     const previewEl = winEl.querySelector('[data-role="note-preview"]');
+    const rootEl = winEl.querySelector('.nt-root');
+    winEl.querySelector('[data-role="nt-back"]').onclick = () => { rootEl.dataset.view = 'list'; };
+    winEl.querySelector('[data-role="writing-tools"]').onclick = (e) => {
+        const r = e.currentTarget.getBoundingClientRect(); const c = OS.viewport.toDesktopCoords(r.right - 200, r.bottom + 4);
+        OS.menu.open([{ label: 'Summarize', action: () => summarizeBtn.click() }, { label: 'Suggest Title', action: () => titleBtn.click() }, { label: 'Key Points', action: () => bulletsBtn.click() }], c.x, c.y, 0);
+    };
     const pathEl = winEl.querySelector('[data-role="note-path"]');
     const statsEl = winEl.querySelector('[data-role="note-stats"]');
     const summarizeBtn = winEl.querySelector('[data-role="ai-summarize"]');
@@ -5837,7 +5876,7 @@ function initNotepad(winEl, windowData, options = {}) {
     const updateStats = () => {
         const text = textarea.value || '';
         const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-        statsEl.textContent = `${words} words • ${text.length} chars • Synced to VFS`;
+        statsEl.textContent = new Date().toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' }).replace(',', '') ;
     };
 
     const renderMarkdownSimple = (md) => {
@@ -5854,16 +5893,17 @@ function initNotepad(winEl, windowData, options = {}) {
     const renderList = () => {
         const q = (searchEl.value || '').toLowerCase().trim();
         const notes = getNoteFiles().filter(n => !q || n.name.toLowerCase().includes(q) || (n.content || '').toLowerCase().includes(q));
+        const cnt = winEl.querySelector('[data-role="notes-count"]'); if (cnt) cnt.textContent = `${notes.length} note${notes.length === 1 ? '' : 's'}`;
         listEl.innerHTML = notes.map(n => `
-            <div class="p-2 rounded-xl cursor-pointer transition ${n.path === activePath ? 'bg-amber-500/25 border border-amber-400/50' : 'hover:bg-[var(--surface-overlay-bg)] border border-transparent'}"
-                data-note-path="${escapeHtml(n.path)}">
-                <div class="font-semibold truncate">${escapeHtml(n.name)}</div>
-                <div class="text-[10px] opacity-65 truncate mt-0.5">${escapeHtml((n.content || '').replace(/#+\s*/g, '').slice(0, 50))}</div>
+            <div class="nt-row${n.path === activePath ? ' sel' : ''}" data-note-path="${escapeHtml(n.path)}" role="option" aria-selected="${n.path === activePath}" tabindex="0">
+                <div class="nt-row-title">${escapeHtml(n.name.replace(/\.(md|txt)$/i, ''))}</div>
+                <div class="nt-row-sub"><span>${escapeHtml((n.content || '').replace(/^#+\s*.*\n?/, '').replace(/[#*`]/g, '').trim().slice(0, 44) || 'No additional text')}</span></div>
             </div>
         `).join('');
 
         listEl.querySelectorAll('[data-note-path]').forEach(el => {
-            el.onclick = () => openNote(el.dataset.notePath);
+            el.onclick = () => { openNote(el.dataset.notePath); if (document.body.classList.contains('device-phone')) rootEl.dataset.view = 'edit'; };
+            el.onkeydown = (e) => { if (e.key === 'Enter') el.click(); };
         });
     };
 
@@ -5922,13 +5962,13 @@ function initNotepad(winEl, windowData, options = {}) {
     summarizeBtn.onclick = async () => {
         if (!textarea.value.trim()) { showTemporaryMessage('Note is empty.', 1800); return; }
         summarizeBtn.disabled = true;
-        summarizeBtn.textContent = '✨ Summarizing...';
+        
         const summary = await callGeminiAPI(`Summarize the following note concisely:\n\n${textarea.value}`);
         textarea.value += `\n\n--- Summary ---\n${summary.trim()}`;
         OS.vfs.writeFile(activePath, textarea.value);
         previewEl.innerHTML = renderMarkdownSimple(textarea.value);
         summarizeBtn.disabled = false;
-        summarizeBtn.textContent = '✨ Summarize';
+        
         updateStats();
         showTemporaryMessage('Apple Intelligence Summary appended.', 2000);
     };
@@ -5936,13 +5976,13 @@ function initNotepad(winEl, windowData, options = {}) {
     titleBtn.onclick = async () => {
         if (!textarea.value.trim()) { showTemporaryMessage('Note is empty.', 1800); return; }
         titleBtn.disabled = true;
-        titleBtn.textContent = '✨ Suggesting...';
+        
         const title = await callGeminiAPI(`Suggest a very short, concise title (3-5 words max) for the following note:\n\n${textarea.value}`, 'title');
         textarea.value = `# ${title.trim()}\n\n${textarea.value}`;
         OS.vfs.writeFile(activePath, textarea.value);
         previewEl.innerHTML = renderMarkdownSimple(textarea.value);
         titleBtn.disabled = false;
-        titleBtn.textContent = '✨ Suggest Title';
+        
         updateStats();
         showTemporaryMessage(`Suggested Title: ${title.trim()}`, 2000);
     };
@@ -7754,6 +7794,7 @@ const appConfig = {
         init: (winEl, winData, opts) => initMusicPlayer(winEl, winData, opts)
     },
     'notepad': {
+        unified: true,
         title: 'Notes',
         width: 780,
         height: 500,
