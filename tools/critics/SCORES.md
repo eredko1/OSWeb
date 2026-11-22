@@ -33,3 +33,8 @@ live Auto appearance, tiled drag-out restore. Not yet re-scored.
 - Cause (most likely): Mac mode on a phone laid the page out at 1100px, so controls were ~10pt on screen. Now portrait lays out at 640px (landscape 960), rows are 40-46px, windows open full-screen (`body.touch-small`).
 - Escape hatch that does not need Settings: open the site with `?ui=ios` (iPhone-style shell) or `?ui=mac`; the choice is remembered.
 - Verified with Chromium touch emulation only; real iOS Safari still needs a device check.
+
+## Round 8-9 (user request): Spaces, monitor, proxy
+- Virtual desktops: add/remove, Ctrl+arrows, drag windows between desktops in Mission Control (touch-capable), Mission Control launcher in Launchpad + Control Center, desktops persisted with the session.
+- System monitor: menu-bar item + popover and Activity Monitor graphs. Honest metrics only: tab load (timer-lateness heartbeat), JS heap (Chromium), GPU name via WebGL + frame rate, network info. System-wide CPU/GPU utilisation is not exposed to web pages. Toggle: Settings > Desktop & Dock.
+- Web proxy: `proxy/` (Vercel function or `node proxy/server.js`), HMAC-signed 5-minute URLs, SSRF block, no cookies, 10MB/15s limits. Client: Settings > Websites, Safari routes external sites through it. Tested against a local upstream that forbids framing. NOT deployed anywhere.

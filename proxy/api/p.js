@@ -1,0 +1,3 @@
+// Vercel serverless entry: https://<your-project>.vercel.app/api/p?url=...&exp=...&sig=...
+const { handle } = require('../lib');
+module.exports = (req, res) => handle(req, res);

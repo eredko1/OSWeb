@@ -1575,6 +1575,11 @@
         .am-graph canvas { flex: 1; min-width: 120px; height: 70px; border-radius: 6px; background: rgba(0,0,0,0.2); }
         .am-graph .am-foot { border: 0; background: transparent; padding: 0; flex-wrap: wrap; align-content: center; max-width: 52%; gap: 8px 22px; }
         .am-note { font-size: 10.5px; color: var(--text-secondary); flex-basis: 100%; }
+
+        /* Safari banner + Settings help text */
+        .sf-banner { display: flex; justify-content: space-between; gap: 12px; padding: 6px 14px; font-size: 12px; color: var(--text-secondary); background: rgba(255,255,255,0.05); border-bottom: 0.5px solid var(--border-color); }
+        .sf-banner a { color: var(--accent-color); white-space: nowrap; }
+        .st-help { font-size: 12px; color: var(--text-secondary); line-height: 1.45; padding: 0 4px; } .st-help code { font-family: var(--font-mono); font-size: 11px; background: rgba(255,255,255,0.08); padding: 1px 4px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -2012,6 +2017,7 @@ const SF_PATHS = {
     'accessibility': 'M8 4.5a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4zM3 5.8l5 1 5-1M8 6.8v3M6 14l2-4 2 4',
     'square.and.arrow.up': 'M8 10V2M5 4.8L8 2l3 2.8M4.5 7H4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-.5',
     'plus': 'M8 3v10M3 8h10', 'lock': 'M4.5 7.5V5.5a3.5 3.5 0 0 1 7 0v2M3.5 7.5h9v6h-9z', 'rectangle.on.rectangle': 'M5.5 5.5h8v8h-8zM2.5 10.5v-8h8', 'arrow.clockwise': 'M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3',
+    'globe': 'M8 14.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM1.5 8h13M8 1.5c2 2 2.8 4 2.8 6.5S10 12.5 8 14.5M8 1.5C6 3.5 5.2 5.5 5.2 8S6 12.5 8 14.5',
     'square.and.pencil': 'M7 3H3.5A1.5 1.5 0 0 0 2 4.5v8A1.5 1.5 0 0 0 3.5 14h8a1.5 1.5 0 0 0 1.5-1.5V9M12.2 2.3a1.4 1.4 0 0 1 2 2L8 10.5 5.5 11l.5-2.5z',
     'trash': 'M2.5 4.5h11M6 4.5V3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.5M4 4.5l.6 8.3a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9l.6-8.3M6.8 7v4M9.2 7v4',
     'sparkles': 'M7 2.5l1.2 3.3 3.3 1.2-3.3 1.2L7 11.5 5.8 8.2 2.5 7l3.3-1.2zM12.2 10l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z',
@@ -5215,15 +5221,22 @@ viewport.innerHTML = `
         } else {
             const safeUrl = tab.url.startsWith('http') ? tab.url : `https://${tab.url}`;
             tab.title = safeUrl.replace(/^https?:\/\//, '').split('/')[0];
+            const viaProxy = OS.proxy.configured() && /^https?:/i.test(safeUrl);
+            const sandbox = (() => { try { const o = new URL(safeUrl, location.href).origin; return (o === location.origin || o === 'null') ? '' : 'allow-same-origin'; } catch (_) { return ''; } })();
             viewport.innerHTML = `
                 <div class="flex flex-col h-full">
-                    <div class="px-3 py-1.5 bg-amber-500/15 border-b border-amber-400/30 flex items-center justify-between text-[11px]">
-                        <span>Viewing external URL in sandboxed frame: <strong>${escapeHtml(safeUrl)}</strong></span>
-                        <a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="action-button !py-0.5 !px-2 !text-[11px]">Open in New Tab ↗</a>
+                    <div class="sf-banner">
+                        <span>${viaProxy ? 'Loaded through your web proxy.' : 'Many sites refuse to be shown inside another page.'}${viaProxy ? '' : ' <a href="#" data-role="sf-setup">Set up a web proxy</a> to open them here.'}</span>
+                        <a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">Open in new tab ↗</a>
                     </div>
-                    <iframe src="${escapeHtml(safeUrl)}" class="flex-1 w-full border-0" sandbox="allow-scripts ${(() => { try { const o = new URL(safeUrl, location.href).origin; return (o === location.origin || o === 'null') ? '' : 'allow-same-origin'; } catch (_) { return ''; } })()} allow-forms"></iframe>
+                    <iframe data-role="sf-frame" class="flex-1 w-full border-0" referrerpolicy="no-referrer" sandbox="allow-scripts ${viaProxy ? '' : sandbox} allow-forms" ${viaProxy ? '' : `src="${escapeHtml(safeUrl)}"`}></iframe>
                 </div>
             `;
+            viewport.querySelector('[data-role="sf-setup"]')?.addEventListener('click', (e) => { e.preventDefault(); launchOrFocusApp('settings', { pane: 'web' }); });
+            if (viaProxy) {
+                const frame = viewport.querySelector('[data-role="sf-frame"]'); const want = tab.url;
+                OS.proxy.signedUrl(safeUrl).then(u => { if (activeTab().url === want && frame.isConnected) frame.src = u; }).catch(() => { viewport.querySelector('.sf-banner span').textContent = 'Could not sign the proxy request (needs a secure page).'; });
+            }
         }
         renderTabs();
     };
@@ -5250,6 +5263,11 @@ viewport.innerHTML = `
     };
 
     windowData.loadUrl = loadUrl;
+    window.addEventListener('message', (e) => {
+        const f = viewport.querySelector('[data-role="sf-frame"]');
+        if (!f || e.source !== f.contentWindow || !e.data || e.data.type !== 'osweb-nav') return;
+        const u = String(e.data.url || ''); if (/^https?:\/\//i.test(u)) loadUrl(u);
+    }, { signal: windowData?.abortController?.signal });
 
     winEl.querySelector('[data-role="new-tab-btn"]').onclick = () => {
         const id = 't' + Date.now();
@@ -7706,6 +7724,7 @@ const SETTINGS_PANES = [
     { id: 'wallpaper', label: 'Wallpaper', color: '#5e5ce6', icon: 'photo' },
     { id: 'dock', label: 'Desktop & Dock', color: '#32ade6', icon: 'dock.rectangle' },
     { id: 'accessibility', label: 'Accessibility', color: '#0a84ff', icon: 'accessibility' },
+    { id: 'web', label: 'Websites', color: '#30d158', icon: 'globe' },
     { id: 'intelligence', label: 'Intelligence', color: '#ff453a', icon: 'sparkles' }
 ];
 function renderSettingsContent() {
@@ -7728,8 +7747,8 @@ function renderSettingsContent() {
 }
 
 function isTouchDevice() { return !!(window.matchMedia && matchMedia('(pointer: coarse)').matches); }
-function initSettings(winEl) {
-    let activePane = 'general';
+function initSettings(winEl, windowData, opts) {
+    let activePane = (opts && SETTINGS_PANES.some(x => x.id === opts.pane)) ? opts.pane : 'general';
     const root = winEl.querySelector('.st-root');
     const paneEl = winEl.querySelector('[data-role="settings-pane"]');
     const titleEl = winEl.querySelector('[data-role="st-title"]');
@@ -7779,6 +7798,22 @@ function initSettings(winEl) {
             };
             bindSwitch('sw-widgets', () => toggleDesktopWidgets());
             bindSwitch('sw-sysmon', (on) => { try { localStorage.setItem('osweb_sysmon', on ? '1' : '0'); } catch (_) {} applySysmonSetting(); });
+        } else if (activePane === 'web') {
+            const c = OS.proxy.get();
+            paneEl.innerHTML = group(
+                row('Use web proxy', sw('sw-proxy', c.on), 'Show sites that block embedding'),
+                row('Proxy address', '<input id="px-url" class="st-input" style="width:240px" placeholder="https://your-proxy.vercel.app/api/p" aria-label="Proxy address"/>'),
+                row('Secret', '<input id="px-secret" type="password" class="st-input" placeholder="Same as PROXY_SECRET" aria-label="Proxy secret"/>', 'Stored in this browser. Requests are signed, the secret is never sent.')) +
+                group(row('', '<button class="mac-btn-secondary" id="px-test">Test</button> <button class="action-button" id="px-save">Save</button>')) +
+                `<p class="st-help" id="px-msg">The proxy is a small server you run (see <code>proxy/README.md</code> in the repository). Without one, Safari can only show sites that allow embedding.</p>`;
+            paneEl.querySelector('#px-url').value = c.url; paneEl.querySelector('#px-secret').value = c.secret;
+            const msg = (t) => { paneEl.querySelector('#px-msg').textContent = t; };
+            bindSwitch('sw-proxy', (on) => OS.proxy.set(paneEl.querySelector('#px-url').value, paneEl.querySelector('#px-secret').value, on));
+            paneEl.querySelector('#px-save').onclick = () => { OS.proxy.set(paneEl.querySelector('#px-url').value, paneEl.querySelector('#px-secret').value, paneEl.querySelector('#sw-proxy').classList.contains('on')); msg('Saved.'); };
+            paneEl.querySelector('#px-test').onclick = async () => {
+                const url = paneEl.querySelector('#px-url').value.trim(); msg('Testing…');
+                try { const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'health=1'); const j = await r.json(); msg(j.ok ? (j.signed ? 'Proxy reachable and configured.' : 'Reachable, but PROXY_SECRET is not set on the server.') : 'Unexpected response.'); } catch (_) { msg('Could not reach the proxy (check the address, and that it allows this page).'); }
+            };
         } else if (activePane === 'accessibility') {
             const rt = document.body.classList.contains('reduce-transparency');
             paneEl.innerHTML = group(row('Reduce transparency', sw('sw-rt', rt), 'Makes windows, the Dock and menus solid'));
@@ -8585,6 +8620,18 @@ const appSwitcher = { el: null, list: [], idx: 0,
  * OS.store (namespaced per user, versioned, JSON). Today the adapter is localStorage; a remote
  * (cloud) adapter can replace get/set without touching any caller.
  * ============================================================================ */
+OS.proxy = {
+    get() { try { return { url: localStorage.getItem('osweb_proxy_url') || '', secret: localStorage.getItem('osweb_proxy_secret') || '', on: localStorage.getItem('osweb_proxy_on') !== '0' }; } catch (_) { return { url: '', secret: '', on: false }; } },
+    set(url, secret, on) { try { localStorage.setItem('osweb_proxy_url', (url || '').trim()); localStorage.setItem('osweb_proxy_secret', secret || ''); localStorage.setItem('osweb_proxy_on', on ? '1' : '0'); } catch (_) {} },
+    configured() { const c = this.get(); return !!(c.url && c.secret && c.on); },
+    async signedUrl(target) {
+        const c = this.get(); const exp = Date.now() + 5 * 60 * 1000;
+        const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(c.secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+        const sig = Array.from(new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(`${target}|${exp}`)))).map(b => b.toString(16).padStart(2, '0')).join('');
+        const base = c.url.replace(/\/+$/, '');
+        return `${base}${base.includes('?') ? '&' : '?'}url=${encodeURIComponent(target)}&exp=${exp}&sig=${sig}`;
+    }
+};
 OS.perf = {
     hist: { load: [], fps: [], heap: [] }, users: 0, raf: 0, timer: 0, hb: 0, hbPrev: 0, lateSum: 0, lastSample: 0, last: 0, frames: 0, acc: 0, base: Infinity, longMs: 0, lt: null, listeners: new Set(),
     start() {
