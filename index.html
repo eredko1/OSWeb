@@ -1405,6 +1405,30 @@
         .am-ico { display: inline-block; width: 16px; height: 16px; vertical-align: -3px; margin-right: 8px; } .am-ico svg { width: 100%; height: 100%; }
         .am-foot { display: flex; gap: 28px; padding: 10px 16px; border-top: 0.5px solid var(--border-color); background: rgba(255,255,255,0.03); font-size: 11px; }
         .am-foot div { display: flex; flex-direction: column; gap: 2px; } .am-foot b { font-weight: 500; color: var(--text-secondary); } .am-foot span { font-size: 13px; font-weight: 500; }
+
+        /* Weather */
+        .wx-root { display: flex; height: 100%; font-size: 13px; color: #fff; }
+        .wx-side { width: 240px; flex-shrink: 0; padding: 12px 10px; display: flex; flex-direction: column; gap: 8px; background: rgba(30,30,34,0.6); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border-right: 0.5px solid rgba(255,255,255,0.1); overflow-y: auto; }
+        .wx-search { display: flex; align-items: center; gap: 6px; margin-top: 30px; height: 24px; padding: 0 8px; border-radius: 6px; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); }
+        .wx-search input { flex: 1; background: transparent; border: 0; outline: none !important; color: #fff; font-size: 13px; min-width: 0; }
+        .wx-res, .wx-none { display: block; width: 100%; text-align: left; padding: 6px 10px; border-radius: 6px; font-size: 13px; } .wx-res:hover { background: rgba(255,255,255,0.12); } .wx-none { opacity: .6; }
+        .wx-loc { display: flex; align-items: center; justify-content: space-between; width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px; margin-bottom: 6px; background: linear-gradient(135deg, #2f6fc0, #3b8fe0); color: #fff; }
+        .wx-loc small { display: block; font-size: 11px; opacity: .85; } .wx-loc b { font-weight: 600; } .wx-loc-t { font-size: 26px; font-weight: 300; } .wx-loc.sel { box-shadow: 0 0 0 2px rgba(255,255,255,0.85); }
+        .wx-locate { margin-top: auto; align-self: flex-start; }
+        .wx-main { flex: 1; min-width: 0; overflow-y: auto; padding: 34px 22px 22px; background: linear-gradient(180deg, #2c6db8, #6fb0e8); }
+        .wx-main.night { background: linear-gradient(180deg, #0b1230, #2b3d6b); } .wx-main.cloudy { background: linear-gradient(180deg, #5b6f86, #94a6ba); } .wx-main.rainy { background: linear-gradient(180deg, #3a4a60, #6b7f96); }
+        .wx-main.wx-empty { display: flex; align-items: center; justify-content: center; background: linear-gradient(180deg, #2c6db8, #6fb0e8); }
+        .wx-empty-box { text-align: center; max-width: 280px; } .wx-empty-t { font-size: 26px; font-weight: 600; margin-bottom: 6px; } .wx-empty-box p { opacity: .9; }
+        .wx-hero { text-align: center; padding: 8px 0 22px; text-shadow: 0 1px 6px rgba(0,0,0,0.18); }
+        .wx-city { font-size: 28px; font-weight: 400; } .wx-temp { font-size: 96px; font-weight: 200; line-height: 1; letter-spacing: -0.03em; margin: 2px 0; padding-left: 20px; } .wx-cond { font-size: 20px; font-weight: 500; } .wx-hl { font-size: 20px; font-weight: 500; }
+        .wx-card { background: rgba(255,255,255,0.16); backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); border-radius: 14px; padding: 10px 14px 12px; margin-bottom: 12px; box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.25); }
+        .wx-card-h { font-size: 12px; font-weight: 600; opacity: .75; padding-bottom: 8px; margin-bottom: 4px; border-bottom: 0.5px solid rgba(255,255,255,0.25); }
+        .wx-hours { display: flex; gap: 18px; overflow-x: auto; padding: 4px 0; } .wx-hour { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 40px; font-size: 13px; } .wx-hour b { font-weight: 600; }
+        .wx-day { display: grid; grid-template-columns: 56px 30px 36px 1fr 36px; align-items: center; gap: 8px; padding: 7px 0; border-top: 0.5px solid rgba(255,255,255,0.18); font-size: 15px; } .wx-card-h + .wx-day { border-top: 0; }
+        .wx-lo { text-align: right; opacity: .7; } .wx-bar { position: relative; height: 4px; border-radius: 2px; background: rgba(0,0,0,0.22); } .wx-bar i { position: absolute; top: 0; bottom: 0; border-radius: 2px; background: linear-gradient(90deg, #7ed4a8, #ffd34d); }
+        .wx-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; } .wx-tiles .wx-card { margin: 0; } .wx-big { font-size: 30px; font-weight: 300; } .wx-big small { font-size: 13px; }
+        .wx-attr { font-size: 11px; opacity: .7; text-align: center; margin-top: 12px; }
+        @media (max-width: 600px) { .wx-side { display: none; } .wx-main { padding-top: 20px; } .wx-temp { font-size: 80px; } }
     </style>
 </head>
 <body>
@@ -1492,15 +1516,15 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <div class="text-xs font-semibold uppercase tracking-wider opacity-75 flex items-center gap-1">
-                            <i class="fas fa-location-arrow text-[10px]"></i> <span id="widget-weather-city">Cupertino</span>
+                            <i class="fas fa-location-arrow text-[10px]"></i> <span id="widget-weather-city">Weather</span>
                         </div>
-                        <div class="text-3xl font-light tracking-tight mt-0.5" id="widget-weather-temp">72°</div>
+                        <div class="text-3xl font-light tracking-tight mt-0.5" id="widget-weather-temp">—</div>
                     </div>
                     <div class="text-3xl text-amber-400"><i id="widget-weather-icon" class="fas fa-sun"></i></div>
                 </div>
                 <div class="flex justify-between items-center mt-2 text-xs opacity-85">
-                    <span id="widget-weather-cond">Mostly Sunny</span>
-                    <span id="widget-weather-range">H:76°  L:58°</span>
+                    <span id="widget-weather-cond"></span>
+                    <span id="widget-weather-range"></span>
                 </div>
             </div>
 
@@ -1609,12 +1633,12 @@
                 <div class="flex items-center gap-2.5">
                     <i id="sidebar-weather-icon" class="fas fa-cloud-sun text-2xl text-amber-400"></i>
                     <div>
-                        <p id="sidebar-weather-city" class="font-semibold">Cupertino, CA</p>
-                        <p id="sidebar-weather-condition" class="text-[11px] opacity-75">Mostly Sunny</p>
+                        <p id="sidebar-weather-city" class="font-semibold">Weather</p>
+                        <p id="sidebar-weather-condition" class="text-[11px] opacity-75">Open Weather to add a location</p>
                     </div>
                 </div>
                 <div class="text-right">
-                    <p id="sidebar-weather-temp" class="text-xl font-light">72°F</p>
+                    <p id="sidebar-weather-temp" class="text-xl font-light">—</p>
                     <button class="text-[11px] text-sky-400 hover:underline" onclick="updateSidebarWeather(true)">Refresh</button>
                 </div>
             </div>
@@ -7066,114 +7090,107 @@ function initCalculator(winEl) {
 }
 
 // --- 8.13 Apple Weather (`weather-app`) ---
-const weatherCitiesData = [
-    { city: 'Cupertino', state: 'CA', temp: 72, cond: 'Mostly Sunny', high: 76, low: 58, icon: 'fa-sun', uv: '6 High', wind: '8 mph NW', humidity: '44%' },
-    { city: 'New York', state: 'NY', temp: 54, cond: 'Partly Cloudy', high: 58, low: 45, icon: 'fa-cloud-sun', uv: '3 Moderate', wind: '12 mph E', humidity: '62%' },
-    { city: 'Chicago', state: 'IL', temp: 49, cond: 'Breezy & Crisp', high: 52, low: 39, icon: 'fa-wind', uv: '2 Low', wind: '19 mph W', humidity: '55%' },
-    { city: 'Tokyo', state: 'JP', temp: 64, cond: 'Clear Night', high: 68, low: 55, icon: 'fa-moon', uv: '1 Low', wind: '6 mph N', humidity: '50%' },
-    { city: 'London', state: 'UK', temp: 51, cond: 'Light Rain', high: 54, low: 44, icon: 'fa-cloud-rain', uv: '2 Low', wind: '11 mph SW', humidity: '82%' }
-];
-let activeWeatherCityIdx = 0;
+
+/* ---- Weather: live data from Open-Meteo (no key). Location is only requested when the user asks. ---- */
+const WX_CODES = { 0: ['Clear', 'sun'], 1: ['Mostly Clear', 'sun'], 2: ['Partly Cloudy', 'partly'], 3: ['Cloudy', 'cloud'], 45: ['Fog', 'fog'], 48: ['Fog', 'fog'], 51: ['Drizzle', 'rain'], 53: ['Drizzle', 'rain'], 55: ['Drizzle', 'rain'],
+    61: ['Rain', 'rain'], 63: ['Rain', 'rain'], 65: ['Heavy Rain', 'rain'], 71: ['Snow', 'snow'], 73: ['Snow', 'snow'], 75: ['Heavy Snow', 'snow'], 80: ['Showers', 'rain'], 81: ['Showers', 'rain'], 82: ['Heavy Showers', 'rain'], 95: ['Thunderstorm', 'bolt'], 96: ['Thunderstorm', 'bolt'], 99: ['Thunderstorm', 'bolt'] };
+function wxIcon(kind, size = 28) {
+    const sun = '<circle cx="16" cy="16" r="6" fill="#FFD60A"/><g stroke="#FFD60A" stroke-width="2" stroke-linecap="round"><path d="M16 4v3M16 25v3M4 16h3M25 16h3M7.5 7.5l2 2M22.5 22.5l2 2M24.5 7.5l-2 2M9.5 22.5l-2 2"/></g>';
+    const cloud = '<path d="M10 24h13a5 5 0 0 0 .6-9.96A7.5 7.5 0 0 0 9.2 12.6 5.7 5.7 0 0 0 10 24z" fill="#F2F4F8"/>';
+    const g = { sun, partly: '<g transform="translate(-3 -4) scale(.8)">' + sun + '</g><g transform="translate(2 1)">' + cloud + '</g>', cloud,
+        fog: cloud + '<path d="M7 27h18M10 30h12" stroke="#cfd6e2" stroke-width="2" stroke-linecap="round"/>',
+        rain: cloud + '<path d="M11 26l-1.5 4M16 26l-1.5 4M21 26l-1.5 4" stroke="#5AC8FA" stroke-width="2" stroke-linecap="round"/>',
+        snow: cloud + '<g fill="#fff"><circle cx="11" cy="28" r="1.5"/><circle cx="16" cy="29" r="1.5"/><circle cx="21" cy="28" r="1.5"/></g>',
+        bolt: cloud + '<path d="M17 24l-4 6h3l-1 4 5-7h-3z" fill="#FFD60A"/>' };
+    return `<svg viewBox="0 0 32 34" width="${size}" height="${size}" aria-hidden="true">${g[kind] || g.cloud}</svg>`;
+}
+const wxUnitF = () => /^en-(US|LR)|^my/.test(navigator.language || '');
+const wxState = { locs: [], active: 0, loaded: false };
+function wxLoad() { if (wxState.loaded) return; wxState.loaded = true; const v = OS.store.get('weather'); if (v && Array.isArray(v.locs)) { wxState.locs = v.locs; wxState.active = Math.min(v.active || 0, Math.max(0, v.locs.length - 1)); } }
+function wxSave() { OS.store.set('weather', { locs: wxState.locs, active: wxState.active }); }
+async function wxFetch(loc) {
+    const u = wxUnitF() ? '&temperature_unit=fahrenheit&wind_speed_unit=mph' : '';
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,is_day&hourly=temperature_2m,weather_code,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=7&timezone=auto${u}`;
+    const r = await fetch(url); if (!r.ok) throw new Error('weather ' + r.status);
+    loc.data = await r.json(); loc.fetchedAt = Date.now(); wxSave(); return loc;
+}
+async function wxGeocode(q) {
+    const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=5&language=en`); if (!r.ok) throw new Error('geocode');
+    return ((await r.json()).results || []).map(x => ({ name: [x.name, x.admin1].filter((v, i, arr) => v && arr.indexOf(v) === i).join(', '), lat: x.latitude, lon: x.longitude }));
+}
 
 function renderWeatherContent() {
     return `
-        <div class="flex h-full text-xs text-white bg-gradient-to-b from-[#1A3F7A] via-[#265D9C] to-[#162C4E]">
-            <!-- Cities List -->
-            <div class="w-48 border-r border-white/15 bg-black/20 p-2.5 space-y-2 overflow-y-auto">
-                <div class="text-[10px] font-bold uppercase opacity-70 px-1">Locations</div>
-                <div data-role="weather-cities" class="space-y-1.5"></div>
-            </div>
-            <!-- Main Weather Forecast -->
-            <div data-role="weather-main" class="flex-1 p-5 overflow-y-auto"></div>
-        </div>
-    `;
+        <div class="wx-root" data-view="main">
+            <aside class="wx-side" aria-label="Locations">
+                <div class="wx-search">${sf('magnifyingglass', 12)}<input data-role="wx-search" type="search" placeholder="Search for a city" aria-label="Search for a city"/></div>
+                <div data-role="wx-results" class="wx-results"></div>
+                <div data-role="weather-cities" class="wx-locs"></div>
+                <button data-role="wx-locate" class="mac-btn-secondary wx-locate">Use My Location</button>
+            </aside>
+            <section data-role="weather-main" class="wx-main"></section>
+        </div>`;
 }
 
-function initWeatherApp(winEl) {
+function initWeatherApp(winEl, windowData) {
+    wxLoad();
     const citiesEl = winEl.querySelector('[data-role="weather-cities"]');
     const mainEl = winEl.querySelector('[data-role="weather-main"]');
+    const resEl = winEl.querySelector('[data-role="wx-results"]');
+    const searchEl = winEl.querySelector('[data-role="wx-search"]');
+    const deg = v => `${Math.round(v)}°`;
 
     const render = () => {
-        const c = weatherCitiesData[activeWeatherCityIdx];
-        citiesEl.innerHTML = weatherCitiesData.map((item, idx) => `
-            <div data-city-idx="${idx}" class="p-2.5 rounded-xl cursor-pointer transition border ${idx === activeWeatherCityIdx ? 'bg-white/20 border-white/40' : 'bg-white/5 border-transparent hover:bg-white/15'}">
-                <div class="flex justify-between items-center">
-                    <span class="font-bold">${escapeHtml(item.city)}</span>
-                    <span class="text-base font-light">${item.temp}°</span>
-                </div>
-                <div class="text-[10px] opacity-80 mt-0.5">${escapeHtml(item.cond)}</div>
-            </div>
-        `).join('');
-
-        citiesEl.querySelectorAll('[data-city-idx]').forEach(el => {
-            el.onclick = () => {
-                activeWeatherCityIdx = Number(el.dataset.cityIdx);
-                updateSidebarWeather(false);
-                render();
-            };
-        });
-
+        citiesEl.innerHTML = wxState.locs.map((l, i) => {
+            const c = l.data && l.data.current; const code = c ? (WX_CODES[c.weather_code] || ['', 'cloud']) : null;
+            return `<button data-i="${i}" class="wx-loc${i === wxState.active ? ' sel' : ''}"><span><b>${escapeHtml(l.name)}</b><small>${code ? code[0] : 'No data'}</small></span><span class="wx-loc-t">${c ? deg(c.temperature_2m) : '—'}</span></button>`;
+        }).join('');
+        citiesEl.querySelectorAll('[data-i]').forEach(b => b.onclick = () => { wxState.active = Number(b.dataset.i); wxSave(); render(); updateSidebarWeather(); winEl.querySelector('.wx-root').dataset.view = 'main'; });
+        const l = wxState.locs[wxState.active];
+        if (!l) { mainEl.className = 'wx-main wx-empty'; mainEl.innerHTML = `<div class="wx-empty-box"><div class="wx-empty-t">Weather</div><p>Search for a city, or allow location access to see the forecast where you are.</p></div>`; return; }
+        const d = l.data;
+        if (!d) { mainEl.className = 'wx-main wx-empty'; mainEl.innerHTML = `<div class="wx-empty-box"><div class="wx-empty-t">${escapeHtml(l.name)}</div><p>${navigator.onLine ? 'Loading forecast…' : 'Weather needs an internet connection.'}</p></div>`; return; }
+        const c = d.current, info = WX_CODES[c.weather_code] || ['—', 'cloud'], night = !c.is_day;
+        mainEl.className = 'wx-main ' + (night ? 'night' : (info[1] === 'rain' || info[1] === 'bolt' ? 'rainy' : (info[1] === 'cloud' || info[1] === 'fog' ? 'cloudy' : 'clear')));
+        const now = new Date(c.time); const hrs = []; for (let i = 0; i < d.hourly.time.length && hrs.length < 24; i++) { if (new Date(d.hourly.time[i]) >= new Date(now.getTime() - 3600e3)) hrs.push(i); }
+        const lo = Math.min(...d.daily.temperature_2m_min), hi = Math.max(...d.daily.temperature_2m_max);
         mainEl.innerHTML = `
-            <div class="text-center mb-5">
-                <div class="text-2xl font-bold">${escapeHtml(c.city)}, ${escapeHtml(c.state)}</div>
-                <div class="text-6xl font-extralight my-1">${c.temp}°F</div>
-                <div class="text-sm font-medium opacity-90">${escapeHtml(c.cond)}</div>
-                <div class="text-xs opacity-75 mt-0.5">H:${c.high}°  L:${c.low}°</div>
-            </div>
-            <div class="grid grid-cols-3 gap-3 mb-4">
-                <div class="p-3 rounded-2xl bg-white/10 border border-white/15">
-                    <div class="text-[10px] uppercase opacity-70">UV Index</div>
-                    <div class="text-base font-bold mt-1">${escapeHtml(c.uv)}</div>
-                </div>
-                <div class="p-3 rounded-2xl bg-white/10 border border-white/15">
-                    <div class="text-[10px] uppercase opacity-70">Wind</div>
-                    <div class="text-base font-bold mt-1">${escapeHtml(c.wind)}</div>
-                </div>
-                <div class="p-3 rounded-2xl bg-white/10 border border-white/15">
-                    <div class="text-[10px] uppercase opacity-70">Humidity</div>
-                    <div class="text-base font-bold mt-1">${escapeHtml(c.humidity)}</div>
-                </div>
-            </div>
-            <div class="p-3.5 rounded-2xl bg-white/10 border border-white/15 space-y-2">
-                <div class="text-[10px] uppercase opacity-75 font-bold">5-Day Outlook</div>
-                ${['Today', 'Sun', 'Mon', 'Tue', 'Wed'].map((d, i) => `
-                    <div class="flex items-center justify-between py-1 border-b border-white/10 last:border-0">
-                        <span class="w-16 font-medium">${d}</span>
-                        <i class="fas ${c.icon} text-amber-300"></i>
-                        <div class="flex items-center gap-2 w-40">
-                            <span class="opacity-70">${c.low - (i % 2)}°</span>
-                            <div class="flex-1 h-1.5 rounded-full bg-gradient-to-r from-sky-300 to-amber-400"></div>
-                            <span class="font-semibold">${c.high + (i % 3)}°</span>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        `;
+            <div class="wx-hero"><div class="wx-city">${escapeHtml(l.name)}</div><div class="wx-temp">${deg(c.temperature_2m)}</div><div class="wx-cond">${info[0]}</div><div class="wx-hl">H:${deg(d.daily.temperature_2m_max[0])}  L:${deg(d.daily.temperature_2m_min[0])}</div></div>
+            <div class="wx-card"><div class="wx-card-h">Hourly Forecast</div><div class="wx-hours">${hrs.map((i, k) => `<div class="wx-hour"><span>${k === 0 ? 'Now' : new Date(d.hourly.time[i]).toLocaleTimeString('en-US', { hour: 'numeric' })}</span>${wxIcon((WX_CODES[d.hourly.weather_code[i]] || [0, 'cloud'])[1], 26)}<b>${deg(d.hourly.temperature_2m[i])}</b></div>`).join('')}</div></div>
+            <div class="wx-card"><div class="wx-card-h">7-Day Forecast</div>${d.daily.time.map((t, i) => { const a = d.daily.temperature_2m_min[i], b = d.daily.temperature_2m_max[i]; return `<div class="wx-day"><span class="wx-dn">${i === 0 ? 'Today' : new Date(t + 'T12:00').toLocaleDateString('en-US', { weekday: 'short' })}</span>${wxIcon((WX_CODES[d.daily.weather_code[i]] || [0, 'cloud'])[1], 24)}<span class="wx-lo">${deg(a)}</span><span class="wx-bar"><i style="left:${((a - lo) / (hi - lo || 1)) * 100}%;width:${Math.max(6, ((b - a) / (hi - lo || 1)) * 100)}%"></i></span><span class="wx-hi">${deg(b)}</span></div>`; }).join('')}</div>
+            <div class="wx-tiles"><div class="wx-card"><div class="wx-card-h">Feels Like</div><div class="wx-big">${deg(c.apparent_temperature)}</div></div><div class="wx-card"><div class="wx-card-h">Humidity</div><div class="wx-big">${Math.round(c.relative_humidity_2m)}%</div></div><div class="wx-card"><div class="wx-card-h">Wind</div><div class="wx-big">${Math.round(c.wind_speed_10m)} <small>${wxUnitF() ? 'mph' : 'km/h'}</small></div></div></div>
+            <div class="wx-attr">Weather data by Open-Meteo.com · updated ${new Date(l.fetchedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</div>`;
+    };
+    const addLocation = async (loc) => {
+        const existing = wxState.locs.findIndex(x => Math.abs(x.lat - loc.lat) < 0.01 && Math.abs(x.lon - loc.lon) < 0.01);
+        if (existing >= 0) wxState.active = existing; else { wxState.locs.push(loc); wxState.active = wxState.locs.length - 1; }
+        wxSave(); render();
+        try { await wxFetch(wxState.locs[wxState.active]); } catch (_) { showTemporaryMessage('Could not load weather. Check your connection.', 2200); }
+        render(); updateSidebarWeather();
+    };
+    let t = null;
+    searchEl.oninput = () => {
+        clearTimeout(t); const q = searchEl.value.trim(); if (q.length < 2) { resEl.innerHTML = ''; return; }
+        t = setTimeout(async () => { try { const r = await wxGeocode(q); resEl.innerHTML = r.map((x, i) => `<button data-r="${i}" class="wx-res">${escapeHtml(x.name)}</button>`).join('') || '<div class="wx-none">No results</div>'; resEl.querySelectorAll('[data-r]').forEach(b => b.onclick = () => { addLocation(r[Number(b.dataset.r)]); resEl.innerHTML = ''; searchEl.value = ''; }); } catch (_) { resEl.innerHTML = '<div class="wx-none">Search needs a connection</div>'; } }, 300);
+    };
+    winEl.querySelector('[data-role="wx-locate"]').onclick = () => {
+        if (!navigator.geolocation) { showTemporaryMessage('Location is not available in this browser.', 2000); return; }
+        navigator.geolocation.getCurrentPosition(pos => addLocation({ name: 'My Location', lat: +pos.coords.latitude.toFixed(3), lon: +pos.coords.longitude.toFixed(3) }), () => showTemporaryMessage('Location permission was not granted.', 2200), { timeout: 10000, maximumAge: 600000 });
     };
     render();
+    const stale = wxState.locs[wxState.active];
+    if (stale && navigator.onLine && (!stale.fetchedAt || Date.now() - stale.fetchedAt > 600000)) wxFetch(stale).then(() => { render(); updateSidebarWeather(); }).catch(() => {});
 }
 
-function updateSidebarWeather(cycleCity = false) {
-    if (cycleCity) {
-        activeWeatherCityIdx = (activeWeatherCityIdx + 1) % weatherCitiesData.length;
-    }
-    const c = weatherCitiesData[activeWeatherCityIdx];
-    const sCity = document.getElementById('sidebar-weather-city');
-    const sTemp = document.getElementById('sidebar-weather-temp');
-    const sCond = document.getElementById('sidebar-weather-condition');
-    if (sCity) sCity.textContent = `${c.city}, ${c.state}`;
-    if (sTemp) sTemp.textContent = `${c.temp}°F`;
-    if (sCond) sCond.textContent = c.cond;
-
-    // Also update Desktop Sequoia Weather Widget
-    const wCity = document.getElementById('widget-weather-city');
-    const wTemp = document.getElementById('widget-weather-temp');
-    const wCond = document.getElementById('widget-weather-cond');
-    const wRange = document.getElementById('widget-weather-range');
-    if (wCity) wCity.textContent = c.city;
-    if (wTemp) wTemp.textContent = `${c.temp}°`;
-    if (wCond) wCond.textContent = c.cond;
-    if (wRange) wRange.textContent = `H:${c.high}°  L:${c.low}°`;
+function updateSidebarWeather() {
+    wxLoad();
+    const l = wxState.locs[wxState.active], c = l && l.data && l.data.current;
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('sidebar-weather-city', l ? l.name : 'Weather');
+    set('sidebar-weather-temp', c ? `${Math.round(c.temperature_2m)}°${wxUnitF() ? 'F' : 'C'}` : '—');
+    set('sidebar-weather-condition', c ? (WX_CODES[c.weather_code] || ['—'])[0] : 'Open Weather to add a location');
+    set('widget-weather-city', l ? l.name : 'Weather'); set('widget-weather-temp', c ? `${Math.round(c.temperature_2m)}°` : '—'); set('widget-weather-cond', c ? (WX_CODES[c.weather_code] || ['—'])[0] : '');
+    set('widget-weather-range', l && l.data ? `H:${Math.round(l.data.daily.temperature_2m_max[0])}°  L:${Math.round(l.data.daily.temperature_2m_min[0])}°` : '');
 }
 
 // --- 8.14 Activity Monitor (`system-monitor` & `task-manager`) ---
