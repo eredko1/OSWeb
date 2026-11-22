@@ -1,0 +1,14 @@
+
+        /* Activity Monitor */
+        .am-root { display: flex; flex-direction: column; height: 100%; font-size: 13px; }
+        .am-toolbar { height: 44px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 0.5px solid var(--border-color); }
+        .am-table-wrap { flex: 1; overflow: auto; }
+        .am-table { width: 100%; border-collapse: collapse; }
+        .am-table th { position: sticky; top: 0; text-align: left; font-size: 11px; font-weight: 500; color: var(--text-secondary); padding: 4px 10px; background: var(--window-content-bg); border-bottom: 0.5px solid var(--border-color); }
+        .am-table td { height: 22px; padding: 0 10px; white-space: nowrap; }
+        .am-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+        .am-table tr.alt { background: rgba(255,255,255,0.04); } body.light-mode .am-table tr.alt { background: rgba(0,0,0,0.035); }
+        .am-table tr.sel { background: #0A60FF; color: #fff; }
+        .am-ico { display: inline-block; width: 16px; height: 16px; vertical-align: -3px; margin-right: 8px; } .am-ico svg { width: 100%; height: 100%; }
+        .am-foot { display: flex; gap: 28px; padding: 10px 16px; border-top: 0.5px solid var(--border-color); background: rgba(255,255,255,0.03); font-size: 11px; }
+        .am-foot div { display: flex; flex-direction: column; gap: 2px; } .am-foot b { font-weight: 500; color: var(--text-secondary); } .am-foot span { font-size: 13px; font-weight: 500; }

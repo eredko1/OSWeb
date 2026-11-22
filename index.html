@@ -1391,6 +1391,20 @@
             .nt-text, .nt-preview { padding: 4px 16px 24px; font-size: 17px; }
         }
         @media (pointer: coarse) { .fx-tb, .fx-seg-btn { min-width: 44px; min-height: 44px; } .fx-side-item { min-height: 44px; } }
+
+        /* Activity Monitor */
+        .am-root { display: flex; flex-direction: column; height: 100%; font-size: 13px; }
+        .am-toolbar { height: 44px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 0.5px solid var(--border-color); }
+        .am-table-wrap { flex: 1; overflow: auto; }
+        .am-table { width: 100%; border-collapse: collapse; }
+        .am-table th { position: sticky; top: 0; text-align: left; font-size: 11px; font-weight: 500; color: var(--text-secondary); padding: 4px 10px; background: var(--window-content-bg); border-bottom: 0.5px solid var(--border-color); }
+        .am-table td { height: 22px; padding: 0 10px; white-space: nowrap; }
+        .am-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+        .am-table tr.alt { background: rgba(255,255,255,0.04); } body.light-mode .am-table tr.alt { background: rgba(0,0,0,0.035); }
+        .am-table tr.sel { background: #0A60FF; color: #fff; }
+        .am-ico { display: inline-block; width: 16px; height: 16px; vertical-align: -3px; margin-right: 8px; } .am-ico svg { width: 100%; height: 100%; }
+        .am-foot { display: flex; gap: 28px; padding: 10px 16px; border-top: 0.5px solid var(--border-color); background: rgba(255,255,255,0.03); font-size: 11px; }
+        .am-foot div { display: flex; flex-direction: column; gap: 2px; } .am-foot b { font-weight: 500; color: var(--text-secondary); } .am-foot span { font-size: 13px; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -2980,7 +2994,7 @@ OS.ai = {
             return lines.map(l => `- ${l.replace(/^[-*#]+\s*/, '')}`).join('\n');
         }
         if (mode === 'professional') {
-            return `Executive Brief — ${new Date().toLocaleDateString()}:\n\n${clean}\n\nPrepared on macOS Sequoia 15.1 (Apple M3 Max).`;
+            return `Executive Brief — ${new Date().toLocaleDateString()}:\n\n${clean}\n\nPrepared in OSWeb.`;
         }
         return clean;
     },
@@ -3105,7 +3119,7 @@ async function callGeminiAPI(prompt, mode = '') {
         return `Command "${cmd}": Executes standard POSIX operation against the macOS Sequoia IndexedDB Virtual File System (OS.vfs).`;
     }
 
-    return `Apple Intelligence (M3 Max Local Neural Engine):\n\n• Active VFS Nodes: ${Object.keys(OS.vfs.tree).length} files & directories in IndexedDB\n• Running Processes: ${Object.keys(OS.proc.table).length} active desktop windows\n• Tip: You can ask me to "Tile Finder & Terminal side-by-side", "Create a new note 'Launch Plan.md'", "Build a Kanban Board app", or "Switch theme to Sequoia Light".`;
+    return `Assistant (local rules):\n\n• Active VFS Nodes: ${Object.keys(OS.vfs.tree).length} files & directories in IndexedDB\n• Running Processes: ${Object.keys(OS.proc.table).length} active desktop windows\n• Tip: You can ask me to "Tile Finder & Terminal side-by-side", "Create a new note 'Launch Plan.md'", "Build a Kanban Board app", or "Switch theme to Sequoia Light".`;
 }
 
 /* ============================================================================
@@ -5351,7 +5365,7 @@ function initTerminal(winEl, windowData) {
     };
 
     printLine(`Last login: ${new Date().toDateString()} on ttys001 — macOS Sequoia 15.1 (Darwin 24.1.0 ARM64_T6031)`);
-    printLine(`Type 'help' for 35+ POSIX & macOS commands, 'neofetch' for Apple M3 Max specs, or '? <intent>' for Apple Intelligence.`);
+    printLine(`Type 'help' for 35+ POSIX & macOS commands, 'neofetch' for system info, or '? <intent>' for Apple Intelligence.`);
 
     const runSingleCommand = async (rawCmd, stdinText = '') => {
         const trimmed = rawCmd.trim();
@@ -5585,7 +5599,7 @@ function initTerminal(winEl, windowData) {
                 return `Filesystem     Size   Used  Avail Capacity  Mounted on\n/dev/disk3s1  1.0TB  518GB  482GB    52%    / (IndexedDB VFS)`;
 
             case 'free':
-                return `Apple M3 Max Unified Memory: 64.0 GB Total | 14.2 GB Wired/Active | 49.8 GB Available`;
+                { const h = OS.sys.heap(); return `Memory: ${OS.sys.memLine()}` + (h ? `\nJS heap: ${(h.used / 1048576).toFixed(1)} MB used of ${(h.limit / 1048576).toFixed(0)} MB limit` : ''); }
 
             case 'ip':
             case 'ifconfig':
@@ -5619,15 +5633,15 @@ function initTerminal(winEl, windowData) {
                     '                    \'c.          eugene@MacBook-Pro.local',
                     '                 ,xNMM.          ------------------------',
                     '               .OMMMMo           OS: macOS Sequoia 15.1 (24B83) arm64',
-                    '               OMMM0,            Host: MacBook Pro (16-inch, M3 Max)',
+                    '               OMMM0,            Host: Web browser on ' + OS.sys.platform(),
                     '     .;loddo:\' loolloddol;.      Kernel: Darwin 24.1.0 (OSWeb VFS)',
                     '   cKMMMMMMMMMMNWMMMMMMMMMM0:    Uptime: ' + (document.getElementById('system-uptime')?.textContent || '0d 0h 5m'),
                     ' .KMMMMMMMMMMMMMMMMMMMMMMMWd.    Shell: zsh 5.9 (arm64-apple-darwin24.0)',
                     ' XMMMMMMMMMMMMMMMMMMMMMMMX.      Resolution: ' + window.innerWidth + 'x' + window.innerHeight + ' (Scale ' + Math.round(OS.viewport.scale * 100) + '%)',
                     ';MMMMMMMMMMMMMMMMMMMMMMMM:       DE: Aqua / Sequoia WindowManager',
-                    ':MMMMMMMMMMMMMMMMMMMMMMMM:       CPU: Apple M3 Max (16-core @ 4.05GHz)',
-                    '.MMMMMMMMMMMMMMMMMMMMMMMMX.      GPU: Apple M3 Max (40-core Metal 3)',
-                    ' kMMMMMMMMMMMMMMMMMMMMMMMMWd.    Memory: 14540MiB / 65536MiB LPDDR5X',
+                    ':MMMMMMMMMMMMMMMMMMMMMMMM:       CPU: ' + OS.sys.cpuLine(),
+                    '.MMMMMMMMMMMMMMMMMMMMMMMMX.      GPU: Not exposed by this browser',
+                    ' kMMMMMMMMMMMMMMMMMMMMMMMMWd.    Memory: ' + OS.sys.memLine(),
                     '  .XMMMMMMMMMMMMMMMMMMMMMMMMMMk',
                     '   .XMMMMMMMMMMMMMMMMMMMMMMMMK.',
                     '     kMMMMMMMMMMMMMMMMMMMMMMd',
@@ -7165,135 +7179,70 @@ function updateSidebarWeather(cycleCity = false) {
 // --- 8.14 Activity Monitor (`system-monitor` & `task-manager`) ---
 function renderActivityMonitorContent() {
     return `
-        <div class="flex flex-col h-full text-xs">
-            <!-- Top Toolbar -->
-            <div class="flex items-center justify-between px-3 py-2 bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)]">
-                <div class="flex items-center gap-2">
-                    <button data-role="quit-proc-btn" class="action-button !bg-rose-600 hover:!bg-rose-500 !py-1 !px-2.5"><i class="fas fa-circle-xmark"></i> Quit Process</button>
-                    <span class="text-[11px] opacity-75">Apple M3 Max • 16-Core CPU / 40-Core GPU</span>
+        <div class="am-root">
+            <div class="am-toolbar">
+                <button data-role="quit-proc-btn" class="fx-tb" title="Quit the selected process" aria-label="Quit Process">${sf('trash')}</button>
+                <span class="fx-spacer"></span>
+                <div class="fx-seg" role="tablist" aria-label="Category">
+                    <button class="fx-seg-btn on am-tab" data-tab="cpu" role="tab" aria-selected="true" style="width:auto;padding:0 12px">CPU</button>
+                    <button class="fx-seg-btn am-tab" data-tab="memory" role="tab" aria-selected="false" style="width:auto;padding:0 12px">Memory</button>
                 </div>
-                <input data-role="proc-filter" type="search" placeholder="Filter Processes" class="px-2.5 py-1 rounded-lg bg-black/20 border border-[var(--border-color)] outline-none text-xs w-44"/>
+                <span class="fx-spacer"></span>
+                <label class="fx-search">${sf('magnifyingglass', 12)}<input data-role="proc-filter" type="search" placeholder="Search" aria-label="Search processes"/></label>
             </div>
-
-            <!-- Process Table -->
-            <div class="flex-1 overflow-y-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)] text-[11px] opacity-70 sticky top-0">
-                        <tr>
-                            <th class="py-1.5 px-3">Process Name</th>
-                            <th class="py-1.5 px-2">PID</th>
-                            <th class="py-1.5 px-2">% CPU</th>
-                            <th class="py-1.5 px-2">Memory</th>
-                            <th class="py-1.5 px-2">Threads</th>
-                            <th class="py-1.5 px-2">User</th>
-                        </tr>
-                    </thead>
-                    <tbody data-role="proc-tbody" class="divide-y divide-[var(--border-color)]/30 font-mono text-[11px]"></tbody>
+            <div class="am-table-wrap">
+                <table class="am-table">
+                    <thead><tr><th>Process Name</th><th class="num" data-col="a">% CPU</th><th class="num">Threads</th><th class="num">PID</th><th>User</th></tr></thead>
+                    <tbody data-role="proc-tbody"></tbody>
                 </table>
             </div>
-
-            <!-- Live CPU / Memory Sparkline Footer -->
-            <div class="h-24 border-t border-[var(--border-color)] bg-[#0c0e14] p-2.5 flex items-center gap-4 text-white">
-                <div class="w-44">
-                    <div class="text-[10px] uppercase text-emerald-400 font-bold">CPU Load History</div>
-                    <canvas data-role="am-canvas" width="170" height="52" class="w-full h-12 rounded bg-black/40 mt-1"></canvas>
-                </div>
-                <div class="flex-1 grid grid-cols-3 gap-2 text-[11px] font-mono">
-                    <div class="p-2 rounded-lg bg-white/5">
-                        <div class="opacity-60 text-[10px]">Physical Memory</div>
-                        <div class="font-bold text-sky-400">64.00 GB</div>
-                    </div>
-                    <div class="p-2 rounded-lg bg-white/5">
-                        <div class="opacity-60 text-[10px]">Memory Used</div>
-                        <div data-role="am-mem-used" class="font-bold text-emerald-400">14.28 GB</div>
-                    </div>
-                    <div class="p-2 rounded-lg bg-white/5">
-                        <div class="opacity-60 text-[10px]">Active Processes</div>
-                        <div data-role="am-proc-count" class="font-bold text-purple-400">6</div>
-                    </div>
-                </div>
-            </div>
+            <div class="am-foot" data-role="am-foot"></div>
         </div>
     `;
 }
 
 function initActivityMonitor(winEl, windowData) {
-    let selectedPid = null;
+    let selectedPid = null, tab = 'cpu';
     const tbody = winEl.querySelector('[data-role="proc-tbody"]');
     const filterInput = winEl.querySelector('[data-role="proc-filter"]');
     const quitBtn = winEl.querySelector('[data-role="quit-proc-btn"]');
-    const canvas = winEl.querySelector('[data-role="am-canvas"]');
-    const ctx = canvas.getContext('2d');
-    const countEl = winEl.querySelector('[data-role="am-proc-count"]');
-    const history = Array.from({ length: 34 }, () => Math.random() * 18 + 5);
+    const foot = winEl.querySelector('[data-role="am-foot"]');
+    const mb = n => (n / 1048576).toFixed(1) + ' MB';
 
+    // Processes are the real things that exist: the OSWeb page itself plus one entry per open app window.
+    const procs = () => {
+        const list = [{ name: 'OSWeb (this tab)', pid: 1, appId: 'system-monitor', protectedProc: true }];
+        Object.values(openWindows).forEach(w => list.push({ name: appConfig[w.appId]?.title || w.appId, pid: w.pid, appId: w.appId, winId: w.id }));
+        return list;
+    };
     const renderTable = () => {
         const q = (filterInput.value || '').toLowerCase().trim();
-        const procs = OS.proc.list().filter(p => !q || p.name.toLowerCase().includes(q) || String(p.pid).includes(q));
-        countEl.textContent = String(procs.length);
-
-        tbody.innerHTML = procs.map(p => `
-            <tr data-pid="${p.pid}" class="cursor-pointer transition ${p.pid === selectedPid ? 'bg-sky-500/30 font-bold' : 'hover:bg-[var(--surface-overlay-bg)]'}">
-                <td class="py-1.5 px-3 font-sans flex items-center gap-2">
-                    <span class="w-4 h-4 inline-block">${getAppIconSVG(p.appId === 'kernel' ? 'system-monitor' : p.appId)}</span>
-                    <span>${escapeHtml(p.name)}</span>
-                </td>
-                <td class="py-1.5 px-2">${p.pid}</td>
-                <td class="py-1.5 px-2 text-emerald-400">${p.cpu}%</td>
-                <td class="py-1.5 px-2">${p.memoryMB} MB</td>
-                <td class="py-1.5 px-2">${p.threads}</td>
-                <td class="py-1.5 px-2 opacity-75">${escapeHtml(p.user)}</td>
-            </tr>
-        `).join('');
-
-        tbody.querySelectorAll('[data-pid]').forEach(row => {
-            row.onclick = () => {
-                selectedPid = Number(row.dataset.pid);
-                renderTable();
-            };
-        });
+        const rows = procs().filter(p => !q || p.name.toLowerCase().includes(q) || String(p.pid).includes(q));
+        const h = OS.sys.heap();
+        winEl.querySelector('th[data-col]').textContent = tab === 'cpu' ? '% CPU' : 'Memory';
+        tbody.innerHTML = rows.map((p, i) => `
+            <tr data-pid="${p.pid}" class="${p.pid === selectedPid ? 'sel' : (i % 2 ? 'alt' : '')}">
+                <td><span class="am-ico">${getAppIconSVG(p.appId)}</span>${escapeHtml(p.name)}</td>
+                <td class="num">${tab === 'cpu' ? '—' : (p.pid === 1 && h ? mb(h.used) : '—')}</td>
+                <td class="num">—</td><td class="num">${p.pid}</td><td>${escapeHtml(currentUsername || 'user')}</td>
+            </tr>`).join('');
+        tbody.querySelectorAll('[data-pid]').forEach(row => { row.onclick = () => { selectedPid = Number(row.dataset.pid); renderTable(); }; });
+        foot.innerHTML = tab === 'cpu'
+            ? `<div><b>Logical processors</b><span>${OS.sys.cores() ?? 'Not exposed'}</span></div><div><b>Per-process CPU</b><span>Not available to web pages</span></div><div><b>Processes</b><span>${rows.length}</span></div>`
+            : `<div><b>JS heap used</b><span>${h ? mb(h.used) : 'Not exposed by this browser'}</span></div><div><b>JS heap limit</b><span>${h ? mb(h.limit) : '—'}</span></div><div><b>Device memory</b><span>${OS.sys.memLine()}</span></div>`;
     };
-
-    const drawGraph = () => {
-        history.push(Math.min(95, Math.max(4, Object.keys(openWindows).length * 4.5 + Math.random() * 10)));
-        if (history.length > 34) history.shift();
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = '#30D158';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        history.forEach((val, idx) => {
-            const x = (idx / 33) * canvas.width;
-            const y = canvas.height - (val / 100) * (canvas.height - 6) - 3;
-            if (idx === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        });
-        ctx.stroke();
-    };
-
+    winEl.querySelectorAll('.am-tab').forEach(b => b.onclick = () => { tab = b.dataset.tab; winEl.querySelectorAll('.am-tab').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', String(x === b)); }); renderTable(); });
     quitBtn.onclick = () => {
-        if (!selectedPid) {
-            showTemporaryMessage('Select a user process from the table first.', 1800);
-            return;
-        }
-        if (selectedPid < 400) {
-            showTemporaryMessage('Protected Darwin kernel daemon cannot be terminated.', 2000);
-            return;
-        }
-        OS.proc.kill(selectedPid);
-        selectedPid = null;
-        renderTable();
+        const p = procs().find(x => x.pid === selectedPid);
+        if (!p) { showTemporaryMessage('Select a process first.', 1600); return; }
+        if (p.protectedProc) { showTemporaryMessage('OSWeb itself cannot be quit from here.', 1800); return; }
+        closeWindow(p.winId); selectedPid = null; renderTable();
     };
-
     filterInput.oninput = renderTable;
-    const timer = setInterval(() => {
-        renderTable();
-        drawGraph();
-    }, 1500);
-
+    const timer = setInterval(() => { if (!document.hidden) renderTable(); }, 2000);
     windowData.abortController.signal.addEventListener('abort', () => clearInterval(timer));
     OS.bus.addEventListener('proc:change', renderTable, { signal: windowData.abortController.signal });
     renderTable();
-    drawGraph();
 }
 
 // --- 8.15 Preview (`pdf-viewer`) Universal VFS Document & Image Inspector ---
@@ -7679,7 +7628,7 @@ function initSettings(winEl) {
             paneEl.innerHTML = `
                 <h2 class="text-base font-bold mb-3">General, Hardware & VFS Storage</h2>
                 <div class="p-4 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] space-y-2 mb-4">
-                    <div><strong>Model:</strong> MacBook Pro (16-inch, Apple M3 Max)</div>
+                    <div><strong>Device:</strong> ${escapeHtml(OS.sys.platform())} (web browser)</div><div><strong>Processor:</strong> ${escapeHtml(OS.sys.cpuLine())}</div><div><strong>Memory:</strong> ${escapeHtml(OS.sys.memLine())}</div>
                     <div><strong>OS Version:</strong> macOS Sequoia 15.1 (Build 24B83)</div>
                     <div><strong>IndexedDB VFS Nodes:</strong> ${Object.keys(OS.vfs.tree).length} persistent files & folders</div>
                 </div>
@@ -8492,6 +8441,14 @@ const appSwitcher = { el: null, list: [], idx: 0,
  * OS.store (namespaced per user, versioned, JSON). Today the adapter is localStorage; a remote
  * (cloud) adapter can replace get/set without touching any caller.
  * ============================================================================ */
+OS.sys = {
+    cores() { return navigator.hardwareConcurrency || null; },
+    memGB() { return navigator.deviceMemory || null; },
+    platform() { return (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || 'Web'; },
+    heap() { const m = performance && performance.memory; return m ? { used: m.usedJSHeapSize, total: m.totalJSHeapSize, limit: m.jsHeapSizeLimit } : null; },
+    memLine() { const g = this.memGB(); return g ? `${g}${g >= 8 ? '+' : ''} GB (browser-reported)` : 'Not exposed by this browser'; },
+    cpuLine() { const c = this.cores(); return c ? `${c} logical processors` : 'Not exposed by this browser'; }
+};
 OS.store = {
     ns() { return 'osweb:' + String(currentUsername || localStorage.getItem('osweb_username') || 'user').toLowerCase().replace(/\s+/g, '-') + ':'; },
     get(key, fallback = null) { try { const v = localStorage.getItem(this.ns() + key); return v == null ? fallback : JSON.parse(v); } catch (_) { return fallback; } },
