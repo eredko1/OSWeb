@@ -1,0 +1,47 @@
+
+        /* ===================================================================
+         * Round 4B — System Settings (grouped inset rows), switches, reduce transparency
+         * =================================================================== */
+        body.reduce-transparency #top-panel, body.reduce-transparency #dock, body.reduce-transparency .window, body.reduce-transparency .os-menu-layer, body.reduce-transparency .fx-sidebar, body.reduce-transparency .nt-list, body.reduce-transparency .st-side, body.reduce-transparency .spotlight-box { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        body.reduce-transparency #top-panel, body.reduce-transparency #dock, body.reduce-transparency .os-menu-layer, body.reduce-transparency .spotlight-box { background: var(--surface-bg-solid) !important; }
+        body.reduce-transparency .fx-sidebar, body.reduce-transparency .nt-list, body.reduce-transparency .st-side { background: var(--window-titlebar-bg) !important; }
+        .st-root { display: flex; height: 100%; font-size: 13px; }
+        .st-side { width: 240px; flex-shrink: 0; display: flex; flex-direction: column; padding: 52px 10px 10px; gap: 6px; overflow-y: auto; background: rgba(40,40,44,0.55); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border-right: 0.5px solid rgba(255,255,255,0.08); }
+        body.light-mode .st-side { background: rgba(236,236,238,0.72); border-right-color: rgba(0,0,0,0.1); }
+        body.device-phone .st-side { padding-top: 8px; }
+        .st-search { width: auto !important; margin: 0 2px; }
+        .st-profile { display: flex; align-items: center; gap: 10px; padding: 8px 8px; border-radius: 8px; }
+        .st-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(180deg, #a1a7b3, #6d7380); display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; flex-shrink: 0; }
+        .st-profile b { display: block; font-weight: 600; } .st-profile small { display: block; font-size: 11px; color: var(--text-secondary); }
+        .st-item { display: flex; align-items: center; gap: 9px; height: 30px; padding: 0 8px; border-radius: 7px; width: 100%; text-align: left; }
+        .st-item.sel { background: #0A60FF; color: #fff; } .st-item:not(.sel):hover { background: rgba(255,255,255,0.06); }
+        .st-ico { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.3); }
+        .st-detail { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .st-top { height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 16px; pointer-events: none; position: relative; z-index: 5; }
+        .st-top h1 { font-size: 15px; font-weight: 700; } .st-top > * { pointer-events: auto; } .st-back { display: none; width: auto; padding: 0 6px; color: var(--accent-color); font-size: 15px; }
+        .st-pane { flex: 1; overflow-y: auto; padding: 4px 22px 22px; }
+        .st-group { background: rgba(255,255,255,0.06); border-radius: 10px; margin-bottom: 18px; box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.08); }
+        body.light-mode .st-group { background: #fff; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.1); }
+        .st-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 40px; padding: 8px 14px; }
+        .st-row + .st-row { border-top: 0.5px solid var(--border-color); }
+        .st-lbl small { display: block; font-size: 11px; color: var(--text-secondary); margin-top: 1px; } .st-ctl { color: var(--text-secondary); text-align: right; }
+        .st-ctl input[type="range"] { width: 180px; accent-color: #0A60FF; }
+        .st-input { width: 200px; height: 22px; padding: 0 8px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 0.5px solid var(--border-color); color: var(--text-primary); font-size: 13px; outline: none !important; }
+        .st-switch { width: 38px; height: 22px; border-radius: 11px; background: rgba(120,120,128,0.4); position: relative; transition: background .15s; flex-shrink: 0; }
+        .st-switch i { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.35); transition: transform .15s; }
+        .st-switch.on { background: #30D158; } .st-switch.on i { transform: translateX(16px); }
+        .st-apprs { display: flex; gap: 18px; padding: 16px 20px; justify-content: flex-start; }
+        .st-appr { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; color: var(--text-primary); }
+        .st-appr-t { width: 78px; height: 54px; border-radius: 8px; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.25); background: linear-gradient(135deg, #dfe6ee 50%, #2c2f36 50%); position: relative; }
+        .st-appr-t.light { background: linear-gradient(180deg, #e8eef5, #cfd9e5); } .st-appr-t.dark { background: linear-gradient(180deg, #34383f, #1b1d22); }
+        .st-appr.on .st-appr-t { box-shadow: 0 0 0 2.5px #0A60FF; } .st-appr.on span:last-child { background: #0A60FF; color: #fff; border-radius: 9px; padding: 0 8px; }
+        .st-walls { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; padding: 14px; background: transparent; box-shadow: none; }
+        body.light-mode .st-walls { background: transparent; box-shadow: none; }
+        .st-wall { text-align: center; } .st-wall span { display: block; aspect-ratio: 16/10; border-radius: 8px; background-size: cover; background-position: center; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.2); }
+        .st-wall.on span { box-shadow: 0 0 0 2.5px #0A60FF; } .st-wall em { display: block; font-style: normal; font-size: 11px; margin-top: 4px; color: var(--text-secondary); }
+        @media (max-width: 600px) {
+            .st-side { width: 100%; } .st-detail { width: 100%; } .st-profile { margin: 4px 0 8px; } .st-item { height: 44px; font-size: 17px; } .st-ico { width: 29px; height: 29px; border-radius: 7px; }
+            .st-root[data-view="list"] .st-detail, .st-root[data-view="detail"] .st-side { display: none; }
+            .st-back { display: flex; align-items: center; } .st-top { height: 44px; pointer-events: auto; } .st-top h1 { position: absolute; left: 50%; transform: translateX(-50%); font-size: 17px; }
+            .st-pane { padding: 8px 16px 24px; } .st-row { min-height: 44px; font-size: 17px; } .st-ctl input[type="range"] { width: 130px; }
+        }

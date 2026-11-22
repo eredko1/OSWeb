@@ -1442,6 +1442,54 @@
             .window .window-title-bar { min-height: 44px; }
         }
         @media (forced-colors: active) { .window, #dock, #top-panel, .os-menu-layer { border: 1px solid CanvasText; } .os-menu-item.kb, .os-menu-item:hover { forced-color-adjust: none; background: Highlight; color: HighlightText; } }
+
+        /* ===================================================================
+         * Round 4B — System Settings (grouped inset rows), switches, reduce transparency
+         * =================================================================== */
+        body.reduce-transparency #top-panel, body.reduce-transparency #dock, body.reduce-transparency .window, body.reduce-transparency .os-menu-layer, body.reduce-transparency .fx-sidebar, body.reduce-transparency .nt-list, body.reduce-transparency .st-side, body.reduce-transparency .spotlight-box { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        body.reduce-transparency #top-panel, body.reduce-transparency #dock, body.reduce-transparency .os-menu-layer, body.reduce-transparency .spotlight-box { background: var(--surface-bg-solid) !important; }
+        body.reduce-transparency .fx-sidebar, body.reduce-transparency .nt-list, body.reduce-transparency .st-side { background: var(--window-titlebar-bg) !important; }
+        .st-root { display: flex; height: 100%; font-size: 13px; }
+        .st-side { width: 240px; flex-shrink: 0; display: flex; flex-direction: column; padding: 52px 10px 10px; gap: 6px; overflow-y: auto; background: rgba(40,40,44,0.55); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border-right: 0.5px solid rgba(255,255,255,0.08); }
+        body.light-mode .st-side { background: rgba(236,236,238,0.72); border-right-color: rgba(0,0,0,0.1); }
+        body.device-phone .st-side { padding-top: 8px; }
+        .st-search { width: auto !important; margin: 0 2px; }
+        .st-profile { display: flex; align-items: center; gap: 10px; padding: 8px 8px; border-radius: 8px; }
+        .st-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(180deg, #a1a7b3, #6d7380); display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; flex-shrink: 0; }
+        .st-profile b { display: block; font-weight: 600; } .st-profile small { display: block; font-size: 11px; color: var(--text-secondary); }
+        .st-item { display: flex; align-items: center; gap: 9px; height: 30px; padding: 0 8px; border-radius: 7px; width: 100%; text-align: left; }
+        .st-item.sel { background: #0A60FF; color: #fff; } .st-item:not(.sel):hover { background: rgba(255,255,255,0.06); }
+        .st-ico { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.3); }
+        .st-detail { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .st-top { height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 16px; pointer-events: none; position: relative; z-index: 5; }
+        .st-top h1 { font-size: 15px; font-weight: 700; } .st-top > * { pointer-events: auto; } .st-back { display: none; width: auto; padding: 0 6px; color: var(--accent-color); font-size: 15px; }
+        .st-pane { flex: 1; overflow-y: auto; padding: 4px 22px 22px; }
+        .st-group { background: rgba(255,255,255,0.06); border-radius: 10px; margin-bottom: 18px; box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.08); }
+        body.light-mode .st-group { background: #fff; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.1); }
+        .st-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 40px; padding: 8px 14px; }
+        .st-row + .st-row { border-top: 0.5px solid var(--border-color); }
+        .st-lbl small { display: block; font-size: 11px; color: var(--text-secondary); margin-top: 1px; } .st-ctl { color: var(--text-secondary); text-align: right; }
+        .st-ctl input[type="range"] { width: 180px; accent-color: #0A60FF; }
+        .st-input { width: 200px; height: 22px; padding: 0 8px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 0.5px solid var(--border-color); color: var(--text-primary); font-size: 13px; outline: none !important; }
+        .st-switch { width: 38px; height: 22px; border-radius: 11px; background: rgba(120,120,128,0.4); position: relative; transition: background .15s; flex-shrink: 0; }
+        .st-switch i { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.35); transition: transform .15s; }
+        .st-switch.on { background: #30D158; } .st-switch.on i { transform: translateX(16px); }
+        .st-apprs { display: flex; gap: 18px; padding: 16px 20px; justify-content: flex-start; }
+        .st-appr { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; color: var(--text-primary); }
+        .st-appr-t { width: 78px; height: 54px; border-radius: 8px; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.25); background: linear-gradient(135deg, #dfe6ee 50%, #2c2f36 50%); position: relative; }
+        .st-appr-t.light { background: linear-gradient(180deg, #e8eef5, #cfd9e5); } .st-appr-t.dark { background: linear-gradient(180deg, #34383f, #1b1d22); }
+        .st-appr.on .st-appr-t { box-shadow: 0 0 0 2.5px #0A60FF; } .st-appr.on span:last-child { background: #0A60FF; color: #fff; border-radius: 9px; padding: 0 8px; }
+        .st-walls { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; padding: 14px; background: transparent; box-shadow: none; }
+        body.light-mode .st-walls { background: transparent; box-shadow: none; }
+        .st-wall { text-align: center; } .st-wall span { display: block; aspect-ratio: 16/10; border-radius: 8px; background-size: cover; background-position: center; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.2); }
+        .st-wall.on span { box-shadow: 0 0 0 2.5px #0A60FF; } .st-wall em { display: block; font-style: normal; font-size: 11px; margin-top: 4px; color: var(--text-secondary); }
+        @media (max-width: 600px) {
+            .st-side { width: 100%; } .st-detail { width: 100%; } .st-profile { margin: 4px 0 8px; } .st-item { height: 44px; font-size: 17px; } .st-ico { width: 29px; height: 29px; border-radius: 7px; }
+            .st-root[data-view="list"] .st-detail, .st-root[data-view="detail"] .st-side { display: none; }
+            .st-back { display: flex; align-items: center; } .st-top { height: 44px; pointer-events: auto; } .st-top h1 { position: absolute; left: 50%; transform: translateX(-50%); font-size: 17px; }
+            .st-pane { padding: 8px 16px 24px; } .st-row { min-height: 44px; font-size: 17px; } .st-ctl input[type="range"] { width: 130px; }
+        }
+        body.device-phone .st-item.sel { background: transparent; color: inherit; }
     </style>
 </head>
 <body>
@@ -1870,6 +1918,10 @@ const SF_PATHS = {
     'music.note': 'M6 12V3.5l7-1.5V10.5M6 12a1.8 1.8 0 1 1-3.6 0A1.8 1.8 0 0 1 6 12zM13 10.5a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0z',
     'arrow.down.circle': 'M8 14.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM8 4.5v6M5.5 8.2L8 10.7l2.5-2.5', 'internaldrive': 'M2 9.5l1.7-5.2A1 1 0 0 1 4.6 3.5h6.8a1 1 0 0 1 .9.8L14 9.5v2.2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 9.5h12M11.5 11.2h.01',
     'app': 'M8 2L3 12.5M8 2l5 10.5M4.4 9.5h7.2M2.5 12.5h.01',
+    'gearshape': 'M8 10.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4zM8 1.5l1 1.6 1.9-.4.5 1.9 1.8.8-.8 1.8 1.1 1.6-1.4 1.4.1 1.9-1.9.3-.9 1.7-1.7-.9-1.7.9-.9-1.7-1.9-.3.1-1.9L1.7 9.3l1.1-1.6-.8-1.8 1.8-.8.5-1.9 1.9.4z',
+    'circle.lefthalf': 'M8 14.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM8 1.5v13',
+    'dock.rectangle': 'M2 3h12v9H2zM4.5 10h7',
+    'accessibility': 'M8 4.5a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4zM3 5.8l5 1 5-1M8 6.8v3M6 14l2-4 2 4',
     'square.and.pencil': 'M7 3H3.5A1.5 1.5 0 0 0 2 4.5v8A1.5 1.5 0 0 0 3.5 14h8a1.5 1.5 0 0 0 1.5-1.5V9M12.2 2.3a1.4 1.4 0 0 1 2 2L8 10.5 5.5 11l.5-2.5z',
     'trash': 'M2.5 4.5h11M6 4.5V3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.5M4 4.5l.6 8.3a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9l.6-8.3M6.8 7v4M9.2 7v4',
     'sparkles': 'M7 2.5l1.2 3.3 3.3 1.2-3.3 1.2L7 11.5 5.8 8.2 2.5 7l3.3-1.2zM12.2 10l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z',
@@ -7515,184 +7567,97 @@ function initAppStore(winEl) {
 }
 
 // --- 8.17 System Settings (`settings`) ---
+const SETTINGS_PANES = [
+    { id: 'general', label: 'General', color: '#8e8e93', icon: 'gearshape' },
+    { id: 'appearance', label: 'Appearance', color: '#0a84ff', icon: 'circle.lefthalf' },
+    { id: 'wallpaper', label: 'Wallpaper', color: '#5e5ce6', icon: 'photo' },
+    { id: 'dock', label: 'Desktop & Dock', color: '#32ade6', icon: 'dock.rectangle' },
+    { id: 'accessibility', label: 'Accessibility', color: '#0a84ff', icon: 'accessibility' },
+    { id: 'intelligence', label: 'Intelligence', color: '#ff453a', icon: 'sparkles' }
+];
 function renderSettingsContent() {
+    const name = currentUsername || 'User';
     return `
-        <div class="flex h-full text-xs">
-            <!-- Left Sidebar with Apple Account Card -->
-            <div class="w-52 border-r border-[var(--border-color)] bg-[var(--surface-overlay-bg)] p-2.5 flex flex-col gap-1 overflow-y-auto">
-                <div class="p-2.5 rounded-xl bg-white/5 border border-[var(--border-color)] flex items-center gap-2.5 mb-2">
-                    <div class="w-9 h-9 rounded-full bg-sky-500 text-white font-bold flex items-center justify-center text-sm">ER</div>
-                    <div class="truncate">
-                        <div class="font-bold truncate">${escapeHtml(currentUsername || 'Eugene Redko')}</div>
-                        <div class="text-[10px] opacity-65">Apple Account • iCloud+</div>
-                    </div>
+        <div class="st-root" data-view="list">
+            <aside class="st-side" aria-label="Settings">
+                <label class="fx-search st-search">${sf('magnifyingglass', 12)}<input data-role="st-search" type="search" placeholder="Search" aria-label="Search settings"/></label>
+                <div class="st-profile"><span class="st-avatar">${escapeHtml(name.trim().charAt(0).toUpperCase() || 'U')}</span><span><b>${escapeHtml(name)}</b><small>This device</small></span></div>
+                <div class="st-list" role="listbox" aria-label="Settings panes">
+                    ${SETTINGS_PANES.map(pn => `<button class="st-item" data-set-pane="${pn.id}" role="option"><span class="st-ico" style="background:${pn.color}">${sf(pn.icon, 14)}</span>${pn.label}</button>`).join('')}
                 </div>
-                <button data-set-pane="appearance" class="w-full text-left px-2.5 py-1.5 rounded-lg bg-sky-500 text-white font-semibold"><i class="fas fa-circle-half-stroke w-5"></i> Appearance & Theme</button>
-                <button data-set-pane="wallpaper" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[var(--surface-overlay-bg)]"><i class="fas fa-image w-5 text-purple-400"></i> Wallpaper</button>
-                <button data-set-pane="dock" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[var(--surface-overlay-bg)]"><i class="fas fa-table-columns w-5 text-sky-400"></i> Desktop & Dock</button>
-                <button data-set-pane="displays" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[var(--surface-overlay-bg)]"><i class="fas fa-display w-5 text-emerald-400"></i> Displays & Viewport</button>
-                <button data-set-pane="ai" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[var(--surface-overlay-bg)]"><i class="fas fa-wand-magic-sparkles w-5 text-rose-400"></i> Apple Intelligence</button>
-                <button data-set-pane="about" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[var(--surface-overlay-bg)]"><i class="fab fa-apple w-5"></i> General & Storage</button>
-            </div>
-
-            <!-- Right Settings Pane -->
-            <div data-role="settings-pane" class="flex-1 p-5 overflow-y-auto"></div>
+            </aside>
+            <section class="st-detail">
+                <div class="st-top"><button class="fx-tb st-back" data-role="st-back" aria-label="Settings">${sf('chevron.left')}<span>Settings</span></button><h1 data-role="st-title">General</h1></div>
+                <div data-role="settings-pane" class="st-pane"></div>
+            </section>
         </div>
     `;
 }
 
 function initSettings(winEl) {
-    let activePane = 'appearance';
+    let activePane = 'general';
+    const root = winEl.querySelector('.st-root');
     const paneEl = winEl.querySelector('[data-role="settings-pane"]');
+    const titleEl = winEl.querySelector('[data-role="st-title"]');
+    const sw = (id, on) => `<button class="st-switch${on ? ' on' : ''}" role="switch" aria-checked="${on}" id="${id}"><i></i></button>`;
+    const row = (label, ctrl, sub = '') => `<div class="st-row"><div class="st-lbl">${label}${sub ? `<small>${sub}</small>` : ''}</div><div class="st-ctl">${ctrl}</div></div>`;
+    const group = (...rows) => `<div class="st-group">${rows.join('')}</div>`;
+    const bindSwitch = (id, fn) => { const el = paneEl.querySelector('#' + id); if (el) el.onclick = () => { const on = !el.classList.contains('on'); el.classList.toggle('on', on); el.setAttribute('aria-checked', String(on)); fn(on); }; };
+    const isAuto = () => { try { return localStorage.getItem('osweb_theme_auto') === '1'; } catch (_) { return false; } };
 
     const renderPane = () => {
-        if (activePane === 'appearance') {
-            paneEl.innerHTML = `
-                <h2 class="text-base font-bold mb-3">Appearance & Vibrancy</h2>
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                    ${themes.map((t, idx) => `
-                        <button data-theme-idx="${idx}" class="p-3 rounded-xl border text-left transition ${idx === currentThemeIndex ? 'border-sky-400 bg-sky-500/20 font-bold' : 'border-[var(--border-color)] bg-[var(--surface-overlay-bg)]'}">
-                            <div class="text-xs">${escapeHtml(themeNames[t])}</div>
-                            <div class="text-[10px] opacity-65 mt-0.5">macOS Sequoia Material</div>
-                        </button>
-                    `).join('')}
-                </div>
-                <div class="p-3.5 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span>Window Glass Blur & Vibrancy</span>
-                        <button class="mac-btn-secondary" onclick="toggleWindowTransparency()">Cycle Glass (${windowTransparencyLevels[currentWindowTransparencyIndex].label})</button>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span>Dock Translucency Level</span>
-                        <button class="mac-btn-secondary" onclick="toggleDockTransparency()">Cycle Dock (${dockTransparencyLevels[currentDockTransparencyIndex].label})</button>
-                    </div>
-                </div>
-            `;
-            paneEl.querySelectorAll('[data-theme-idx]').forEach(btn => {
-                btn.onclick = () => { applyThemeByIndex(Number(btn.dataset.themeIdx)); renderPane(); };
+        titleEl.textContent = SETTINGS_PANES.find(x => x.id === activePane).label;
+        winEl.querySelectorAll('[data-set-pane]').forEach(b => { const on = b.dataset.setPane === activePane; b.classList.toggle('sel', on); b.setAttribute('aria-selected', String(on)); });
+        if (activePane === 'general') {
+            const h = OS.sys.heap();
+            paneEl.innerHTML = group(
+                row('Device', escapeHtml(OS.sys.platform()) + ' (web browser)'),
+                row('Processor', escapeHtml(OS.sys.cpuLine())),
+                row('Memory', escapeHtml(OS.sys.memLine())),
+                row('Version', 'OSWeb 0.2')) + group(
+                row('Files and folders', `${Object.keys(OS.vfs.tree).length} items`, 'Stored in this browser'),
+                row('Erase All Content and Settings…', '<button class="mac-btn-secondary" id="factory-reset-btn">Erase…</button>'));
+            paneEl.querySelector('#factory-reset-btn').onclick = () => showCustomModal({
+                title: 'Erase All Content and Settings?', message: 'This removes every file, window layout and preference stored in this browser.', confirmText: 'Erase',
+                onConfirm: () => { localStorage.clear(); indexedDB.deleteDatabase(OS.vfs.dbName); location.reload(); } });
+        } else if (activePane === 'appearance') {
+            const mode = isAuto() ? 'auto' : (document.body.classList.contains('light-mode') ? 'light' : 'dark');
+            const tile = (id, label) => `<button class="st-appr${mode === id ? ' on' : ''}" data-mode="${id}" aria-pressed="${mode === id}"><span class="st-appr-t ${id}"></span><span>${label}</span></button>`;
+            paneEl.innerHTML = `<div class="st-group st-apprs">${tile('light', 'Light')}${tile('dark', 'Dark')}${tile('auto', 'Auto')}</div>`;
+            paneEl.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => {
+                const m = b.dataset.mode; try { localStorage.setItem('osweb_theme_auto', m === 'auto' ? '1' : '0'); } catch (_) {}
+                applyThemeByIndex(m === 'light' ? 1 : (m === 'dark' ? 0 : (matchMedia('(prefers-color-scheme: dark)').matches ? 0 : 1))); renderPane();
             });
         } else if (activePane === 'wallpaper') {
-            paneEl.innerHTML = `
-                <div class="flex items-center justify-between mb-3">
-                    <h2 class="text-base font-bold">macOS Sequoia Dynamic Wallpapers</h2>
-                    <button data-role="custom-wall-btn" class="action-button !py-1">+ Custom URL</button>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    ${wallpapers.map((w, idx) => `
-                        <div data-wall-idx="${idx}" class="rounded-xl overflow-hidden border-2 cursor-pointer transition ${idx === currentWallpaperIdx ? 'border-sky-400 scale-[1.02]' : 'border-transparent hover:border-white/40'}">
-                            <div class="h-20 bg-cover bg-center" style="background-image:url('${w.url}')"></div>
-                            <div class="p-1.5 text-center text-[11px] bg-[var(--surface-overlay-bg)] font-medium truncate">${escapeHtml(w.name)}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            paneEl.querySelectorAll('[data-wall-idx]').forEach(el => {
-                el.onclick = () => {
-                    currentWallpaperIdx = Number(el.dataset.wallIdx);
-                    applyWallpaper(wallpapers[currentWallpaperIdx].url);
-                    renderPane();
-                };
-            });
-            paneEl.querySelector('[data-role="custom-wall-btn"]').onclick = () => {
-                showCustomModal({
-                    title: 'Custom Desktop Wallpaper URL',
-                    message: 'Enter an image URL (HTTPS or data URI):',
-                    showInput: true,
-                    inputPlaceholder: 'https://images.unsplash.com/...',
-                    confirmText: 'Apply Wallpaper',
-                    onConfirm: (url) => {
-                        if (url && url.trim()) applyWallpaper(url.trim());
-                    }
-                });
-            };
+            paneEl.innerHTML = `<div class="st-group st-walls">${wallpapers.map((w, i) => `<button class="st-wall${i === currentWallpaperIdx ? ' on' : ''}" data-wall-idx="${i}" aria-label="${escapeHtml(w.name)}"><span style="background-image:url('${w.url}')"></span><em>${escapeHtml(w.name)}</em></button>`).join('')}</div>` +
+                group(row('Add Image…', '<button class="mac-btn-secondary" data-role="custom-wall-btn">Choose…</button>', 'Use an image address'));
+            paneEl.querySelectorAll('[data-wall-idx]').forEach(el => el.onclick = () => { currentWallpaperIdx = Number(el.dataset.wallIdx); const w = wallpapers[currentWallpaperIdx]; applyWallpaper(w.auto && !document.body.classList.contains('light-mode') ? w.dark : w.url); renderPane(); });
+            paneEl.querySelector('[data-role="custom-wall-btn"]').onclick = () => showCustomModal({ title: 'Add Image', message: 'Enter an image address (https or data URI):', showInput: true, inputPlaceholder: 'https://…', confirmText: 'Set Wallpaper', onConfirm: (url) => { if (url && url.trim()) applyWallpaper(url.trim()); } });
         } else if (activePane === 'dock') {
-            const curSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--dock-base-size')) || 50;
-            paneEl.innerHTML = `
-                <h2 class="text-base font-bold mb-3">Desktop & Dock</h2>
-                <div class="p-4 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] space-y-4">
-                    <div>
-                        <div class="flex justify-between mb-1"><span>Dock Icon Size</span><span id="set-dock-size-val">${curSize}px</span></div>
-                        <input id="set-dock-size" type="range" min="38" max="64" value="${curSize}" class="w-full accent-sky-500"/>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span>Show Sequoia Widgets on Desktop</span>
-                        <button class="action-button" onclick="toggleDesktopWidgets()">Toggle Desktop Widgets</button>
-                    </div>
-                </div>
-            `;
+            const curSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--dock-base-size')) || 56;
+            const widgetsOn = !document.getElementById('desktop-widgets-container')?.classList.contains('hidden');
+            paneEl.innerHTML = group(row('Size', `<input id="set-dock-size" type="range" min="38" max="64" value="${curSize}" aria-label="Dock size"/>`)) + group(row('Show Widgets on Desktop', sw('sw-widgets', widgetsOn)));
             paneEl.querySelector('#set-dock-size').oninput = (e) => {
-                const rawVal = Number(e.target.value) || 42;
-                const dock = document.getElementById('dock');
-                const iconCount = (dock && dock.querySelectorAll('.dock-icon').length) || 20;
-                const bounds = OS.viewport.getDesktopBounds();
-                const stageW = bounds.width || 1180;
-                const gap = iconCount > 18 ? 4 : 5;
-                const maxFit = Math.max(32, Math.floor((stageW - 68 - (iconCount - 1) * gap) / Math.max(1, iconCount)));
-                const clamped = Math.min(rawVal, maxFit);
-                document.documentElement.style.setProperty('--dock-base-size', `${clamped}px`);
-                paneEl.querySelector('#set-dock-size-val').textContent = `${clamped}px`;
+                const dock = document.getElementById('dock'); const n = (dock && dock.querySelectorAll('.dock-icon').length) || 16; const b = OS.viewport.getDesktopBounds();
+                const maxFit = Math.max(34, Math.floor(((b.width || 1180) - 80 - (n - 1) * 4) / Math.max(1, n)));
+                document.documentElement.style.setProperty('--dock-base-size', `${Math.min(Number(e.target.value) || 56, maxFit)}px`);
             };
-        } else if (activePane === 'displays') {
-            paneEl.innerHTML = `
-                <h2 class="text-base font-bold mb-3">Displays & Cross-Device Desktop Viewport Engine</h2>
-                <div class="p-4 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] space-y-3">
-                    <div class="text-xs leading-relaxed opacity-85">
-                        macOS Sequoia Desktop renders at <strong>100% Desktop Fidelity</strong> on every device (Mac, PC, iPad, and iPhone). On narrow screens, the Proportional Desktop Viewport Engine scales the full desktop canvas smoothly.
-                    </div>
-                    <div class="flex items-center gap-2 pt-1">
-                        <button class="action-button" onclick="OS.viewport.mode='fit'; try{localStorage.setItem('osweb_viewport_mode', OS.viewport.mode);}catch(e){} OS.viewport.apply();">🖥️ Proportional Desktop Fit</button>
-                        <button class="mac-btn-secondary" onclick="OS.viewport.mode='native'; try{localStorage.setItem('osweb_viewport_mode', OS.viewport.mode);}catch(e){} OS.viewport.apply();">🔍 1:1 Native Pixel Zoom</button>
-                        <button class="mac-btn-secondary" onclick="OS.viewport.mode='auto'; try{localStorage.setItem('osweb_viewport_mode', OS.viewport.mode);}catch(e){} OS.viewport.apply();">✨ Auto-Detect</button>
-                    </div>
-                </div>
-            `;
-        } else if (activePane === 'ai') {
-            paneEl.innerHTML = `
-                <h2 class="text-base font-bold mb-3">Apple Intelligence & Gemini API Key</h2>
-                <div class="p-4 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] space-y-3">
-                    <p class="text-xs opacity-80">Apple Intelligence Writing Tools and OS Syscalls work out-of-the-box using the built-in deterministic engine. Optionally add a Gemini API key for live cloud completions:</p>
-                    <input id="set-ai-key" type="password" placeholder="AIzaSy... (Optional Gemini API Key)" value="${escapeHtml(OS.ai.getApiKey())}"
-                        class="w-full px-3 py-2 rounded-lg bg-black/25 border border-[var(--border-color)] outline-none font-mono text-xs"/>
-                    <button id="save-ai-key" class="action-button">Save API Key</button>
-                </div>
-            `;
-            paneEl.querySelector('#save-ai-key').onclick = () => {
-                OS.ai.setApiKey(paneEl.querySelector('#set-ai-key').value);
-                showTemporaryMessage('Saved Apple Intelligence API configuration.', 1800);
-            };
+            bindSwitch('sw-widgets', () => toggleDesktopWidgets());
+        } else if (activePane === 'accessibility') {
+            const rt = document.body.classList.contains('reduce-transparency');
+            paneEl.innerHTML = group(row('Reduce transparency', sw('sw-rt', rt), 'Makes windows, the Dock and menus solid'));
+            bindSwitch('sw-rt', (on) => { document.body.classList.toggle('reduce-transparency', on); try { localStorage.setItem('osweb_reduce_transparency', on ? '1' : '0'); } catch (_) {} });
         } else {
-            paneEl.innerHTML = `
-                <h2 class="text-base font-bold mb-3">General, Hardware & VFS Storage</h2>
-                <div class="p-4 rounded-xl bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] space-y-2 mb-4">
-                    <div><strong>Device:</strong> ${escapeHtml(OS.sys.platform())} (web browser)</div><div><strong>Processor:</strong> ${escapeHtml(OS.sys.cpuLine())}</div><div><strong>Memory:</strong> ${escapeHtml(OS.sys.memLine())}</div>
-                    <div><strong>OS Version:</strong> macOS Sequoia 15.1 (Build 24B83)</div>
-                    <div><strong>IndexedDB VFS Nodes:</strong> ${Object.keys(OS.vfs.tree).length} persistent files & folders</div>
-                </div>
-                <button id="factory-reset-btn" class="action-button !bg-rose-600 hover:!bg-rose-500">Factory Reset VFS & Settings</button>
-            `;
-            paneEl.querySelector('#factory-reset-btn').onclick = () => {
-                showCustomModal({
-                    title: 'Factory Reset macOS Sequoia',
-                    message: 'Reset all IndexedDB VFS files and preferences to clean factory defaults?',
-                    confirmText: 'Erase & Restart',
-                    onConfirm: () => {
-                        localStorage.clear();
-                        indexedDB.deleteDatabase(OS.vfs.dbName);
-                        location.reload();
-                    }
-                });
-            };
+            paneEl.innerHTML = group(row('Assistant API key', '<input id="set-ai-key" type="password" placeholder="Optional" class="st-input" aria-label="Assistant API key"/>', 'Optional. Stored only in this browser.')) +
+                group(row('', '<button class="action-button" id="save-ai-key">Save</button>'));
+            paneEl.querySelector('#set-ai-key').value = OS.ai.getApiKey();
+            paneEl.querySelector('#save-ai-key').onclick = () => { OS.ai.setApiKey(paneEl.querySelector('#set-ai-key').value); showTemporaryMessage('Saved.', 1500); };
         }
     };
-
-    winEl.querySelectorAll('[data-set-pane]').forEach(btn => {
-        btn.onclick = () => {
-            activePane = btn.dataset.setPane;
-            winEl.querySelectorAll('[data-set-pane]').forEach(b => b.classList.remove('bg-sky-500', 'text-white', 'font-semibold'));
-            btn.classList.add('bg-sky-500', 'text-white', 'font-semibold');
-            renderPane();
-        };
-    });
+    winEl.querySelectorAll('[data-set-pane]').forEach(btn => { btn.onclick = () => { activePane = btn.dataset.setPane; renderPane(); root.dataset.view = 'detail'; }; });
+    winEl.querySelector('[data-role="st-back"]').onclick = () => { root.dataset.view = 'list'; };
+    const search = winEl.querySelector('[data-role="st-search"]');
+    search.oninput = () => { const q = search.value.trim().toLowerCase(); winEl.querySelectorAll('[data-set-pane]').forEach(b => { b.style.display = !q || b.textContent.toLowerCase().includes(q) ? '' : 'none'; }); };
     renderPane();
 }
 
@@ -7857,6 +7822,7 @@ const appConfig = {
         init: (winEl, winData, opts) => initAppStore(winEl, winData, opts)
     },
     'settings': {
+        unified: true,
         title: 'System Settings',
         width: 760,
         height: 520,
@@ -8304,6 +8270,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     applyDefaultWallpaperForTheme();
     setLockedState(true);
+    try { document.body.classList.toggle('reduce-transparency', localStorage.getItem('osweb_reduce_transparency') === '1'); if (localStorage.getItem('osweb_theme_auto') === '1') { const mq = matchMedia('(prefers-color-scheme: dark)'); applyThemeByIndex(mq.matches ? 0 : 1); mq.addEventListener('change', () => { if (localStorage.getItem('osweb_theme_auto') === '1') applyThemeByIndex(mq.matches ? 0 : 1); }); } } catch (_) {}
     try { const n = localStorage.getItem('osweb_username') || 'Eugene Redko'; document.getElementById('lockscreen-username').textContent = n; document.getElementById('lockscreen-initial').textContent = n.trim().charAt(0).toUpperCase() || 'U'; } catch (_) {}
 
     // 5. Render Menu Bar, Virtual Spaces, Desktop Icons, Widgets & Parabolic Dock
