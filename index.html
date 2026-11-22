@@ -1228,6 +1228,123 @@
         body.device-phone .lock-time { font-size: 82px; }
         /* minimum 44pt hit targets on touch devices */
         @media (pointer: coarse) { .dock-icon, .menubar-item, .tl-btn::after { min-height: 44px; } .tl-btn { position: relative; } .tl-btn::after { content: ''; position: absolute; inset: -16px -6px; min-height: 0; } }
+
+        /* ===================================================================
+         * Round 2B — menus, Spotlight, Launchpad, Mission Control, About
+         * =================================================================== */
+        .mb-pct { display: none; }
+        input:focus-visible, textarea:focus-visible, [contenteditable]:focus-visible, select:focus-visible { outline: none !important; }
+        .window[data-app="terminal"] *:focus-visible { outline: none !important; }
+
+        /* Menus: 10px radius, 5px inset, 22px rows, 13px, no icons */
+        .os-menu-layer { padding: 5px; border-radius: 10px; min-width: 220px; font-size: 13px;
+            background: rgba(48, 48, 52, 0.62); backdrop-filter: blur(40px) saturate(190%); -webkit-backdrop-filter: blur(40px) saturate(190%);
+            border: 0.5px solid rgba(255,255,255,0.18); box-shadow: 0 0 0 0.5px rgba(0,0,0,0.5), 0 12px 32px rgba(0,0,0,0.38); }
+        body.light-mode .os-menu-layer { background: rgba(246,246,248,0.7); border-color: rgba(255,255,255,0.6); box-shadow: 0 0 0 0.5px rgba(0,0,0,0.2), 0 12px 32px rgba(0,0,0,0.2); }
+        .os-menu-item { height: 22px; padding: 0 10px; border-radius: 5px; font-size: 13px; line-height: 22px; gap: 24px; }
+        .os-menu-item > span:first-child > i { display: none; }
+        .os-menu-item:hover:not(.disabled), .os-menu-item.submenu-open { background: #0A60FF; }
+        .os-menu-item.disabled { opacity: 0.4; }
+        .os-menu-shortcut { font-size: 13px; letter-spacing: 0.03em; }
+        .os-menu-sep { height: 0.5px; margin: 5px 10px; background: rgba(255,255,255,0.18); }
+        body.light-mode .os-menu-sep { background: rgba(0,0,0,0.14); }
+
+        /* Spotlight: 680px, ring-less 24px field, Top Hit section, accent selection */
+        #spotlight-overlay { background: transparent; padding-top: 16vh; }
+        .spotlight-box { width: 680px; border-radius: 20px; background: rgba(40,40,44,0.62); border: 0.5px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(50px) saturate(190%); -webkit-backdrop-filter: blur(50px) saturate(190%); box-shadow: 0 0 0 0.5px rgba(0,0,0,0.45), 0 24px 60px rgba(0,0,0,0.45); }
+        body.light-mode .spotlight-box { background: rgba(246,246,248,0.72); }
+        .sl-field { display: flex; align-items: center; gap: 12px; padding: 14px 18px; color: var(--text-secondary); }
+        .sl-field input { flex: 1; background: transparent; border: 0; outline: none !important; font-size: 24px; font-weight: 300; color: var(--text-primary); letter-spacing: -0.01em; }
+        .sl-field input::placeholder { color: var(--text-muted); }
+        #spotlight-results { padding: 0 8px 8px; max-height: 420px; overflow-y: auto; }
+        #spotlight-results:empty { display: none; }
+        .sl-head { font-size: 11px; font-weight: 600; color: var(--text-muted); padding: 8px 10px 4px; border-top: 0.5px solid var(--border-color); margin: 0 -8px; padding-left: 18px; }
+        .sl-row { display: flex; align-items: center; gap: 12px; padding: 6px 10px; border-radius: 8px; cursor: default; }
+        .sl-row.sel, .sl-row:hover { background: #0A60FF; color: #fff; }
+        .sl-ico { width: 32px; height: 32px; flex-shrink: 0; } .sl-ico svg { width: 100%; height: 100%; }
+        .sl-title { font-size: 13px; font-weight: 500; } .sl-sub { font-size: 11px; opacity: 0.6; }
+
+        /* Launchpad: blurred wallpaper, big icons, no label plates, pill search */
+        #launchpad-overlay { background: rgba(0,0,0,0.28); backdrop-filter: blur(60px) brightness(0.8) saturate(160%); -webkit-backdrop-filter: blur(60px) brightness(0.8) saturate(160%); padding: 40px 6vw 90px; }
+        .lp-search { display: flex; align-items: center; gap: 6px; width: 240px; height: 28px; padding: 0 10px; border-radius: 14px; background: rgba(255,255,255,0.16); border: 0.5px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); margin-bottom: 36px; }
+        .lp-search input { flex: 1; background: transparent; border: 0; outline: none !important; color: #fff; font-size: 13px; text-align: left; }
+        .lp-search input::placeholder { color: rgba(255,255,255,0.7); }
+        #launchpad-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 34px 10px; width: 100%; max-width: 1100px; justify-items: center; align-content: start; overflow-y: auto; padding: 4px; }
+        .lp-app { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 110px; }
+        .lp-ico { width: 86px; height: 86px; display: block; transition: transform .12s; } .lp-ico svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        .lp-app:hover .lp-ico { transform: scale(1.04); }
+        .lp-name { font-size: 13px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.6); max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        @media (max-width: 800px) { #launchpad-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } .lp-ico { width: 62px; height: 62px; } .lp-app { width: 80px; } }
+
+        /* Mission Control: dim wallpaper, desktop strip, live window thumbnails */
+        #mission-control-overlay { padding: 14px 24px 60px; background: rgba(0,0,0,0.32); backdrop-filter: blur(24px) brightness(0.72); -webkit-backdrop-filter: blur(24px) brightness(0.72); }
+        #mc-spaces-bar { display: flex; gap: 14px; justify-content: center; align-items: flex-start; height: 96px; }
+        .mc-space { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #fff; font-size: 12px; }
+        .mc-space-thumb { width: 130px; height: 74px; border-radius: 8px; background: var(--wallpaper-url) center/cover, #1c2d4f; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.3); display: block; }
+        .mc-space.cur .mc-space-thumb { box-shadow: 0 0 0 2px rgba(255,255,255,0.9); }
+        .mc-add { width: 34px; height: 74px; border-radius: 8px; background: rgba(255,255,255,0.14); color: #fff; font-size: 20px; }
+        #mc-windows-grid { flex: 1; display: flex; flex-wrap: wrap; gap: 28px 36px; align-content: center; justify-content: center; padding: 8px 4vw; overflow-y: auto; }
+        .mc-card { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .mc-thumb { position: relative; overflow: hidden; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.5), 0 14px 34px rgba(0,0,0,0.5); transition: transform .15s; }
+        .mc-card:hover .mc-thumb { transform: scale(1.04); box-shadow: 0 0 0 3px rgba(255,255,255,0.6), 0 14px 34px rgba(0,0,0,0.5); }
+        .mc-label { font-size: 13px; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+
+        /* About This Mac: small real window, no dimming */
+        .about-win { position: absolute; left: 50%; top: 22%; transform: translateX(-50%); z-index: 19000; width: 260px; padding: 0 0 18px; text-align: center; border-radius: 10px;
+            background: var(--window-content-bg); box-shadow: 0 0 0 0.5px rgba(0,0,0,0.6), 0 22px 70px 4px rgba(0,0,0,0.5); border: 0.5px solid rgba(255,255,255,0.14); }
+        .about-title { height: 28px; display: flex; align-items: center; padding-left: 13px; } .about-title .tl-btn:hover svg { opacity: 1; }
+        .about-hero { width: 120px; height: 84px; margin: 6px auto 8px; display: block; }
+        .about-name { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; } .about-sub { font-size: 11px; color: var(--text-secondary); margin-bottom: 14px; }
+        .about-rows { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; padding: 0 22px; font-size: 11px; text-align: left; margin: 0 0 14px; }
+        .about-rows dt { color: var(--text-secondary); text-align: right; } .about-rows dd { margin: 0; font-weight: 500; }
+
+        /* ===================================================================
+         * Round 2C — control kit, unified window chrome, Finder
+         * =================================================================== */
+        .action-button { height: 22px; padding: 0 12px; border-radius: 5px; font-size: 13px; font-weight: 400; background: linear-gradient(180deg, #4c97ff, #0a6cff); box-shadow: 0 0.5px 1px rgba(0,0,0,0.3), inset 0 0.5px 0 rgba(255,255,255,0.3); }
+        .mac-btn-secondary { height: 22px; padding: 0 10px; border-radius: 5px; font-size: 13px; font-weight: 400; background: rgba(255,255,255,0.12); border: 0.5px solid rgba(255,255,255,0.12); box-shadow: 0 0.5px 1px rgba(0,0,0,0.25); }
+        body.light-mode .mac-btn-secondary { background: #fff; border-color: rgba(0,0,0,0.12); box-shadow: 0 0.5px 1px rgba(0,0,0,0.12); }
+        .sf { display: block; flex-shrink: 0; }
+
+        /* Unified title+toolbar: traffic lights float over the sidebar/toolbar, titlebar is the drag strip underneath */
+        .window.unified .window-title-bar { position: absolute; top: 0; left: 0; right: 0; height: 52px; min-height: 52px; background: transparent; border-bottom: 0; z-index: 3; }
+        .window.unified .window-title-text { display: none; }
+        .window.unified .traffic-lights { position: absolute; left: 13px; top: 20px; z-index: 6; }
+        .window.unified .window-content { position: static; flex: 1; background: var(--window-content-bg); }
+
+        /* Finder */
+        .fx-root { display: flex; height: 100%; font-size: 13px; }
+        .fx-sidebar { width: 200px; flex-shrink: 0; padding: 52px 10px 10px; overflow-y: auto; background: rgba(40,40,44,0.55); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border-right: 0.5px solid rgba(255,255,255,0.08); }
+        body.light-mode .fx-sidebar { background: rgba(236,236,238,0.7); border-right-color: rgba(0,0,0,0.1); }
+        .fx-side-head { font-size: 11px; font-weight: 600; color: var(--text-muted); padding: 10px 8px 3px; }
+        .fx-side-item { display: flex; align-items: center; gap: 8px; width: 100%; height: 28px; padding: 0 8px; border-radius: 6px; text-align: left; color: var(--text-primary); }
+        .fx-side-item .sf { color: var(--accent-color); } .fx-side-item:hover { background: rgba(255,255,255,0.06); }
+        .fx-side-item.sel { background: rgba(255,255,255,0.14); } body.light-mode .fx-side-item.sel { background: rgba(0,0,0,0.1); }
+        .fx-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .fx-toolbar { height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 12px 0 8px; pointer-events: none; position: relative; z-index: 5; }
+        .fx-toolbar > * { pointer-events: auto; }
+        .fx-spacer { flex: 1; pointer-events: none !important; }
+        .fx-title { font-size: 15px; font-weight: 700; margin-left: 6px; white-space: nowrap; pointer-events: none !important; letter-spacing: -0.01em; }
+        .fx-tb { width: 30px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: var(--text-secondary); }
+        .fx-tb:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+        .fx-seg { display: inline-flex; padding: 2px; gap: 1px; border-radius: 7px; background: rgba(255,255,255,0.1); }
+        .fx-seg-btn { width: 30px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 5px; color: var(--text-secondary); }
+        .fx-seg-btn.on { background: rgba(255,255,255,0.2); color: var(--text-primary); box-shadow: 0 0.5px 1px rgba(0,0,0,0.3); }
+        body.light-mode .fx-seg { background: rgba(0,0,0,0.07); } body.light-mode .fx-seg-btn.on { background: #fff; }
+        .fx-search { display: flex; align-items: center; gap: 5px; height: 24px; width: 150px; padding: 0 8px; border-radius: 6px; background: rgba(255,255,255,0.1); color: var(--text-muted); }
+        .fx-search input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none !important; font-size: 13px; color: var(--text-primary); }
+        body.light-mode .fx-search, body.light-mode .fx-tb:hover { background: rgba(0,0,0,0.06); }
+        .fx-body { flex: 1; display: flex; min-height: 0; border-top: 0.5px solid rgba(255,255,255,0.08); }
+        body.light-mode .fx-body { border-top-color: rgba(0,0,0,0.1); }
+        .fx-items { flex: 1; padding: 14px; overflow-y: auto; }
+        .fx-ql { width: 240px; border-left: 0.5px solid var(--border-color); padding: 14px; overflow-y: auto; }
+        .fx-path { height: 24px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; font-size: 11px; color: var(--text-secondary); border-top: 0.5px solid var(--border-color); }
+        .fx-crumbs { display: flex; align-items: center; gap: 4px; overflow: hidden; white-space: nowrap; font-family: var(--font-sans) !important; }
+        .window[data-app="file-explorer"] .finder-item.bg-sky-500\/25, .window[data-app="file-explorer"] tr.bg-sky-500\/25 { background: rgba(255,255,255,0.12) !important; border-color: transparent !important; }
+        .window[data-app="file-explorer"] .finder-item { border-radius: 6px; font-size: 12px; }
+        .window[data-app="file-explorer"] .finder-item .border-sky-400 { border-color: transparent; }
+        @media (max-width: 600px) { .fx-sidebar { display: none; } .fx-search { width: 110px; } .fx-toolbar { padding-left: 12px; } .window.unified .traffic-lights { display: none !important; } }
     </style>
 </head>
 <body>
@@ -1254,7 +1371,7 @@
                 <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" fill="currentColor" aria-hidden="true"><rect x="1.5" y="3.5" width="14.5" height="9" rx="2.6" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/><rect id="battery-fill" x="3" y="5" width="11.5" height="6" rx="1.4"/><path d="M17.3 6.3v3.4c.7-.2 1.2-.9 1.2-1.7s-.5-1.5-1.2-1.7z" opacity=".55"/></svg>
             </button>
             <button id="wifi-menubar-button" class="menubar-item" role="menuitem" aria-label="Wi-Fi">
-                <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" fill="currentColor" aria-hidden="true"><path d="M10 12.9a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8z" transform="translate(0 -3.4)"/><path d="M6.6 9.3a4.9 4.9 0 0 1 6.8 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M3.6 6.3a9.2 9.2 0 0 1 12.8 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M.9 3.4a13 13 0 0 1 18.2 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity=".0"/></svg>
+                <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" transform="translate(0 1)"><path d="M6.4 10.4a5 5 0 0 1 7.2 0"/><path d="M3.6 7.6a9 9 0 0 1 12.8 0"/><path d="M.9 4.9a12.8 12.8 0 0 1 18.2 0"/></g><circle cx="10" cy="13.4" r="1.5" fill="currentColor"/></svg>
             </button>
             <button id="spotlight-menubar-button" class="menubar-item" role="menuitem" aria-label="Spotlight Search">
                 <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" fill="currentColor" aria-hidden="true"><circle cx="8.6" cy="7.2" r="4.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 10.6l3.6 3.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
@@ -1489,36 +1606,27 @@
     <!-- Spotlight Search Overlay (Cmd+K / Cmd+Space) -->
     <div id="spotlight-overlay">
         <div class="spotlight-box">
-            <div class="flex items-center px-4 py-3 border-b border-[var(--border-color)] gap-3">
-                <i class="fas fa-magnifying-glass text-lg text-sky-400"></i>
-                <input id="spotlight-input" type="text" placeholder="Spotlight Search — Apps, VFS Files, Math (24*365), or AI Syscalls..."
-                    class="w-full bg-transparent text-base outline-none text-[var(--text-primary)] placeholder-[var(--text-secondary)]" />
-                <button type="button" id="spotlight-esc-btn" onclick="OS.spotlight.close()" aria-label="Close Spotlight" title="Close Spotlight (Esc)"
-                    class="text-[11px] opacity-75 hover:opacity-100 cursor-pointer font-mono px-2 py-0.5 rounded border border-[var(--border-color)] bg-[var(--surface-overlay-bg)] hover:bg-[var(--surface-active-bg)] transition">ESC</button>
+            <div class="sl-field">
+                <svg class="sl-mag" viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.6"/><path d="M13 13l4.6 4.6"/></svg>
+                <input id="spotlight-input" type="text" placeholder="Spotlight Search" aria-label="Spotlight Search" autocomplete="off" spellcheck="false" />
             </div>
-            <div id="spotlight-results" class="max-h-80 overflow-y-auto p-2 space-y-1"></div>
+            <div id="spotlight-results" role="listbox" aria-label="Results"></div>
         </div>
     </div>
 
     <!-- Launchpad Fullscreen Grid Overlay -->
     <div id="launchpad-overlay">
-        <div class="w-72 mb-8">
-            <div class="relative">
-                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-xs text-white/70"></i>
-                <input id="launchpad-search" type="text" placeholder="Search Applications"
-                    class="w-full bg-white/15 border border-white/25 rounded-lg py-1.5 pl-8 pr-3 text-sm text-white placeholder-white/65 outline-none focus:bg-white/25" />
-            </div>
+        <div class="lp-search">
+            <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.6"/><path d="M13 13l4.6 4.6"/></svg>
+            <input id="launchpad-search" type="text" placeholder="Search" aria-label="Search applications" autocomplete="off" />
         </div>
-        <div id="launchpad-grid" class="grid grid-cols-4 sm:grid-cols-6 gap-x-8 gap-y-7 max-w-4xl w-full justify-items-center overflow-y-auto p-4"></div>
+        <div id="launchpad-grid"></div>
     </div>
 
     <!-- Mission Control Exposé Overlay -->
-    <div id="mission-control-overlay">
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3" id="mc-spaces-bar"></div>
-            <button class="mac-btn-secondary !text-white" onclick="toggleMissionControl(false)">Exit Mission Control (ESC)</button>
-        </div>
-        <div id="mc-windows-grid" class="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-6 overflow-y-auto p-4 items-center justify-items-center"></div>
+    <div id="mission-control-overlay" role="dialog" aria-label="Mission Control">
+        <div id="mc-spaces-bar"></div>
+        <div id="mc-windows-grid"></div>
     </div>
 
     <!-- Backward-compat single context-menu + dynamic multi-layer menu root -->
@@ -1651,6 +1759,23 @@ function getMacFolderSVG(accent = '#36A8FF') {
         <rect x="6" y="20" width="52" height="35" rx="6" fill="url(#fFront)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
         <line x1="10" y1="22" x2="54" y2="22" stroke="rgba(255,255,255,0.55)" stroke-width="1" stroke-linecap="round"/>
     </svg>`;
+}
+
+const SF_PATHS = {
+    'chevron.left': 'M10 3L5 8l5 5', 'chevron.right': 'M6 3l5 5-5 5', 'arrow.up': 'M8 13V3M4 7l4-4 4 4',
+    'square.grid.2x2': 'M2.5 2.5h4.5v4.5H2.5zM9 2.5h4.5v4.5H9zM2.5 9H7v4.5H2.5zM9 9h4.5v4.5H9z', 'list.bullet': 'M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.01M2.5 8h.01M2.5 12h.01',
+    'eye': 'M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+    'folder.badge.plus': 'M2 4.5A1.5 1.5 0 0 1 3.5 3h2.6l1.4 1.5h5A1.5 1.5 0 0 1 14 6v5.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5zM8 7.2v3.6M6.2 9h3.6',
+    'doc.badge.plus': 'M4 2h5l3.5 3.5V13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM8 7.5v4M6 9.5h4',
+    'magnifyingglass': 'M7 11.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zM10.3 10.3L14 14', 'house': 'M2 8l6-5.5L14 8M3.5 7v6h3.2V9.5h2.6V13h3.2V7',
+    'desktopcomputer': 'M2 3h12v8H2zM6 14h4M8 11v3', 'doc': 'M4 2h5l3.5 3.5V13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM9 2v3.5h3.5',
+    'chevron.left.forwardslash.chevron.right': 'M5 4L1.5 8 5 12M11 4l3.5 4L11 12M9.2 3l-2.4 10', 'photo': 'M2.5 3h11v10h-11zM2.5 11l3.5-3.5 3 3 2-2 2.5 2.5M10.5 6.2h.01',
+    'music.note': 'M6 12V3.5l7-1.5V10.5M6 12a1.8 1.8 0 1 1-3.6 0A1.8 1.8 0 0 1 6 12zM13 10.5a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0z',
+    'arrow.down.circle': 'M8 14.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM8 4.5v6M5.5 8.2L8 10.7l2.5-2.5', 'internaldrive': 'M2 9.5l1.7-5.2A1 1 0 0 1 4.6 3.5h6.8a1 1 0 0 1 .9.8L14 9.5v2.2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 9.5h12M11.5 11.2h.01',
+    'app': 'M8 2L3 12.5M8 2l5 10.5M4.4 9.5h7.2M2.5 12.5h.01'
+};
+function sf(name, size = 16, cls = '') {
+    return `<svg class="sf ${cls}" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${SF_PATHS[name] || ''}"/></svg>`;
 }
 
 function getTrashSVG() {
@@ -3235,6 +3360,7 @@ function createWindow(appId, options = {}) {
     winEl.id = windowId;
     winEl.className = 'window focused';
     winEl.dataset.app = appId;
+    if (config.unified) winEl.classList.add('unified');
     winEl.setAttribute('role', 'group');
     winEl.setAttribute('aria-label', config.title);
     winEl.style.width = `${defaultW}px`;
@@ -3576,123 +3702,89 @@ function setupWindowDragAndResize(winEl, titleBar, windowId) {
  * ============================================================================ */
 
 function getAppleMenuItems() {
+    const front = activeWindowId && openWindows[activeWindowId] ? appConfig[openWindows[activeWindowId].appId]?.title : null;
     return [
-        { label: 'About This Mac', icon: 'fab fa-apple', action: () => openAboutThisMacModal() },
+        { label: 'About This Mac', action: () => openAboutThisMacModal() },
         { separator: true },
-        { label: 'System Settings...', icon: 'fas fa-gear', shortcut: '⌘,', action: () => launchOrFocusApp('settings') },
-        { label: 'App Store & Arcade...', icon: 'fab fa-app-store-ios', action: () => launchOrFocusApp('clicker-game') },
+        { label: 'System Settings…', action: () => launchOrFocusApp('settings') },
+        { label: 'App Store…', action: () => launchOrFocusApp('clicker-game') },
         { separator: true },
         {
-            label: 'Recent Applications',
-            icon: 'fas fa-clock-rotate-left',
-            submenu: () => ['file-explorer', 'chrome', 'web-browser', 'vscode', 'code-studio', 'slack', 'spotify', 'terminal', 'notepad'].map(id => ({
-                label: appConfig[id]?.title || id,
-                action: () => launchOrFocusApp(id)
-            }))
+            label: 'Recent Items',
+            submenu: () => ['file-explorer', 'web-browser', 'notepad', 'terminal', 'calendar-app'].filter(id => appConfig[id]).map(id => ({ label: appConfig[id].title, action: () => launchOrFocusApp(id) }))
         },
         { separator: true },
-        { label: 'Force Quit Applications...', icon: 'fas fa-bolt', shortcut: '⌥⌘Esc', action: () => openForceQuitModal() },
+        { label: front ? `Force Quit ${front}` : 'Force Quit…', shortcut: '⌥⌘⎋', action: () => openForceQuitModal() },
         { separator: true },
-        { label: 'Sleep', icon: 'fas fa-moon', action: () => showTemporaryMessage('Mac entered Low Power Sleep Mode') },
-        { label: 'Restart...', icon: 'fas fa-rotate-right', action: () => location.reload() },
-        { label: 'Shut Down...', icon: 'fas fa-power-off', action: () => lockScreen() },
+        { label: 'Sleep', action: () => lockScreen() },
+        { label: 'Restart…', action: () => location.reload() },
+        { label: 'Shut Down…', action: () => lockScreen() },
         { separator: true },
-        { label: 'Lock Screen', icon: 'fas fa-lock', shortcut: '⌃⌘Q', action: () => lockScreen() },
-        { label: `Log Out ${currentUsername || 'Eugene Redko'}...`, icon: 'fas fa-right-from-bracket', shortcut: '⇧⌘Q', action: () => lockScreen() }
+        { label: 'Lock Screen', shortcut: '⌃⌘Q', action: () => lockScreen() },
+        { label: `Log Out ${currentUsername || 'User'}…`, shortcut: '⇧⌘Q', action: () => lockScreen() }
     ];
 }
 
+const APP_MENU_TITLES = {
+    'file-explorer': ['File', 'Edit', 'View', 'Go', 'Window', 'Help'],
+    'web-browser': ['File', 'Edit', 'View', 'History', 'Bookmarks', 'Window', 'Help'],
+    'terminal': ['Shell', 'Edit', 'View', 'Window', 'Help'],
+    'notepad': ['File', 'Edit', 'Format', 'View', 'Window', 'Help'],
+    'calculator': ['File', 'Edit', 'View', 'Window', 'Help'],
+    'system-monitor': ['File', 'Edit', 'View', 'Window', 'Help'],
+    '*': ['File', 'Edit', 'View', 'Window', 'Help']
+};
 function getAppMenusFor(appId) {
     const cfg = appConfig[appId];
     const appTitle = cfg ? cfg.title : 'Finder';
     const targetAppId = cfg ? appId : 'file-explorer';
-
+    const hasWin = !!activeWindowId;
+    const run = (fn) => () => { if (activeWindowId) fn(activeWindowId); };
+    const sameApp = () => Object.keys(openWindows).filter(id => openWindows[id].appId === targetAppId);
+    const D = (label, shortcut) => ({ label, shortcut, disabled: true });
+    const defs = {
+        File: [
+            { label: targetAppId === 'file-explorer' ? 'New Finder Window' : `New ${appTitle} Window`, shortcut: '⌘N', action: () => createWindow(targetAppId, { forceNew: true }) },
+            { separator: true },
+            ...(targetAppId === 'notepad' ? [{ label: 'New Note', shortcut: '⌘N', action: () => launchOrFocusApp('notepad') }, { separator: true }] : []),
+            { label: 'Close Window', shortcut: '⌘W', disabled: !hasWin, action: run(closeWindow) },
+            D('Print…', '⌘P')
+        ],
+        Shell: [{ label: 'New Window', shortcut: '⌘N', action: () => createWindow('terminal', { forceNew: true }) }, { separator: true }, { label: 'Close Window', shortcut: '⌘W', disabled: !hasWin, action: run(closeWindow) }],
+        Edit: [D('Undo', '⌘Z'), D('Redo', '⇧⌘Z'), { separator: true },
+            { label: 'Cut', shortcut: '⌘X', action: () => document.execCommand('cut') }, { label: 'Copy', shortcut: '⌘C', action: () => document.execCommand('copy') },
+            { label: 'Paste', shortcut: '⌘V', disabled: true }, { label: 'Select All', shortcut: '⌘A', action: () => document.execCommand('selectAll') }],
+        Format: [D('Font'), D('Text'), D('Table'), D('List')],
+        View: [{ label: 'Enter Full Screen', shortcut: '⌃⌘F', disabled: !hasWin, action: run(toggleMaximizeWindow) }, { separator: true },
+            { label: 'Change Wallpaper', action: () => changeWallpaperContext(true) }, { label: 'Switch Appearance', action: () => cycleTheme() }],
+        Go: [{ label: 'Home', shortcut: '⇧⌘H', action: () => launchOrFocusApp('file-explorer', { initialPath: '/Users/eugene' }) },
+            { label: 'Desktop', shortcut: '⇧⌘D', action: () => launchOrFocusApp('file-explorer', { initialPath: '/Users/eugene/Desktop' }) },
+            { label: 'Documents', shortcut: '⇧⌘O', action: () => launchOrFocusApp('file-explorer', { initialPath: '/Users/eugene/Documents' }) },
+            { label: 'Downloads', shortcut: '⌥⌘L', action: () => launchOrFocusApp('file-explorer', { initialPath: '/Users/eugene/Downloads' }) },
+            { label: 'Applications', shortcut: '⇧⌘A', action: () => launchOrFocusApp('file-explorer', { initialPath: '/Applications' }) }],
+        History: [D('Back', '⌘['), D('Forward', '⌘]'), { separator: true }, D('Show All History', '⌘Y')],
+        Bookmarks: [D('Show Bookmarks', '⌥⌘B'), D('Add Bookmark…', '⌘D')],
+        Window: [
+            { label: 'Minimize', shortcut: '⌘M', disabled: !hasWin, action: run(minimizeWindow) },
+            { label: 'Zoom', disabled: !hasWin, action: run(toggleMaximizeWindow) },
+            { label: 'Move & Resize', disabled: !hasWin, submenu: () => [['Left', 'left'], ['Right', 'right'], ['Top', 'top'], ['Bottom', 'bottom']].map(([l, d]) => ({ label: l, action: run(id => tileWindow(id, d)) })) },
+            { separator: true },
+            { label: 'Move to Desktop', disabled: !hasWin, submenu: () => virtualDesktops.map(d => ({ label: `Desktop ${d}`, action: run(id => moveWindowToSpace(id, d)) })) },
+            { separator: true },
+            { label: 'Bring All to Front', action: () => showDesktop(false) }
+        ],
+        Help: [{ label: 'Search', action: () => toggleSpotlight(true) }, { separator: true }, { label: `${appTitle} Help`, disabled: true }]
+    };
+    const titles = APP_MENU_TITLES[targetAppId] || APP_MENU_TITLES['*'];
     return [
-        {
-            key: 'app',
-            label: appTitle,
-            bold: true,
-            items: [
-                { label: `About ${appTitle}`, action: () => showTemporaryMessage(`${appTitle} — macOS Sequoia 15.1 Native Web Architecture`) },
-                { separator: true },
-                { label: 'Settings...', shortcut: '⌘,', action: () => launchOrFocusApp('settings') },
-                { separator: true },
-                { label: `Hide ${appTitle}`, shortcut: '⌘H', action: () => { if (activeWindowId) minimizeWindow(activeWindowId); } },
-                { label: 'Show All Windows', action: () => Object.keys(openWindows).forEach(id => { if (openWindows[id].isMinimized) restoreWindow(id); }) },
-                { separator: true },
-                { label: `Quit ${appTitle}`, shortcut: '⌘Q', action: () => {
-                    Object.keys(openWindows).filter(id => openWindows[id].appId === targetAppId).forEach(id => closeWindow(id));
-                }}
-            ]
-        },
-        {
-            key: 'file',
-            label: 'File',
-            items: [
-                { label: `New ${appTitle} Window`, shortcut: '⌘N', action: () => createWindow(targetAppId, { forceNew: true }) },
-                { label: 'New Note in VFS...', shortcut: '⌥⌘N', action: () => launchOrFocusApp('notepad') },
-                { label: 'Open Finder...', shortcut: '⌘O', action: () => launchOrFocusApp('file-explorer') },
-                { separator: true },
-                { label: 'Close Window', shortcut: '⌘W', disabled: !activeWindowId, action: () => { if (activeWindowId) closeWindow(activeWindowId); } }
-            ]
-        },
-        {
-            key: 'edit',
-            label: 'Edit',
-            items: [
-                { label: 'Cut', shortcut: '⌘X', action: () => document.execCommand('cut') },
-                { label: 'Copy', shortcut: '⌘C', action: () => document.execCommand('copy') },
-                { label: 'Paste', shortcut: '⌘V', action: () => showTemporaryMessage('Use ⌘V / Ctrl+V inside any editor') },
-                { label: 'Select All', shortcut: '⌘A', action: () => document.execCommand('selectAll') },
-                { separator: true },
-                { label: 'Writing Tools (Apple Intelligence)...', icon: 'fas fa-wand-magic-sparkles', action: () => launchOrFocusApp('ai-assistant') }
-            ]
-        },
-        {
-            key: 'view',
-            label: 'View',
-            items: [
-                { label: 'Toggle Full Screen / Fill', shortcut: '⌃⌘F', disabled: !activeWindowId, action: () => { if (activeWindowId) toggleMaximizeWindow(activeWindowId); } },
-                { label: 'Toggle Desktop Viewport Scale (Fit / 1:1)', action: () => OS.viewport.toggleMode() },
-                { label: 'Toggle Desktop Widgets', action: () => toggleDesktopWidgets() },
-                { separator: true },
-                { label: 'Switch Appearance Theme', action: () => cycleTheme() },
-                { label: 'Next Sequoia Wallpaper', action: () => changeWallpaperContext(true) }
-            ]
-        },
-        {
-            key: 'window',
-            label: 'Window',
-            items: [
-                { label: 'Minimize', shortcut: '⌘M', disabled: !activeWindowId, action: () => { if (activeWindowId) minimizeWindow(activeWindowId); } },
-                { label: 'Zoom / Fill', disabled: !activeWindowId, action: () => { if (activeWindowId) toggleMaximizeWindow(activeWindowId); } },
-                { separator: true },
-                { label: 'Tile Window to Left of Screen', disabled: !activeWindowId, action: () => { if (activeWindowId) tileWindow(activeWindowId, 'left'); } },
-                { label: 'Tile Window to Right of Screen', disabled: !activeWindowId, action: () => { if (activeWindowId) tileWindow(activeWindowId, 'right'); } },
-                { label: 'Tile Top-Left Quarter', disabled: !activeWindowId, action: () => { if (activeWindowId) tileWindow(activeWindowId, 'nw'); } },
-                { label: 'Tile Bottom-Right Quarter', disabled: !activeWindowId, action: () => { if (activeWindowId) tileWindow(activeWindowId, 'se'); } },
-                { separator: true },
-                {
-                    label: 'Move to Space',
-                    disabled: !activeWindowId,
-                    submenu: () => virtualDesktops.map(d => ({
-                        label: `Space ${d}`,
-                        action: () => { if (activeWindowId) moveWindowToSpace(activeWindowId, d); }
-                    }))
-                },
-                { separator: true },
-                { label: 'Bring All to Front', action: () => showDesktop(false) }
-            ]
-        },
-        {
-            key: 'help',
-            label: 'Help',
-            items: [
-                { label: 'Spotlight Search...', shortcut: '⌘K', action: () => toggleSpotlight(true) },
-                { label: 'Ask Apple Intelligence...', action: () => launchOrFocusApp('ai-assistant') },
-                { label: 'macOS Sequoia Release Notes', action: () => OS.openFile('/Users/eugene/Downloads/Release_Notes_15_1.md') }
-            ]
-        }
+        { key: 'app', label: appTitle, bold: true, items: [
+            { label: `About ${appTitle}`, disabled: true }, { separator: true },
+            { label: 'Settings…', shortcut: '⌘,', action: () => launchOrFocusApp('settings') }, { separator: true },
+            { label: `Hide ${appTitle}`, shortcut: '⌘H', action: () => sameApp().forEach(id => { openWindows[id].isHidden = true; openWindows[id].element.style.display = 'none'; }) },
+            { label: 'Show All', action: () => Object.values(openWindows).forEach(w => { w.isHidden = false; if (!w.isMinimized && w.element) w.element.style.display = 'flex'; }) }, { separator: true },
+            { label: `Quit ${appTitle}`, shortcut: '⌘Q', action: () => sameApp().forEach(id => closeWindow(id)) }
+        ] },
+        ...titles.map(t => ({ key: t.toLowerCase(), label: t, items: defs[t] || [] }))
     ];
 }
 
@@ -3739,33 +3831,29 @@ function updateTopAppMenuBar(appId) {
 
 // About This Mac Modal
 function openAboutThisMacModal() {
-    let modal = document.getElementById('about-mac-modal');
-    if (modal) modal.remove();
-    modal = document.createElement('div');
+    document.getElementById('about-mac-modal')?.remove();
+    const cores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency}-core` : 'Unavailable';
+    const mem = navigator.deviceMemory ? `${navigator.deviceMemory}${navigator.deviceMemory >= 8 ? '+' : ''} GB` : 'Unavailable';
+    const plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || 'Web';
+    const modal = document.createElement('div');
     modal.id = 'about-mac-modal';
-    modal.className = 'fixed inset-0 z-[19000] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4';
+    modal.className = 'about-win';
+    modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-label', 'About This Mac');
     modal.innerHTML = `
-        <div class="bg-[var(--surface-bg-solid)] border border-[var(--border-color)] rounded-2xl shadow-2xl w-80 p-6 text-center relative animate-[menuFadeIn_0.15s_ease-out]">
-            <button class="tl-btn tl-close absolute top-3.5 left-3.5 !text-black/70" onclick="document.getElementById('about-mac-modal').remove()">×</button>
-            <div class="w-20 h-14 mx-auto mb-3 rounded-lg bg-gradient-to-tr from-slate-800 via-indigo-900 to-sky-600 border-2 border-slate-300/80 flex items-center justify-center shadow-lg">
-                <i class="fab fa-apple text-2xl text-white"></i>
-            </div>
-            <h2 class="text-lg font-bold">MacBook Pro</h2>
-            <p class="text-xs opacity-65 mb-4">16-inch, Nov 2024 • Space Black</p>
-            <div class="text-xs space-y-1.5 text-left bg-[var(--surface-overlay-bg)] p-3 rounded-xl border border-[var(--border-color)] mb-4">
-                <div class="flex justify-between"><span class="opacity-65">Chip</span><span class="font-semibold">Apple M3 Max (16-core)</span></div>
-                <div class="flex justify-between"><span class="opacity-65">Memory</span><span class="font-semibold">64 GB Unified LPDDR5X</span></div>
-                <div class="flex justify-between"><span class="opacity-65">macOS</span><span class="font-semibold">Sequoia 15.1 (24B83)</span></div>
-                <div class="flex justify-between"><span class="opacity-65">Startup Disk</span><span class="font-semibold">Macintosh HD (VFS)</span></div>
-                <div class="flex justify-between"><span class="opacity-65">Serial Number</span><span class="font-mono text-[11px]">C02ZTC5TC7M3</span></div>
-            </div>
-            <div class="flex justify-center gap-2">
-                <button class="action-button !text-xs" onclick="document.getElementById('about-mac-modal').remove(); launchOrFocusApp('settings');">More Info...</button>
-                <button class="mac-btn-secondary !text-xs" onclick="document.getElementById('about-mac-modal').remove(); launchOrFocusApp('system-monitor');">Activity Monitor</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
+        <div class="about-title"><button class="tl-btn tl-close" aria-label="Close" onclick="document.getElementById('about-mac-modal').remove()"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1.6 1.6l4.8 4.8M6.4 1.6L1.6 6.4"/></svg></button></div>
+        <svg class="about-hero" viewBox="0 0 120 84" aria-hidden="true"><defs><linearGradient id="abS" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3f77d6"/><stop offset="1" stop-color="#1b2a58"/></linearGradient></defs>
+            <rect x="14" y="4" width="92" height="62" rx="6" fill="#2a2c33" stroke="#9aa0ab" stroke-width="1.5"/><rect x="19" y="9" width="82" height="52" rx="2.5" fill="url(#abS)"/>
+            <path d="M4 70h112l-6 8a4 4 0 0 1-3 1.5H13a4 4 0 0 1-3-1.5z" fill="#c9cdd5"/></svg>
+        <div class="about-name">OSWeb</div>
+        <div class="about-sub">Sequoia-style desktop</div>
+        <dl class="about-rows">
+            <dt>Processor</dt><dd>${escapeHtml(cores)}</dd>
+            <dt>Memory</dt><dd>${escapeHtml(mem)}</dd>
+            <dt>Platform</dt><dd>${escapeHtml(plat)}</dd>
+            <dt>Version</dt><dd>OSWeb 0.2</dd>
+        </dl>
+        <button class="mac-btn-secondary about-more" onclick="document.getElementById('about-mac-modal').remove(); launchOrFocusApp('settings');">More Info…</button>`;
+    document.getElementById('macos-viewport-root').appendChild(modal);
 }
 
 // Force Quit Applications Dialog (Cmd+Opt+Esc)
@@ -4114,33 +4202,27 @@ function toggleMissionControl(force) {
     const spacesBar = document.getElementById('mc-spaces-bar');
     const winGrid = document.getElementById('mc-windows-grid');
 
-    spacesBar.innerHTML = virtualDesktops.map(d => `
-        <button class="px-4 py-2 rounded-xl text-xs font-semibold border transition ${d === currentVirtualDesktop ? 'bg-sky-500 text-white border-sky-400 shadow-lg' : 'bg-white/10 text-white/80 border-white/15 hover:bg-white/20'}"
-            onclick="switchVirtualDesktop(${d}); toggleMissionControl(true);">
-            Desktop Space ${d}
-        </button>
-    `).join('') + `<button class="px-3 py-2 rounded-xl text-xs bg-white/10 text-white hover:bg-white/20" onclick="addVirtualDesktop(); toggleMissionControl(true);">+ New Space</button>`;
+    spacesBar.innerHTML = virtualDesktops.map(d => `<button class="mc-space${d === currentVirtualDesktop ? ' cur' : ''}" onclick="switchVirtualDesktop(${d}); toggleMissionControl(true);" aria-label="Desktop ${d}"><span class="mc-space-thumb"></span><span>Desktop ${d}</span></button>`).join('')
+        + `<button class="mc-add" onclick="addVirtualDesktop(); toggleMissionControl(true);" aria-label="Add Desktop">+</button>`;
 
-    const spaceWins = Object.values(openWindows).filter(w => w.virtualDesktop === currentVirtualDesktop);
-    if (spaceWins.length === 0) {
-        winGrid.innerHTML = `<div class="col-span-full text-center text-white/60 text-sm">No open windows on Space ${currentVirtualDesktop}. Click any app in the Dock or press ESC.</div>`;
-    } else {
-        winGrid.innerHTML = spaceWins.map(w => `
-            <div class="w-72 bg-slate-900/85 border border-white/25 rounded-2xl p-4 cursor-pointer hover:scale-105 hover:border-sky-400 transition shadow-2xl text-white"
-                onclick="toggleMissionControl(false); restoreWindow('${escapeHtml(w.id)}');">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-2">
-                        <span class="w-6 h-6 inline-block">${getAppIconSVG(w.appId)}</span>
-                        <span class="text-xs font-bold">${escapeHtml(w.title)}</span>
-                    </div>
-                    <span class="text-[10px] font-mono opacity-60">PID ${w.pid}</span>
-                </div>
-                <div class="h-28 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center text-xs text-white/70">
-                    Click to Focus Window
-                </div>
-            </div>
-        `).join('');
-    }
+    const spaceWins = Object.values(openWindows).filter(w => w.virtualDesktop === currentVirtualDesktop && w.element);
+    winGrid.innerHTML = '';
+    spaceWins.forEach(w => {
+        const el = w.element, ww = el.offsetWidth || parseInt(el.style.width) || 600, wh = el.offsetHeight || parseInt(el.style.height) || 400;
+        const k = Math.min(1, 300 / ww, 220 / wh);
+        const card = document.createElement('button');
+        card.className = 'mc-card'; card.setAttribute('aria-label', w.title);
+        const thumb = document.createElement('div'); thumb.className = 'mc-thumb'; thumb.style.width = `${Math.round(ww * k)}px`; thumb.style.height = `${Math.round(wh * k)}px`;
+        const clone = el.cloneNode(true);
+        clone.removeAttribute('id'); clone.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
+        clone.style.cssText = `position:absolute;left:0;top:0;width:${ww}px;height:${wh}px;transform:scale(${k});transform-origin:0 0;display:flex;opacity:1;pointer-events:none;`;
+        clone.classList.remove('minimizing', 'closing'); clone.querySelectorAll('iframe,canvas,video,audio').forEach(n => n.remove());
+        thumb.appendChild(clone);
+        const label = document.createElement('div'); label.className = 'mc-label'; label.textContent = w.title;
+        card.append(thumb, label);
+        card.addEventListener('click', () => { toggleMissionControl(false); if (w.isMinimized) restoreWindow(w.id); else focusWindow(w.id); });
+        winGrid.appendChild(card);
+    });
     overlay.classList.add('active');
 }
 
@@ -4160,15 +4242,14 @@ function toggleLaunchpad(force) {
 
     const renderGrid = (filter = '') => {
         const q = filter.toLowerCase().trim();
-        const ids = Object.keys(appConfig).filter(id => id !== 'app-launcher' && id !== 'task-manager');
+        const ids = Object.keys(appConfig).filter(id => !HIDDEN_FROM_LAUNCHERS.has(id));
         grid.innerHTML = ids
             .filter(id => !q || appConfig[id].title.toLowerCase().includes(q) || id.includes(q))
             .map(id => `
-                <div class="flex flex-col items-center gap-2 cursor-pointer group w-24 text-center"
-                    onclick="toggleLaunchpad(false); launchOrFocusApp('${escapeHtml(id)}');">
-                    <div class="w-16 h-16 transition-transform group-hover:scale-110">${getAppIconSVG(id)}</div>
-                    <span class="text-xs font-semibold text-white px-2 py-0.5 rounded-md bg-black/35 shadow-sm" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9);">${escapeHtml(appConfig[id].title)}</span>
-                </div>
+                <button class="lp-app" onclick="toggleLaunchpad(false); launchOrFocusApp('${escapeHtml(id)}');" aria-label="${escapeHtml(appConfig[id].title)}">
+                    <span class="lp-ico">${getAppIconSVG(id)}</span>
+                    <span class="lp-name">${escapeHtml(appConfig[id].title)}</span>
+                </button>
             `).join('');
     };
 
@@ -4191,7 +4272,9 @@ function toggleLaunchpad(force) {
     overlay.classList.add('active');
 }
 
-// Spotlight Search Overlay (Cmd+K / Cmd+Space)
+const HIDDEN_FROM_LAUNCHERS = new Set(['app-launcher', 'task-manager', 'chrome', 'slack', 'spotify', 'vscode', 'code-studio']);
+
+// Spotlight Search Overlay (Cmd+Space)
 function toggleSpotlight(force, initialQuery = '') {
     const overlay = document.getElementById('spotlight-overlay');
     const input = document.getElementById('spotlight-input');
@@ -4227,10 +4310,11 @@ function toggleSpotlight(force, initialQuery = '') {
 
         // 2. Applications
         Object.entries(appConfig).forEach(([id, cfg]) => {
+            if (HIDDEN_FROM_LAUNCHERS.has(id)) return;
             if (!q || cfg.title.toLowerCase().includes(lower) || id.toLowerCase().includes(lower)) {
                 items.push({
                     title: cfg.title,
-                    sub: 'Application — /Applications',
+                    sub: 'Application',
                     icon: getAppIconSVG(id),
                     action: () => { toggleSpotlight(false); launchOrFocusApp(id); }
                 });
@@ -4250,31 +4334,18 @@ function toggleSpotlight(force, initialQuery = '') {
             }
         });
 
-        // 4. Apple Intelligence Syscall Option
-        if (q.length > 2) {
-            items.push({
-                title: `Ask Apple Intelligence: "${q}"`,
-                sub: 'Execute OS Syscall or Query Local Neural Engine',
-                icon: getAppIconSVG('ai-assistant'),
-                action: async () => {
-                    toggleSpotlight(false);
-                    launchOrFocusApp('ai-assistant', { prompt: q });
-                }
-            });
+        // 4. Web search (opens the in-OS browser)
+        if (q.length > 1 && items.length < 3) {
+            items.push({ title: `Search the Web for "${q}"`, sub: 'Safari', icon: getAppIconSVG('web-browser'),
+                action: () => { toggleSpotlight(false); launchOrFocusApp('web-browser', { url: 'https://duckduckgo.com/?q=' + encodeURIComponent(q) }); } });
         }
 
-        results.innerHTML = items.slice(0, 12).map((it, i) => `
-            <div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-500/25 cursor-pointer transition" data-idx="${i}">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 flex-shrink-0">${it.icon}</div>
-                    <div>
-                        <div class="text-xs font-semibold text-[var(--text-primary)]">${escapeHtml(it.title)}</div>
-                        <div class="text-[11px] text-[var(--text-secondary)]">${escapeHtml(it.sub)}</div>
-                    </div>
-                </div>
-                <span class="text-[10px] opacity-60 font-mono">↵ Open</span>
-            </div>
-        `).join('');
+        const shown = items.slice(0, 9);
+        results.innerHTML = shown.length ? `<div class="sl-head">${q ? 'Top Hit' : 'Suggestions'}</div>` + shown.map((it, i) => `
+            <div class="sl-row${i === 0 ? ' sel' : ''}" role="option" data-idx="${i}">
+                <div class="sl-ico">${it.icon}</div>
+                <div class="sl-txt"><div class="sl-title">${escapeHtml(it.title)}</div><div class="sl-sub">${escapeHtml(it.sub)}</div></div>
+            </div>`).join('') : '';
 
         results.querySelectorAll('[data-idx]').forEach(row => {
             row.addEventListener('click', () => {
@@ -4288,6 +4359,13 @@ function toggleSpotlight(force, initialQuery = '') {
     renderResults(initialQuery);
     input.oninput = () => renderResults(input.value);
     input.onkeydown = (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            const rows = [...results.querySelectorAll('.sl-row')]; if (!rows.length) return;
+            let i = rows.findIndex(r => r.classList.contains('sel')); rows[i]?.classList.remove('sel');
+            i = (i + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length; rows[i].classList.add('sel'); rows[i].scrollIntoView({ block: 'nearest' });
+            return;
+        }
         if (e.key === 'Escape' || e.code === 'Escape') {
             e.preventDefault();
             e.stopPropagation();
@@ -4295,7 +4373,7 @@ function toggleSpotlight(force, initialQuery = '') {
             return;
         }
         if (e.key === 'Enter') {
-            const first = results.querySelector('[data-idx="0"]');
+            const first = results.querySelector('.sl-row.sel') || results.querySelector('[data-idx="0"]');
             if (first) first.click();
         }
     };
@@ -4314,58 +4392,37 @@ function toggleSpotlight(force, initialQuery = '') {
 // --- 8.1 Finder (`file-explorer`) ---
 function renderFinderContent() {
     return `
-        <div class="flex flex-col h-full text-xs">
-            <!-- Finder Toolbar -->
-            <div class="flex items-center justify-between px-3 py-2 bg-[var(--surface-overlay-bg)] border-b border-[var(--border-color)] gap-2 flex-wrap">
-                <div class="flex items-center gap-1.5">
-                    <button data-role="back-btn" class="mac-btn-secondary !py-1 !px-2" title="Back"><i class="fas fa-chevron-left"></i></button>
-                    <button data-role="up-btn" class="mac-btn-secondary !py-1 !px-2" title="Enclosing Folder"><i class="fas fa-arrow-up"></i></button>
-                    <span data-role="current-folder-name" class="font-bold text-sm ml-1.5">eugene</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <div class="inline-flex rounded-lg border border-[var(--border-color)] overflow-hidden">
-                        <button data-role="view-grid" class="px-2.5 py-1 bg-sky-500 text-white" title="Icon Grid View"><i class="fas fa-border-all"></i></button>
-                        <button data-role="view-list" class="px-2.5 py-1 bg-[var(--surface-overlay-bg)]" title="List View"><i class="fas fa-list"></i></button>
+        <div class="fx-root">
+            <aside class="fx-sidebar" aria-label="Sidebar">
+                <div class="fx-side-head">Favorites</div>
+                <button data-nav="/Users/eugene" class="fx-side-item">${sf('house')}<span>Home</span></button><button data-nav="/Users/eugene/Desktop" class="fx-side-item">${sf('desktopcomputer')}<span>Desktop</span></button><button data-nav="/Users/eugene/Documents" class="fx-side-item">${sf('doc')}<span>Documents</span></button><button data-nav="/Users/eugene/Developer" class="fx-side-item">${sf('chevron.left.forwardslash.chevron.right')}<span>Developer</span></button><button data-nav="/Users/eugene/Pictures" class="fx-side-item">${sf('photo')}<span>Pictures</span></button><button data-nav="/Users/eugene/Music" class="fx-side-item">${sf('music.note')}<span>Music</span></button><button data-nav="/Users/eugene/Downloads" class="fx-side-item">${sf('arrow.down.circle')}<span>Downloads</span></button>
+                <div class="fx-side-head">Locations</div>
+                <button data-nav="/" class="fx-side-item">${sf('internaldrive')}<span>Macintosh HD</span></button><button data-nav="/Applications" class="fx-side-item">${sf('app')}<span>Applications</span></button>
+            </aside>
+            <section class="fx-main">
+                <div class="fx-toolbar">
+                    <button data-role="back-btn" class="fx-tb" title="Back" aria-label="Back">${sf('chevron.left')}</button>
+                    <button data-role="up-btn" class="fx-tb" title="Enclosing Folder" aria-label="Enclosing Folder">${sf('arrow.up')}</button>
+                    <span data-role="current-folder-name" class="fx-title">eugene</span>
+                    <span class="fx-spacer"></span>
+                    <div class="fx-seg" role="group" aria-label="View">
+                        <button data-role="view-grid" class="fx-seg-btn on" title="as Icons" aria-label="as Icons">${sf('square.grid.2x2')}</button>
+                        <button data-role="view-list" class="fx-seg-btn" title="as List" aria-label="as List">${sf('list.bullet')}</button>
                     </div>
-                    <button data-role="quicklook-btn" class="mac-btn-secondary !py-1 !px-2" title="Quick Look (Space)"><i class="far fa-eye"></i> Quick Look</button>
-                    <button data-role="new-folder-btn" class="mac-btn-secondary !py-1 !px-2"><i class="fas fa-folder-plus text-sky-400"></i> New Folder</button>
-                    <button data-role="new-file-btn" class="action-button !py-1 !px-2.5"><i class="fas fa-file-circle-plus"></i> New File</button>
+                    <button data-role="quicklook-btn" class="fx-tb" title="Quick Look" aria-label="Quick Look">${sf('eye')}</button>
+                    <button data-role="new-folder-btn" class="fx-tb" title="New Folder" aria-label="New Folder">${sf('folder.badge.plus')}</button>
+                    <button data-role="new-file-btn" class="fx-tb" title="New File" aria-label="New File">${sf('doc.badge.plus')}</button>
+                    <label class="fx-search">${sf('magnifyingglass', 12)}<input data-role="search-input" type="search" placeholder="Search" aria-label="Search" /></label>
                 </div>
-                <div class="relative">
-                    <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] opacity-60"></i>
-                    <input data-role="search-input" type="search" placeholder="Search Finder" class="bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] rounded-lg py-1 pl-7 pr-2 text-xs outline-none w-36 focus:w-48 transition-all"/>
+                <div class="fx-body">
+                    <div data-role="items-container" class="fx-items"></div>
+                    <div data-role="quicklook-pane" class="fx-ql hidden flex-col"></div>
                 </div>
-            </div>
-
-            <!-- Finder Main Body -->
-            <div class="flex flex-1 overflow-hidden">
-                <!-- Favorites Sidebar -->
-                <div class="w-44 border-r border-[var(--border-color)] bg-[var(--surface-overlay-bg)] p-2 space-y-0.5 overflow-y-auto flex-shrink-0">
-                    <div class="text-[10px] font-bold uppercase opacity-55 px-2 py-1">Favorites</div>
-                    <button data-nav="/Users/eugene" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-sky-500/20 text-left"><i class="fas fa-house text-sky-400 w-4"></i> Home</button>
-                    <button data-nav="/Users/eugene/Desktop" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-sky-500/20 text-left"><i class="fas fa-desktop text-sky-400 w-4"></i> Desktop</button>
-                    <button data-nav="/Users/eugene/Documents" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-sky-500/20 text-left"><i class="fas fa-file-lines text-sky-400 w-4"></i> Documents</button>
-                    <button data-nav="/Users/eugene/Developer" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-sky-500/20 text-left"><i class="fas fa-code text-sky-400 w-4"></i> Developer</button>
-                    <button data-nav="/Users/eugene/Pictures" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-sky-500/20 text-left"><i class="fas fa-image text-purple-400 w-4"></i> Pictures</button>
-                    <button data-nav="/Users/eugene/Music" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-sky-500/20 text-left"><i class="fas fa-music text-rose-400 w-4"></i> Music</button>
-                    <button data-nav="/Users/eugene/Downloads" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-sky-500/20 text-left"><i class="fas fa-circle-arrow-down text-emerald-400 w-4"></i> Downloads</button>
-                    <div class="text-[10px] font-bold uppercase opacity-55 px-2 pt-3 pb-1">Locations</div>
-                    <button data-nav="/" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-sky-500/20 text-left"><i class="fas fa-hard-drive text-slate-400 w-4"></i> Macintosh HD</button>
-                    <button data-nav="/Applications" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-sky-500/20 text-left"><i class="fab fa-app-store-ios text-sky-400 w-4"></i> Applications</button>
+                <div class="fx-path">
+                    <div data-role="path-breadcrumbs" class="fx-crumbs"></div>
+                    <div data-role="status-count" class="fx-status"></div>
                 </div>
-
-                <!-- File View Canvas + Quick Look Drawer -->
-                <div class="flex-1 flex overflow-hidden">
-                    <div data-role="items-container" class="flex-1 p-3 overflow-y-auto"></div>
-                    <div data-role="quicklook-pane" class="w-64 border-l border-[var(--border-color)] bg-[var(--surface-overlay-bg)] p-3 overflow-y-auto hidden flex-col"></div>
-                </div>
-            </div>
-
-            <!-- Finder Path & Status Bar -->
-            <div class="flex items-center justify-between px-3 py-1.5 border-t border-[var(--border-color)] bg-[var(--surface-overlay-bg)] text-[11px] opacity-80">
-                <div data-role="path-breadcrumbs" class="flex items-center gap-1 font-mono truncate"></div>
-                <div data-role="status-count">0 items • 482 GB available on Macintosh HD</div>
-            </div>
+            </section>
         </div>
     `;
 }
@@ -4442,8 +4499,7 @@ function initFinder(winEl, windowData, options = {}) {
 
         // Sidebar active state
         winEl.querySelectorAll('[data-nav]').forEach(btn => {
-            btn.classList.toggle('bg-sky-500/25', btn.dataset.nav === state.cwd);
-            btn.classList.toggle('font-semibold', btn.dataset.nav === state.cwd);
+            btn.classList.toggle('sel', btn.dataset.nav === state.cwd);
         });
 
         let entries = [];
@@ -4600,14 +4656,14 @@ function initFinder(winEl, windowData, options = {}) {
     };
     gridBtn.onclick = () => {
         state.viewMode = 'grid';
-        gridBtn.className = 'px-2.5 py-1 bg-sky-500 text-white';
-        listBtn.className = 'px-2.5 py-1 bg-[var(--surface-overlay-bg)]';
+        gridBtn.className = 'fx-seg-btn on';
+        listBtn.className = 'fx-seg-btn';
         render();
     };
     listBtn.onclick = () => {
         state.viewMode = 'list';
-        listBtn.className = 'px-2.5 py-1 bg-sky-500 text-white';
-        gridBtn.className = 'px-2.5 py-1 bg-[var(--surface-overlay-bg)]';
+        listBtn.className = 'fx-seg-btn on';
+        gridBtn.className = 'fx-seg-btn';
         render();
     };
     searchInput.oninput = () => {
@@ -7585,6 +7641,7 @@ function initSettings(winEl) {
 
 const appConfig = {
     'file-explorer': {
+        unified: true,
         title: 'Finder',
         width: 840,
         height: 520,

@@ -1,0 +1,47 @@
+
+        /* ===================================================================
+         * Round 2C — control kit, unified window chrome, Finder
+         * =================================================================== */
+        .action-button { height: 22px; padding: 0 12px; border-radius: 5px; font-size: 13px; font-weight: 400; background: linear-gradient(180deg, #4c97ff, #0a6cff); box-shadow: 0 0.5px 1px rgba(0,0,0,0.3), inset 0 0.5px 0 rgba(255,255,255,0.3); }
+        .mac-btn-secondary { height: 22px; padding: 0 10px; border-radius: 5px; font-size: 13px; font-weight: 400; background: rgba(255,255,255,0.12); border: 0.5px solid rgba(255,255,255,0.12); box-shadow: 0 0.5px 1px rgba(0,0,0,0.25); }
+        body.light-mode .mac-btn-secondary { background: #fff; border-color: rgba(0,0,0,0.12); box-shadow: 0 0.5px 1px rgba(0,0,0,0.12); }
+        .sf { display: block; flex-shrink: 0; }
+
+        /* Unified title+toolbar: traffic lights float over the sidebar/toolbar, titlebar is the drag strip underneath */
+        .window.unified .window-title-bar { position: absolute; top: 0; left: 0; right: 0; height: 52px; min-height: 52px; background: transparent; border-bottom: 0; z-index: 3; }
+        .window.unified .window-title-text { display: none; }
+        .window.unified .traffic-lights { position: absolute; left: 13px; top: 20px; z-index: 6; }
+        .window.unified .window-content { position: static; flex: 1; background: var(--window-content-bg); }
+
+        /* Finder */
+        .fx-root { display: flex; height: 100%; font-size: 13px; }
+        .fx-sidebar { width: 200px; flex-shrink: 0; padding: 52px 10px 10px; overflow-y: auto; background: rgba(40,40,44,0.55); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border-right: 0.5px solid rgba(255,255,255,0.08); }
+        body.light-mode .fx-sidebar { background: rgba(236,236,238,0.7); border-right-color: rgba(0,0,0,0.1); }
+        .fx-side-head { font-size: 11px; font-weight: 600; color: var(--text-muted); padding: 10px 8px 3px; }
+        .fx-side-item { display: flex; align-items: center; gap: 8px; width: 100%; height: 28px; padding: 0 8px; border-radius: 6px; text-align: left; color: var(--text-primary); }
+        .fx-side-item .sf { color: var(--accent-color); } .fx-side-item:hover { background: rgba(255,255,255,0.06); }
+        .fx-side-item.sel { background: rgba(255,255,255,0.14); } body.light-mode .fx-side-item.sel { background: rgba(0,0,0,0.1); }
+        .fx-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .fx-toolbar { height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 12px 0 8px; pointer-events: none; position: relative; z-index: 5; }
+        .fx-toolbar > * { pointer-events: auto; }
+        .fx-spacer { flex: 1; pointer-events: none !important; }
+        .fx-title { font-size: 15px; font-weight: 700; margin-left: 6px; white-space: nowrap; pointer-events: none !important; letter-spacing: -0.01em; }
+        .fx-tb { width: 30px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: var(--text-secondary); }
+        .fx-tb:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+        .fx-seg { display: inline-flex; padding: 2px; gap: 1px; border-radius: 7px; background: rgba(255,255,255,0.1); }
+        .fx-seg-btn { width: 30px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 5px; color: var(--text-secondary); }
+        .fx-seg-btn.on { background: rgba(255,255,255,0.2); color: var(--text-primary); box-shadow: 0 0.5px 1px rgba(0,0,0,0.3); }
+        body.light-mode .fx-seg { background: rgba(0,0,0,0.07); } body.light-mode .fx-seg-btn.on { background: #fff; }
+        .fx-search { display: flex; align-items: center; gap: 5px; height: 24px; width: 150px; padding: 0 8px; border-radius: 6px; background: rgba(255,255,255,0.1); color: var(--text-muted); }
+        .fx-search input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none !important; font-size: 13px; color: var(--text-primary); }
+        body.light-mode .fx-search, body.light-mode .fx-tb:hover { background: rgba(0,0,0,0.06); }
+        .fx-body { flex: 1; display: flex; min-height: 0; border-top: 0.5px solid rgba(255,255,255,0.08); }
+        body.light-mode .fx-body { border-top-color: rgba(0,0,0,0.1); }
+        .fx-items { flex: 1; padding: 14px; overflow-y: auto; }
+        .fx-ql { width: 240px; border-left: 0.5px solid var(--border-color); padding: 14px; overflow-y: auto; }
+        .fx-path { height: 24px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; font-size: 11px; color: var(--text-secondary); border-top: 0.5px solid var(--border-color); }
+        .fx-crumbs { display: flex; align-items: center; gap: 4px; overflow: hidden; white-space: nowrap; font-family: var(--font-sans) !important; }
+        .window[data-app="file-explorer"] .finder-item.bg-sky-500\/25, .window[data-app="file-explorer"] tr.bg-sky-500\/25 { background: rgba(255,255,255,0.12) !important; border-color: transparent !important; }
+        .window[data-app="file-explorer"] .finder-item { border-radius: 6px; font-size: 12px; }
+        .window[data-app="file-explorer"] .finder-item .border-sky-400 { border-color: transparent; }
+        @media (max-width: 600px) { .fx-sidebar { display: none; } .fx-search { width: 110px; } .fx-toolbar { padding-left: 12px; } .window.unified .traffic-lights { display: none !important; } }
