@@ -1,0 +1,14 @@
+
+        /* ===================================================================
+         * Round 8A — virtual desktops (Spaces)
+         * =================================================================== */
+        @keyframes spaceInR { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: none; } }
+        @keyframes spaceInL { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: none; } }
+        .window.space-in-r { animation: spaceInR .26s cubic-bezier(.2,.9,.3,1); } .window.space-in-l { animation: spaceInL .26s cubic-bezier(.2,.9,.3,1); }
+        .mc-space-wrap { position: relative; }
+        .mc-space-x { position: absolute; top: -6px; left: -6px; width: 20px; height: 20px; border-radius: 50%; background: rgba(40,40,44,0.9); color: #fff; font-size: 14px; line-height: 18px; text-align: center; opacity: 0; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.4); z-index: 2; }
+        .mc-space-wrap:hover .mc-space-x, .mc-space-x:focus-visible { opacity: 1; }
+        @media (pointer: coarse) { .mc-space-x { opacity: 1; width: 26px; height: 26px; font-size: 18px; line-height: 24px; } }
+        .mc-space.drop .mc-space-thumb { box-shadow: 0 0 0 3px #0A84FF; transform: scale(1.04); }
+        .mc-ghost { position: fixed; z-index: 30000; pointer-events: none; transform: translate(-50%, -50%) scale(.5); opacity: .85; border-radius: 10px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,0.5); }
+        .mc-card { touch-action: none; }

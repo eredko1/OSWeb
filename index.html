@@ -1546,6 +1546,20 @@
         body.touch-small .tl-btn::after { inset: -14px -8px; }
         body.touch-small .window-title-bar { min-height: 34px; }
         body.touch-small button, body.touch-small [role="button"], body.touch-small .st-item, body.touch-small .finder-item { touch-action: manipulation; cursor: pointer; }
+
+        /* ===================================================================
+         * Round 8A — virtual desktops (Spaces)
+         * =================================================================== */
+        @keyframes spaceInR { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: none; } }
+        @keyframes spaceInL { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: none; } }
+        .window.space-in-r { animation: spaceInR .26s cubic-bezier(.2,.9,.3,1); } .window.space-in-l { animation: spaceInL .26s cubic-bezier(.2,.9,.3,1); }
+        .mc-space-wrap { position: relative; }
+        .mc-space-x { position: absolute; top: -6px; left: -6px; width: 20px; height: 20px; border-radius: 50%; background: rgba(40,40,44,0.9); color: #fff; font-size: 14px; line-height: 18px; text-align: center; opacity: 0; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.4); z-index: 2; }
+        .mc-space-wrap:hover .mc-space-x, .mc-space-x:focus-visible { opacity: 1; }
+        @media (pointer: coarse) { .mc-space-x { opacity: 1; width: 26px; height: 26px; font-size: 18px; line-height: 24px; } }
+        .mc-space.drop .mc-space-thumb { box-shadow: 0 0 0 3px #0A84FF; transform: scale(1.04); }
+        .mc-ghost { position: fixed; z-index: 30000; pointer-events: none; transform: translate(-50%, -50%) scale(.5); opacity: .85; border-radius: 10px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,0.5); }
+        .mc-card { touch-action: none; }
     </style>
 </head>
 <body>
@@ -1675,6 +1689,7 @@
         <!-- Control Center Modules -->
         <div class="flex items-center justify-between mb-3">
             <h2 class="text-xs font-bold uppercase tracking-wider opacity-70">Control Center</h2>
+            <button id="cc-mission-btn" class="mac-btn-secondary !py-1 !px-2 !text-[11px]">Mission Control</button>
             <button id="cc-toggle-widgets-btn" class="mac-btn-secondary !py-1 !px-2 !text-[11px]">Toggle Widgets</button>
         </div>
 
@@ -2025,6 +2040,8 @@ function getAppIconSVG(appId) {
     const dayNum = now.getDate();
 
     const icons = {
+        'mission-control': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="mcBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4252"/><stop offset="1" stop-color="#1c2029"/></linearGradient></defs><rect x="4" y="4" width="56" height="56" rx="13" fill="url(#mcBg)"/><rect x="11" y="14" width="42" height="9" rx="2.5" fill="#9fb4d6" opacity=".9"/><rect x="11" y="27" width="19" height="22" rx="3" fill="#e8eef8"/><rect x="34" y="27" width="19" height="22" rx="3" fill="#e8eef8"/></svg>`,
+
         'file-explorer': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="finL" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38B6FF"/><stop offset="100%" stop-color="#1473E6"/></linearGradient>
@@ -3547,6 +3564,10 @@ function launchOrFocusApp(appId, options = {}) {
         toggleLaunchpad();
         return null;
     }
+    if (appId === 'mission-control') {
+        toggleMissionControl(true);
+        return null;
+    }
     // Check if an instance already exists on current space (unless forceNew)
     if (!options.forceNew) {
         const existingId = Object.keys(openWindows).find(id => openWindows[id].appId === appId && !openWindows[id].isClosing);
@@ -3785,7 +3806,7 @@ function moveWindowToSpace(windowId, targetSpaceId) {
     } else if (!winData.isMinimized) {
         winData.element.style.display = 'flex';
     }
-    showTemporaryMessage(`Moved ${winData.title} to Space ${targetSpaceId}`, 1600);
+    showTemporaryMessage(`Moved ${winData.title} to ${desktopLabel(targetSpaceId)}`, 1600);
     renderVirtualDesktopButtons();
 }
 
@@ -4439,18 +4460,37 @@ function renderVirtualDesktopButtons() {
     });
 }
 
-function switchVirtualDesktop(spaceId) {
+function switchVirtualDesktop(spaceId, animate = true) {
+    if (!virtualDesktops.includes(spaceId)) return;
+    const changed = spaceId !== currentVirtualDesktop;
+    const dir = virtualDesktops.indexOf(spaceId) > virtualDesktops.indexOf(currentVirtualDesktop) ? 1 : -1;
     currentVirtualDesktop = spaceId;
     Object.values(openWindows).forEach(w => {
         if (!w.element) return;
-        if (w.virtualDesktop === spaceId && !w.isMinimized) {
+        if (w.virtualDesktop === spaceId && !w.isMinimized && !w.isHidden) {
             w.element.style.display = 'flex';
+            if (animate && changed) { w.element.classList.remove('space-in-l', 'space-in-r'); void w.element.offsetWidth; w.element.classList.add(dir > 0 ? 'space-in-r' : 'space-in-l'); setTimeout(() => w.element && w.element.classList.remove('space-in-l', 'space-in-r'), 320); }
         } else {
             w.element.style.display = 'none';
         }
     });
+    const front = Object.values(openWindows).filter(w => w.virtualDesktop === spaceId && !w.isMinimized && !w.isHidden && w.element).sort((a, b) => (parseInt(b.element.style.zIndex) || 0) - (parseInt(a.element.style.zIndex) || 0))[0];
+    if (changed) { if (front) focusWindow(front.id); else { activeWindowId = null; updateTopAppMenuBar(null); } }
     renderVirtualDesktopButtons();
+    if (typeof scheduleSessionSave === 'function') scheduleSessionSave();
 }
+
+// Remove a desktop: its windows move to the neighbouring desktop (like macOS).
+function removeVirtualDesktop(id) {
+    if (virtualDesktops.length <= 1) { showTemporaryMessage('You need at least one desktop.', 1600); return; }
+    const idx = virtualDesktops.indexOf(id); if (idx < 0) return;
+    const target = virtualDesktops[idx === 0 ? 1 : idx - 1];
+    Object.values(openWindows).forEach(w => { if (w.virtualDesktop === id) w.virtualDesktop = target; });
+    virtualDesktops.splice(idx, 1);
+    if (currentVirtualDesktop === id) switchVirtualDesktop(target, false); else switchVirtualDesktop(currentVirtualDesktop, false);
+    showTemporaryMessage(`Removed Desktop ${id}`, 1400);
+}
+function desktopLabel(id) { return `Desktop ${virtualDesktops.indexOf(id) + 1}`; }
 
 function addVirtualDesktop() {
     if (virtualDesktops.length >= 8) {
@@ -4460,7 +4500,7 @@ function addVirtualDesktop() {
     const newId = nextDesktopId++;
     virtualDesktops.push(newId);
     switchVirtualDesktop(newId);
-    showTemporaryMessage(`Created & switched to Space ${newId}`, 1500);
+    showTemporaryMessage(`Created ${desktopLabel(newId)}`, 1400);
 }
 
 let desktopShownState = false;
@@ -4488,7 +4528,7 @@ function toggleMissionControl(force) {
     const spacesBar = document.getElementById('mc-spaces-bar');
     const winGrid = document.getElementById('mc-windows-grid');
 
-    spacesBar.innerHTML = virtualDesktops.map(d => `<button class="mc-space${d === currentVirtualDesktop ? ' cur' : ''}" onclick="switchVirtualDesktop(${d}); toggleMissionControl(true);" aria-label="Desktop ${d}"><span class="mc-space-thumb"></span><span>Desktop ${d}</span></button>`).join('')
+    spacesBar.innerHTML = virtualDesktops.map(d => `<div class="mc-space-wrap"><button class="mc-space${d === currentVirtualDesktop ? ' cur' : ''}" data-space="${d}" onclick="switchVirtualDesktop(${d}); toggleMissionControl(true);" aria-label="${desktopLabel(d)}"><span class="mc-space-thumb"></span><span>${desktopLabel(d)}</span></button>${virtualDesktops.length > 1 ? `<button class="mc-space-x" aria-label="Remove ${desktopLabel(d)}" onclick="removeVirtualDesktop(${d}); toggleMissionControl(true);">&times;</button>` : ''}</div>`).join('')
         + `<button class="mc-add" onclick="addVirtualDesktop(); toggleMissionControl(true);" aria-label="Add Desktop">+</button>`;
 
     const spaceWins = Object.values(openWindows).filter(w => w.virtualDesktop === currentVirtualDesktop && w.element);
@@ -4506,7 +4546,20 @@ function toggleMissionControl(force) {
         thumb.appendChild(clone);
         const label = document.createElement('div'); label.className = 'mc-label'; label.textContent = w.title;
         card.append(thumb, label);
-        card.addEventListener('click', () => { toggleMissionControl(false); if (w.isMinimized) restoreWindow(w.id); else focusWindow(w.id); });
+        // click = open window; press-and-drag onto a desktop in the strip = move it there (works with touch)
+        let drag = null;
+        card.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY, moved: false, ghost: null }; card.setPointerCapture(e.pointerId); });
+        card.addEventListener('pointermove', (e) => {
+            if (!drag) return;
+            if (!drag.moved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 8) { drag.moved = true; drag.ghost = thumb.cloneNode(true); drag.ghost.className = 'mc-ghost'; document.body.appendChild(drag.ghost); }
+            if (drag.moved) { drag.ghost.style.left = e.clientX + 'px'; drag.ghost.style.top = e.clientY + 'px'; document.querySelectorAll('.mc-space').forEach(sp => { const r = sp.getBoundingClientRect(); sp.classList.toggle('drop', e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom); }); }
+        });
+        card.addEventListener('pointerup', (e) => {
+            if (!drag) return; const d = drag; drag = null; d.ghost && d.ghost.remove();
+            if (d.moved) { const tgt = document.elementFromPoint(e.clientX, e.clientY)?.closest?.('.mc-space'); document.querySelectorAll('.mc-space.drop').forEach(x => x.classList.remove('drop')); if (tgt) { moveWindowToSpace(w.id, Number(tgt.dataset.space)); toggleMissionControl(true); } return; }
+            toggleMissionControl(false); if (w.isMinimized) restoreWindow(w.id); else focusWindow(w.id);
+        });
+        card.addEventListener('pointercancel', () => { if (drag && drag.ghost) drag.ghost.remove(); drag = null; });
         winGrid.appendChild(card);
     });
     overlay.classList.add('active');
@@ -7732,6 +7785,7 @@ const appConfig = {
         content: () => renderFinderContent(),
         init: (winEl, winData, opts) => initFinder(winEl, winData, opts)
     },
+    'mission-control': { title: 'Mission Control', width: 10, height: 10, content: () => '' },
     'app-launcher': {
         title: 'Launchpad',
         width: 720,
@@ -8392,6 +8446,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('sidebar-toggle')?.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
     document.getElementById('clock')?.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
     document.getElementById('cc-toggle-widgets-btn')?.addEventListener('click', () => toggleDesktopWidgets());
+    document.getElementById('cc-mission-btn')?.addEventListener('click', () => { document.getElementById('right-sidebar')?.classList.add('hidden'); toggleMissionControl(true); });
 
     // Control Center Brightness & Sound Sliders
     document.getElementById('cc-brightness-slider')?.addEventListener('input', (e) => {
@@ -8525,7 +8580,7 @@ function serializeSession() {
         return { appId: w.appId, opts, space: w.virtualDesktop, min: !!w.isMinimized, max: !!(w.isMaximized || pre), z: parseInt(el.style.zIndex) || 0,
             rect: { left: pre ? pre.left : el.style.left, top: pre ? pre.top : el.style.top, width: pre ? pre.width : el.style.width, height: pre ? pre.height : el.style.height } };
     }).sort((a, b) => a.z - b.z);
-    return { v: 1, space: currentVirtualDesktop, active: activeWindowId && openWindows[activeWindowId] ? openWindows[activeWindowId].appId : null, windows: wins };
+    return { v: 1, spaces: virtualDesktops.slice(), nextSpace: nextDesktopId, space: currentVirtualDesktop, active: activeWindowId && openWindows[activeWindowId] ? openWindows[activeWindowId].appId : null, windows: wins };
 }
 let sessionSaveTimer = null;
 function scheduleSessionSave() {
@@ -8538,6 +8593,7 @@ function restoreSession() {
     let sess = null;
     try { sess = OS.store.get('session'); } catch (_) {}
     if (!sess || sess.v !== 1 || !Array.isArray(sess.windows) || !sess.windows.length) return false;
+    if (Array.isArray(sess.spaces) && sess.spaces.length && sess.spaces.length <= 8 && sess.spaces.every(n => Number.isInteger(n) && n > 0)) { virtualDesktops.length = 0; sess.spaces.forEach(n => virtualDesktops.push(n)); nextDesktopId = Math.max(Number(sess.nextSpace) || 0, ...sess.spaces) + 1; renderVirtualDesktopButtons(); }
     const b = OS.viewport.getDesktopBounds();
     const num = (v, d) => { const n = parseFloat(v); return Number.isFinite(n) ? n : d; };
     let made = 0;
