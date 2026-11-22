@@ -1770,7 +1770,7 @@
                         <p class="text-xs font-semibold">New Message in Mail</p>
                         <button class="text-xs opacity-60 hover:opacity-100 dismiss-notification">&times;</button>
                     </div>
-                    <p class="text-[11px] opacity-75 mt-1">Craig Federighi: "Welcome to macOS Sequoia on the web!"</p>
+                    <p class="text-[11px] opacity-75 mt-1">OSWeb Team: "Welcome to macOS Sequoia on the web!"</p>
                     <button class="action-button !text-[11px] !py-1 !px-2 mt-2" onclick="launchOrFocusApp('mail-client')">Open Mail</button>
                 </div>
             </div>
@@ -2961,12 +2961,14 @@ window.OS = {
         activeTopMenuKey: null,
 
         closeAll() {
+            const had = this.layers.length > 0;
             this.layers.forEach(el => el.remove());
             this.layers = [];
             this.activeTopMenuKey = null;
             document.querySelectorAll('#top-panel .menubar-item.active').forEach(b => b.classList.remove('active'));
             const legacyCtx = document.getElementById('context-menu');
             if (legacyCtx) legacyCtx.classList.add('hidden');
+            if (had && OS._lastContentFocus && OS._lastContentFocus.isConnected) { try { OS._lastContentFocus.focus({ preventScroll: true }); } catch (_) {} }
         },
 
         closeFromDepth(depth) {
@@ -3289,8 +3291,13 @@ function showCustomModal({ title = 'Confirmation', message = '', showInput = fal
     }
 
     modal.classList.remove('hidden');
+    modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-modal', 'true'); modal.setAttribute('aria-label', title);
+    const release = trapFocus(modal);
+    const onEsc = (e) => { if (e.key === 'Escape') { e.stopPropagation(); cancelBtn.click(); } };
+    modal.addEventListener('keydown', onEsc);
 
     const close = () => {
+        release(); modal.removeEventListener('keydown', onEsc);
         modal.classList.add('hidden');
         confirmBtn.onclick = null;
         cancelBtn.onclick = null;
@@ -3490,6 +3497,7 @@ function focusWindow(windowId) {
     winData.element.classList.add('focused');
     activeWindowId = windowId;
     updateTopAppMenuBar(winData.appId);
+    if (!winData.element.contains(document.activeElement)) { winData.element.tabIndex = -1; try { winData.element.focus({ preventScroll: true }); } catch (_) {} }
 }
 
 function launchOrFocusApp(appId, options = {}) {
@@ -3752,7 +3760,7 @@ function setupWindowDragAndResize(winEl, titleBar, windowId) {
 
         let startPt = OS.viewport.toDesktopCoords(e.clientX, e.clientY);
         let startLeft = winEl.offsetLeft, startTop = winEl.offsetTop;
-        let armed = !(winData && winData.isMaximized);        // a plain click on a maximized title bar must not un-maximize it
+        let armed = !(winData && (winData.isMaximized || winData.preTileRect));        // a plain click on a maximized title bar must not un-maximize it
         const unmaxUnderCursor = (pt) => {
             const areaW = area.clientWidth;
             const pre = winData.preTileRect;
@@ -4087,7 +4095,7 @@ function openForceQuitModal() {
                     <span class="w-5 h-5 inline-block">${getAppIconSVG(w.appId)}</span>
                     <span>${escapeHtml(w.title)}</span>
                 </span>
-                <span class="text-[10px] font-mono opacity-60">PID ${w.pid}</span>
+                
             </label>
         `).join('');
     };
@@ -4111,6 +4119,11 @@ function openForceQuitModal() {
     `;
     document.body.appendChild(modal);
 
+    if (!modal.isConnected) document.body.appendChild(modal);
+    modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-modal', 'true'); modal.setAttribute('aria-label', 'Force Quit Applications');
+    modal.querySelector('.tl-close')?.setAttribute('aria-label', 'Close');
+    const relFQ = trapFocus(modal);
+    modal.addEventListener('keydown', (e) => { if (e.key === 'Escape') { modal.remove(); relFQ(); } });
     modal.querySelector('#fq-confirm-btn').onclick = () => {
         const checked = modal.querySelector('input[name="fq-win"]:checked');
         if (checked && openWindows[checked.value]) {
@@ -5094,20 +5107,31 @@ viewport.innerHTML = `
                         <span>Viewing external URL in sandboxed frame: <strong>${escapeHtml(safeUrl)}</strong></span>
                         <a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="action-button !py-0.5 !px-2 !text-[11px]">Open in New Tab ↗</a>
                     </div>
-                    <iframe src="${escapeHtml(safeUrl)}" class="flex-1 w-full border-0" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+                    <iframe src="${escapeHtml(safeUrl)}" class="flex-1 w-full border-0" sandbox="allow-scripts ${(() => { try { const o = new URL(safeUrl, location.href).origin; return (o === location.origin || o === 'null') ? '' : 'allow-same-origin'; } catch (_) { return ''; } })()} allow-forms"></iframe>
                 </div>
             `;
         }
         renderTabs();
     };
 
-    const hist = [tabs[0].url]; let hi = 0;
+    // Address bar: URL or search. Only http(s)/vfs/wiki/start schemes are loadable; everything else is a search.
+    const resolveAddress = (raw) => {
+        const u = String(raw || '').trim(); if (!u) return '';
+        if (u.startsWith('/')) return 'vfs://' + u;
+        const m = u.match(/^([a-z][a-z0-9+.-]*):/i);
+        if (m) {
+            const sch = m[1].toLowerCase();
+            if (['http', 'https', 'vfs', 'wiki', 'start'].includes(sch)) return u;
+            if (!/\s/.test(u) && /^[\w.-]+:\d+(\/|$)/.test(u)) return 'https://' + u;       // host:port
+            return 'https://duckduckgo.com/?q=' + encodeURIComponent(u);                  // javascript:, data:, etc. are never navigated
+        }
+        if (/\s/.test(u) || (!/\./.test(u) && !/^localhost(:|\/|$)/i.test(u))) return 'https://duckduckgo.com/?q=' + encodeURIComponent(u);
+        return 'https://' + u;
+    };
     const loadUrl = (raw) => {
-        let u = String(raw || '').trim();
-        if (!u) return;
-        if (u.startsWith('/')) u = 'vfs://' + u;
-        activeTab().url = u;
-        hist.length = hi + 1; hist.push(u); hi = hist.length - 1;
+        const u = resolveAddress(raw); if (!u) return;
+        const t = activeTab(); const h = t.hist || (t.hist = [t.url]); if (t.hi == null) t.hi = h.length - 1;
+        t.url = u; h.length = t.hi + 1; h.push(u); t.hi = h.length - 1;
         renderViewport();
     };
 
@@ -5120,8 +5144,9 @@ viewport.innerHTML = `
         renderViewport();
     };
     winEl.querySelector('[data-role="nav-home"]').onclick = () => loadUrl('start://home');
-    winEl.querySelector('[data-role="nav-back"]').onclick = () => { if (hi > 0) { hi--; activeTab().url = hist[hi]; renderViewport(); } };
-    winEl.querySelector('[data-role="nav-fwd"]').onclick = () => { if (hi < hist.length - 1) { hi++; activeTab().url = hist[hi]; renderViewport(); } };
+    const step = (d) => { const t = activeTab(); const h = t.hist || (t.hist = [t.url]); if (t.hi == null) t.hi = h.length - 1; const n = t.hi + d; if (n >= 0 && n < h.length) { t.hi = n; t.url = h[n]; renderViewport(); } };
+    winEl.querySelector('[data-role="nav-back"]').onclick = () => step(-1);
+    winEl.querySelector('[data-role="nav-fwd"]').onclick = () => step(1);
     winEl.querySelector('[data-role="nav-reload"]').onclick = () => renderViewport();
     winEl.querySelector('[data-role="go-btn"]').onclick = () => loadUrl(urlInput.value);
     winEl.querySelector('[data-role="devtools-btn"]').onclick = () => {
@@ -6167,7 +6192,7 @@ function initSlack(winEl) {
         'general': {
             topic: 'Company-wide announcements and macOS Sequoia 15.1 launch updates',
             messages: [
-                { author: 'Craig Federighi', avatar: 'CF', time: '8:30 AM', text: 'Welcome to macOS Sequoia! Try hovering the green traffic light on any window to tile halves & quarters.', reactions: { '🍎': 8 } }
+                { author: 'OSWeb Team', avatar: 'CF', time: '8:30 AM', text: 'Welcome to macOS Sequoia! Try hovering the green traffic light on any window to tile halves & quarters.', reactions: { '🍎': 8 } }
             ]
         },
         'engineering': {
@@ -6193,7 +6218,7 @@ function initSlack(winEl) {
             </button>
         `).join('');
 
-        dmList.innerHTML = ['Craig Federighi', 'Sarah Chen', 'Apple Intelligence'].map(dm => `
+        dmList.innerHTML = ['OSWeb Team', 'Sarah Chen', 'Apple Intelligence'].map(dm => `
             <div class="px-2.5 py-1 text-purple-200/80 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>${escapeHtml(dm)}</span></div>
         `).join('');
 
@@ -6556,7 +6581,7 @@ function renderMailContent() {
 
 function initMail(winEl) {
     const messages = [
-        { id: 'm1', box: 'inbox', vip: true, unread: true, from: 'Craig Federighi <craig@apple.com>', subject: 'macOS Sequoia 15.1 Desktop Emulation Architecture', date: 'Today, 10:15 AM', body: `Hi Eugene,\n\nIncredible work bringing 100% fidelity macOS Sequoia 15.1 to the browser across Mac, iPad, and iPhone!\n\nThe Proportional Desktop Viewport Engine, Parabolic Dock, Green Traffic Light Window Tiling popover, and IndexedDB VFS make it feel indistinguishable from native Darwin.\n\nBest,\nCraig` },
+        { id: 'm1', box: 'inbox', vip: true, unread: true, from: 'OSWeb Team <hello@osweb.invalid>', subject: 'macOS Sequoia 15.1 Desktop Emulation Architecture', date: 'Today, 10:15 AM', body: `Hi Eugene,\n\nIncredible work bringing 100% fidelity macOS Sequoia 15.1 to the browser across Mac, iPad, and iPhone!\n\nThe Proportional Desktop Viewport Engine, Parabolic Dock, Green Traffic Light Window Tiling popover, and IndexedDB VFS make it feel indistinguishable from native Darwin.\n\nBest,\nCraig` },
         { id: 'm2', box: 'inbox', vip: true, unread: false, from: 'Zebra Enterprise Portfolio <pm-team@zebra.com>', subject: 'TC5 & TC7 Next-Gen Field Trial Telemetry', date: 'Today, 9:05 AM', body: `Eugene,\n\nField telemetry from the TC5 and TC7 customer pilots shows 99.94% 5G handoff reliability and 18% faster barcode symbology capture.\n\nThe updated roadmap is saved in /Users/eugene/Desktop/Project Roadmap.md.` },
         { id: 'm3', box: 'inbox', vip: false, unread: false, from: 'GitHub Pages <noreply@github.com>', subject: '[eredko1/OSWeb] Deployment Succeeded', date: 'Yesterday', body: `Your site https://eredko1.github.io/OSWeb/ has been compiled and deployed with zero DOM XSS sinks and full cross-device desktop viewport scaling.` }
     ];
@@ -7612,7 +7637,7 @@ function initSettings(winEl) {
             paneEl.innerHTML = `<div class="st-group st-apprs">${tile('light', 'Light')}${tile('dark', 'Dark')}${tile('auto', 'Auto')}</div>`;
             paneEl.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => {
                 const m = b.dataset.mode; try { localStorage.setItem('osweb_theme_auto', m === 'auto' ? '1' : '0'); } catch (_) {}
-                applyThemeByIndex(m === 'light' ? 1 : (m === 'dark' ? 0 : (matchMedia('(prefers-color-scheme: dark)').matches ? 0 : 1))); renderPane();
+                applyThemeByIndex(m === 'light' ? 1 : (m === 'dark' ? 0 : (matchMedia('(prefers-color-scheme: dark)').matches ? 0 : 1))); initAutoTheme(); renderPane();
             });
         } else if (activePane === 'wallpaper') {
             paneEl.innerHTML = `<div class="st-group st-walls">${wallpapers.map((w, i) => `<button class="st-wall${i === currentWallpaperIdx ? ' on' : ''}" data-wall-idx="${i}" aria-label="${escapeHtml(w.name)}"><span style="background-image:url('${w.url}')"></span><em>${escapeHtml(w.name)}</em></button>`).join('')}</div>` +
@@ -8202,6 +8227,7 @@ async function initRealStatusItems() {
 
 function lockScreen() {
     const loginModal = document.getElementById('login-modal');
+    try { OS.menu.closeAll(); toggleSpotlight(false); toggleLaunchpad(false); toggleMissionControl(false); ['force-quit-modal', 'about-mac-modal', 'app-switcher'].forEach(id => document.getElementById(id)?.remove()); document.getElementById('custom-modal')?.classList.add('hidden'); } catch (_) {}
     if (loginModal) loginModal.classList.remove('hidden');
     setLockedState(true);
 }
@@ -8255,7 +8281,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     applyDefaultWallpaperForTheme();
     setLockedState(true);
-    try { document.body.classList.toggle('reduce-transparency', localStorage.getItem('osweb_reduce_transparency') === '1'); if (localStorage.getItem('osweb_theme_auto') === '1') { const mq = matchMedia('(prefers-color-scheme: dark)'); applyThemeByIndex(mq.matches ? 0 : 1); mq.addEventListener('change', () => { if (localStorage.getItem('osweb_theme_auto') === '1') applyThemeByIndex(mq.matches ? 0 : 1); }); } } catch (_) {}
+    try { document.body.classList.toggle('reduce-transparency', localStorage.getItem('osweb_reduce_transparency') === '1'); initAutoTheme(); } catch (_) {}
     try { const n = localStorage.getItem('osweb_username') || 'Eugene Redko'; document.getElementById('lockscreen-username').textContent = n; document.getElementById('lockscreen-initial').textContent = n.trim().charAt(0).toUpperCase() || 'U'; } catch (_) {}
 
     // 5. Render Menu Bar, Virtual Spaces, Desktop Icons, Widgets & Parabolic Dock
@@ -8546,14 +8572,25 @@ function trapFocus(container, { restore = document.activeElement } = {}) {
     const onKey = (e) => { if (e.key !== 'Tab') return; const f = [...container.querySelectorAll(sel)].filter(x => x.offsetParent !== null); if (!f.length) return; const first = f[0], last = f[f.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } };
     container.addEventListener('keydown', onKey);
-    (container.querySelector(sel) || container).focus?.();
+    const firstVisible = [...container.querySelectorAll(sel)].find(x => x.offsetParent !== null);
+    if (!container.hasAttribute('tabindex')) container.tabIndex = -1;
+    (firstVisible || container).focus?.();
     return () => { container.removeEventListener('keydown', onKey); try { restore && restore.focus && restore.focus(); } catch (_) {} };
 }
 
 // While locked, everything behind the lock screen is inert (no Tab/AT/pointer access).
+let lockPrevFocus = null;
+function isLocked() { const lm = document.getElementById('login-modal'); return !!lm && !lm.classList.contains('hidden'); }
+function initAutoTheme() {
+    const mq = matchMedia('(prefers-color-scheme: dark)');
+    const auto = () => { try { return localStorage.getItem('osweb_theme_auto') === '1'; } catch (_) { return false; } };
+    if (!initAutoTheme._on) { initAutoTheme._on = true; mq.addEventListener('change', () => { if (auto()) applyThemeByIndex(mq.matches ? 0 : 1); }); }
+    if (auto()) applyThemeByIndex(mq.matches ? 0 : 1);
+}
 function setLockedState(locked) {
-    ['top-panel', 'desktop-area', 'dock-wrapper', 'ios-status', 'ios-home', 'ios-indicator', 'right-sidebar'].forEach(id => { const el = document.getElementById(id); if (el) { if (locked) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } });
-    if (locked) setTimeout(() => document.getElementById('username-input')?.focus(), 60);
+    ['top-panel', 'desktop-area', 'dock-wrapper', 'ios-status', 'ios-home', 'ios-indicator', 'right-sidebar', 'spotlight-overlay', 'launchpad-overlay', 'mission-control-overlay', 'force-quit-modal', 'custom-modal', 'about-mac-modal', 'app-switcher', 'os-menu-root', 'temp-message-container'].forEach(id => { const el = document.getElementById(id); if (el) { if (locked) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } });
+    if (locked) { lockPrevFocus = document.activeElement && document.activeElement !== document.body ? document.activeElement : lockPrevFocus; setTimeout(() => document.getElementById('username-input')?.focus(), 60); }
+    else if (lockPrevFocus && lockPrevFocus.isConnected) { try { lockPrevFocus.focus(); } catch (_) {} }
 }
 
 // Context menus inside app content (text: Cut/Copy/Paste/Select All; elsewhere: Copy/Select All).
@@ -8581,9 +8618,11 @@ function initContentContextMenu() {
 }
 
 function initKeyboardShortcuts() {
-    window.addEventListener('keydown', (e) => { if (OS.menu.layers.length) menuKeyNav(e); }, true);
+    document.addEventListener('focusin', (e) => { if (e.target.closest && e.target.closest('.window-content')) OS._lastContentFocus = e.target; });
+    window.addEventListener('keydown', (e) => { if (isLocked()) return; if (OS.menu.layers.length) menuKeyNav(e); }, true);
     initContentContextMenu();
     window.addEventListener('keydown', (e) => {
+        if (isLocked()) return;          // the lock screen swallows every shortcut
         const key = (e.key || '').toLowerCase();
         if (e.key === 'Escape') {
             if (appSwitcher.el) { appSwitcher.el.remove(); appSwitcher.el = null; }
