@@ -45,3 +45,10 @@ live Auto appearance, tiled drag-out restore. Not yet re-scored.
 - Passcode: salted PBKDF2-SHA256 (150k), 4-6 digits, set/change/turn off in Settings > Lock Screen, re-lock after background (default 5 min).
 - Face ID / Touch ID via WebAuthn platform authenticator (needs https; tested with a virtual authenticator, not on real hardware). Local convenience gate only: there is no server, so it is not account security.
 - Display name is editable (Settings > Lock Screen).
+
+## Round 11 (user report, 2nd time): can't select/change settings or other UI on iPhone
+- Not reproducible in Chromium touch emulation and WebKit could not be installed in the sandbox, so fixes target known iOS Safari behaviours:
+  hover-first taps (all `:hover` now only under `@media (hover: hover)`; Tailwind `hoverOnlyWhenSupported`; `tools/wrap_hover.py` keeps it that way),
+  viewport set before first layout + `<meta>` node replacement + reload on mode switch, `touch-action: manipulation`, pointer cursor on every clickable role,
+  no restack/menubar rebuild on taps inside the front window, submenus open on tap.
+- Diagnostic: open the site with `?debug=touch` to see every pointer/click event and the viewport the phone reports.

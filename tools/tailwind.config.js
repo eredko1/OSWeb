@@ -1,1 +1,1 @@
-module.exports = { content: ['./index.html'], corePlugins: { preflight: true }, theme: { extend: {} } };
+module.exports = { content: ['./index.html'], future: { hoverOnlyWhenSupported: true }, corePlugins: { preflight: true }, theme: { extend: {} } };
