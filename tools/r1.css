@@ -1,0 +1,140 @@
+
+        /* ===================================================================
+         * macOS fidelity layer — round 1 (overrides earlier rules by cascade)
+         * =================================================================== */
+        :root { --dock-base-size: 56px; }
+        html, body { font-size: 13px; }
+        body { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+
+        /* Dark: opaque-ish graphite windows, like AppKit */
+        :root {
+            --window-titlebar-bg: rgba(44, 44, 46, 0.97);
+            --window-content-bg: rgba(30, 30, 32, 0.98);
+            --surface-bg: rgba(40, 40, 43, 0.86);
+            --border-color: rgba(255, 255, 255, 0.12);
+            --menubar-bg: rgba(20, 22, 30, 0.38);
+            --dock-bg: rgba(60, 62, 72, 0.34);
+        }
+        body.light-mode {
+            --window-titlebar-bg: rgba(236, 236, 238, 0.97);
+            --window-content-bg: rgba(255, 255, 255, 0.98);
+            --surface-bg: rgba(246, 246, 248, 0.88);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --menubar-bg: rgba(255, 255, 255, 0.42);
+            --dock-bg: rgba(255, 255, 255, 0.34);
+        }
+        body.light-mode #top-panel, body.light-mode .menubar-item { color: #1d1d1f; }
+
+        /* ---- Menu bar: 24px, 13px SF, real items only ---- */
+        #top-panel { height: 24px; min-height: 24px; max-height: 24px; padding: 0 6px; font-size: 13px; font-weight: 400; letter-spacing: 0; gap: 0;
+            backdrop-filter: saturate(180%) blur(30px); -webkit-backdrop-filter: saturate(180%) blur(30px);
+            box-shadow: none; --font-mono: var(--font-sans); }
+        .menubar-left, .menubar-right { gap: 0; }
+        .menubar-item { height: 20px; padding: 0 8px; border-radius: 4px; font-size: 13px; font-weight: 400; letter-spacing: 0; }
+        .menubar-item[hidden] { display: none !important; }
+        .menubar-app-title { font-weight: 700; padding: 0 8px; }
+        .menubar-item.apple-logo { font-size: 15px; padding: 0 10px 0 8px; }
+        .menubar-right .menubar-item { padding: 0 6px; }
+        #clock { font-size: 13px; font-weight: 400; padding: 0 8px; font-variant-numeric: tabular-nums; }
+        .mb-glyph { width: 20px; height: 16px; display: block; }
+        .mb-pct { font-size: 12px; margin-right: 2px; }
+        .menubar-item:hover, .menubar-item.active { background: rgba(255,255,255,0.18); }
+        body.light-mode .menubar-item:hover, body.light-mode .menubar-item.active { background: rgba(0,0,0,0.1); }
+
+        /* Desktop area: no fake lift/shadow, dock floats over wallpaper */
+        #desktop-area { transform: none; box-shadow: none; }
+
+        /* ---- Wallpaper ---- */
+        #wallpaper-container { background-color: #1c2d4f; background-size: cover; background-position: center; }
+
+        /* ---- Desktop icons ---- */
+        .desktop-icon { width: 80px; padding: 4px 2px; border: none; border-radius: 6px; }
+        .desktop-icon:hover { background: transparent; }
+        .desktop-icon.selected { background: rgba(255,255,255,0.22); border: none; }
+        .desktop-icon .icon-art { width: 56px; height: 56px; margin-bottom: 3px; }
+        .desktop-icon span { font-size: 12px; font-weight: 400; line-height: 1.2; text-shadow: 0 0.5px 3px rgba(0,0,0,0.75); }
+        .desktop-icon.selected span { background: #0A60FF; }
+
+        /* ---- Windows ---- */
+        .window { border-radius: 10px; border: 0.5px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 0 0.5px rgba(0,0,0,0.55), 0 10px 30px rgba(0,0,0,0.30); backdrop-filter: none; -webkit-backdrop-filter: none; }
+        .window.focused { border-color: rgba(255,255,255,0.16);
+            box-shadow: 0 0 0 0.5px rgba(0,0,0,0.6), 0 22px 70px 4px rgba(0,0,0,0.56); }
+        body.light-mode .window { border-color: rgba(255,255,255,0.7); box-shadow: 0 0 0 0.5px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.16); }
+        body.light-mode .window.focused { box-shadow: 0 0 0 0.5px rgba(0,0,0,0.22), 0 22px 70px 4px rgba(0,0,0,0.3); }
+        .window-title-bar { height: 28px; min-height: 28px; padding: 0 13px; border-bottom: 0.5px solid rgba(0,0,0,0.35); }
+        body.light-mode .window-title-bar { border-bottom-color: rgba(0,0,0,0.13); }
+        .window-title-text { left: 84px; right: 84px; font-size: 13px; font-weight: 600; }
+        .window:not(.focused) .window-title-text { opacity: 0.5; }
+        .traffic-lights { gap: 8px; }
+        .tl-btn { width: 12px; height: 12px; border: 0.5px solid rgba(0,0,0,0.14); font-size: 0; }
+        .tl-btn svg { width: 8px; height: 8px; stroke: rgba(0,0,0,0.62); stroke-width: 1.4; stroke-linecap: round; fill: none; opacity: 0; }
+        .tl-max svg { stroke: none; }
+        .traffic-lights:hover .tl-btn svg { opacity: 1; }
+        .tl-close { background-color: #FF5F57; } .tl-min { background-color: #FEBC2E; } .tl-max { background-color: #28C840; }
+        .window:not(.focused) .tl-btn { background-color: rgba(142,142,147,0.38) !important; border-color: rgba(0,0,0,0.1) !important; }
+
+        /* ---- Dock: 64pt icons, 22px bar, hairline rim, separator, running dots ---- */
+        #dock-wrapper { padding: 0 0 6px 0; }
+        #dock { gap: 4px; padding: 5px 7px 5px; border-radius: 22px; border: 0.5px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.32), inset 0 0.5px 0 rgba(255,255,255,0.28);
+            backdrop-filter: saturate(180%) blur(30px); -webkit-backdrop-filter: saturate(180%) blur(30px);
+            height: calc(var(--dock-base-size) + 12px); }
+        body.light-mode #dock { border-color: rgba(255,255,255,0.55); box-shadow: 0 8px 28px rgba(0,0,0,0.18), inset 0 0.5px 0 rgba(255,255,255,0.7); }
+        .dock-icon { border-radius: 14px; }
+        .dock-icon svg, .dock-icon img { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.28)); }
+        .dock-divider { width: 0.5px; background: rgba(255,255,255,0.3); height: calc(var(--dock-base-size) - 6px); margin: 0 4px 2px; }
+        body.light-mode .dock-divider { background: rgba(0,0,0,0.25); }
+        .dock-running-dot { width: 4px; height: 4px; bottom: -6px; box-shadow: none; background: rgba(255,255,255,0.85); }
+        .dock-tooltip { top: -44px; font-size: 13px; font-weight: 400; padding: 3px 11px; border: none; border-radius: 6px;
+            background: rgba(40,40,44,0.72); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); box-shadow: 0 0 0 0.5px rgba(255,255,255,0.14), 0 4px 14px rgba(0,0,0,0.3); }
+
+        /* ---- Chrome typography: SF everywhere except real code surfaces; no dashboard caps ---- */
+        .window:not([data-app="terminal"]):not([data-app="vscode"]):not([data-app="code-studio"]) { --font-mono: var(--font-sans); }
+        .font-mono { font-family: var(--font-mono, ui-monospace) !important; }
+        .uppercase { text-transform: none !important; }
+        .tracking-wider, .tracking-wide, .tracking-widest { letter-spacing: normal !important; }
+
+        /* ---- Lock / login screen ---- */
+        .lock-screen { position: fixed; inset: 0; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            padding: max(56px, env(safe-area-inset-top)) 16px max(40px, env(safe-area-inset-bottom)); color: #fff;
+            background: var(--wallpaper-url) center / cover no-repeat, #1c2d4f; }
+        .lock-screen::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.18); backdrop-filter: blur(30px) saturate(150%); -webkit-backdrop-filter: blur(30px) saturate(150%); }
+        .lock-screen > * { position: relative; }
+        .lock-screen.hidden { display: none; }
+        .lock-top { text-align: center; text-shadow: 0 2px 14px rgba(0,0,0,0.25); }
+        .lock-date { font-size: 22px; font-weight: 600; letter-spacing: 0.01em; opacity: 0.95; }
+        .lock-time { font-size: 96px; font-weight: 600; line-height: 1.02; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+        .lock-bottom { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .lock-avatar { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 500;
+            background: linear-gradient(180deg, #a1a7b3, #6d7380); box-shadow: 0 0 0 0.5px rgba(255,255,255,0.4), 0 4px 14px rgba(0,0,0,0.3); }
+        .lock-name { font-size: 17px; font-weight: 600; text-shadow: 0 1px 6px rgba(0,0,0,0.3); }
+        .lock-field { position: relative; width: 200px; }
+        .lock-field input { width: 100%; height: 28px; padding: 0 30px 0 12px; border-radius: 14px; border: 0.5px solid rgba(255,255,255,0.3); outline: none;
+            background: rgba(255,255,255,0.22); color: #fff; font-size: 13px; text-align: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .lock-field input::placeholder { color: rgba(255,255,255,0.75); }
+        .lock-field button { position: absolute; right: 3px; top: 3px; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.28); display: flex; align-items: center; justify-content: center; color: #fff; }
+        .lock-hint { font-size: 12px; opacity: 0.8; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+        .lock-power { display: flex; gap: 28px; margin-top: 22px; font-size: 12px; }
+        .lock-power button { display: flex; flex-direction: column; align-items: center; gap: 6px; color: rgba(255,255,255,0.9); text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+        .lock-power button span { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+        /* ---- Cmd+Tab application switcher ---- */
+        #app-switcher { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 19000; display: flex; gap: 8px; padding: 14px;
+            border-radius: 22px; background: rgba(50,50,54,0.62); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: 0 0 0 0.5px rgba(255,255,255,0.18), 0 24px 60px rgba(0,0,0,0.45); max-width: 92vw; overflow: hidden; }
+        #app-switcher .as-item { width: 84px; padding: 8px 6px 6px; border-radius: 14px; text-align: center; }
+        #app-switcher .as-item.sel { background: rgba(255,255,255,0.2); }
+        #app-switcher .as-icon { width: 64px; height: 64px; margin: 0 auto 4px; } #app-switcher .as-icon svg { width: 100%; height: 100%; }
+        #app-switcher .as-name { font-size: 12px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ---- Accessibility ---- */
+        :focus-visible { outline: 2px solid rgba(10,132,255,0.85) !important; outline-offset: 1px; }
+        .lock-field input:focus-visible { outline: 3px solid rgba(255,255,255,0.55) !important; outline-offset: 0; }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+        @media (prefers-reduced-transparency: reduce) { #top-panel, #dock, .window, .lock-screen::before, #app-switcher { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+            #top-panel { background: var(--surface-bg-solid) !important; } #dock { background: var(--surface-bg-solid) !important; } }
+        @media (prefers-contrast: more) { :root { --border-color: rgba(255,255,255,0.5); --text-secondary: rgba(245,245,247,0.9); --text-muted: rgba(245,245,247,0.75); } }
+        /* iOS Safari: inputs < 16px trigger focus-zoom */
+        @media (pointer: coarse) { input, textarea, select { font-size: 16px !important; } }
+        button, [role="button"], .dock-icon, .menubar-item { touch-action: manipulation; }

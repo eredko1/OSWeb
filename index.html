@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>macOS Sequoia 15.1 — OSWeb Desktop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1c2d4f">
+    <title>OSWeb</title>
     <link rel="stylesheet" href="vendor/tailwind.css">
     <link rel="stylesheet" href="vendor/fa/css/all.min.css">
     <style>
@@ -1042,6 +1046,147 @@
         .calc-button.op-btn { background: #FF9F0A; color: #fff; font-weight: 600; }
         .calc-button.op-btn:hover { background: #FFB340; }
         .calc-button.fn-btn { background: rgba(255,255,255,0.16); font-size: 13px; }
+
+        /* ===================================================================
+         * macOS fidelity layer — round 1 (overrides earlier rules by cascade)
+         * =================================================================== */
+        :root { --dock-base-size: 56px; }
+        html, body { font-size: 13px; }
+        body { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+
+        /* Dark: opaque-ish graphite windows, like AppKit */
+        :root {
+            --window-titlebar-bg: rgba(44, 44, 46, 0.97);
+            --window-content-bg: rgba(30, 30, 32, 0.98);
+            --surface-bg: rgba(40, 40, 43, 0.86);
+            --border-color: rgba(255, 255, 255, 0.12);
+            --menubar-bg: rgba(20, 22, 30, 0.38);
+            --dock-bg: rgba(60, 62, 72, 0.34);
+        }
+        body.light-mode {
+            --window-titlebar-bg: rgba(236, 236, 238, 0.97);
+            --window-content-bg: rgba(255, 255, 255, 0.98);
+            --surface-bg: rgba(246, 246, 248, 0.88);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --menubar-bg: rgba(255, 255, 255, 0.42);
+            --dock-bg: rgba(255, 255, 255, 0.34);
+        }
+        body.light-mode #top-panel, body.light-mode .menubar-item { color: #1d1d1f; }
+
+        /* ---- Menu bar: 24px, 13px SF, real items only ---- */
+        #top-panel { height: 24px; min-height: 24px; max-height: 24px; padding: 0 6px; font-size: 13px; font-weight: 400; letter-spacing: 0; gap: 0;
+            backdrop-filter: saturate(180%) blur(30px); -webkit-backdrop-filter: saturate(180%) blur(30px);
+            box-shadow: none; --font-mono: var(--font-sans); }
+        .menubar-left, .menubar-right { gap: 0; }
+        .menubar-item { height: 20px; padding: 0 8px; border-radius: 4px; font-size: 13px; font-weight: 400; letter-spacing: 0; }
+        .menubar-item[hidden] { display: none !important; }
+        .menubar-app-title { font-weight: 700; padding: 0 8px; }
+        .menubar-item.apple-logo { font-size: 15px; padding: 0 10px 0 8px; }
+        .menubar-right .menubar-item { padding: 0 6px; }
+        #clock { font-size: 13px; font-weight: 400; padding: 0 8px; font-variant-numeric: tabular-nums; }
+        .mb-glyph { width: 20px; height: 16px; display: block; }
+        .mb-pct { font-size: 12px; margin-right: 2px; }
+        .menubar-item:hover, .menubar-item.active { background: rgba(255,255,255,0.18); }
+        body.light-mode .menubar-item:hover, body.light-mode .menubar-item.active { background: rgba(0,0,0,0.1); }
+
+        /* Desktop area: no fake lift/shadow, dock floats over wallpaper */
+        #desktop-area { transform: none; box-shadow: none; }
+
+        /* ---- Wallpaper ---- */
+        #wallpaper-container { background-color: #1c2d4f; background-size: cover; background-position: center; }
+
+        /* ---- Desktop icons ---- */
+        .desktop-icon { width: 80px; padding: 4px 2px; border: none; border-radius: 6px; }
+        .desktop-icon:hover { background: transparent; }
+        .desktop-icon.selected { background: rgba(255,255,255,0.22); border: none; }
+        .desktop-icon .icon-art { width: 56px; height: 56px; margin-bottom: 3px; }
+        .desktop-icon span { font-size: 12px; font-weight: 400; line-height: 1.2; text-shadow: 0 0.5px 3px rgba(0,0,0,0.75); }
+        .desktop-icon.selected span { background: #0A60FF; }
+
+        /* ---- Windows ---- */
+        .window { border-radius: 10px; border: 0.5px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 0 0.5px rgba(0,0,0,0.55), 0 10px 30px rgba(0,0,0,0.30); backdrop-filter: none; -webkit-backdrop-filter: none; }
+        .window.focused { border-color: rgba(255,255,255,0.16);
+            box-shadow: 0 0 0 0.5px rgba(0,0,0,0.6), 0 22px 70px 4px rgba(0,0,0,0.56); }
+        body.light-mode .window { border-color: rgba(255,255,255,0.7); box-shadow: 0 0 0 0.5px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.16); }
+        body.light-mode .window.focused { box-shadow: 0 0 0 0.5px rgba(0,0,0,0.22), 0 22px 70px 4px rgba(0,0,0,0.3); }
+        .window-title-bar { height: 28px; min-height: 28px; padding: 0 13px; border-bottom: 0.5px solid rgba(0,0,0,0.35); }
+        body.light-mode .window-title-bar { border-bottom-color: rgba(0,0,0,0.13); }
+        .window-title-text { left: 84px; right: 84px; font-size: 13px; font-weight: 600; }
+        .window:not(.focused) .window-title-text { opacity: 0.5; }
+        .traffic-lights { gap: 8px; }
+        .tl-btn { width: 12px; height: 12px; border: 0.5px solid rgba(0,0,0,0.14); font-size: 0; }
+        .tl-btn svg { width: 8px; height: 8px; stroke: rgba(0,0,0,0.62); stroke-width: 1.4; stroke-linecap: round; fill: none; opacity: 0; }
+        .tl-max svg { stroke: none; }
+        .traffic-lights:hover .tl-btn svg { opacity: 1; }
+        .tl-close { background-color: #FF5F57; } .tl-min { background-color: #FEBC2E; } .tl-max { background-color: #28C840; }
+        .window:not(.focused) .tl-btn { background-color: rgba(142,142,147,0.38) !important; border-color: rgba(0,0,0,0.1) !important; }
+
+        /* ---- Dock: 64pt icons, 22px bar, hairline rim, separator, running dots ---- */
+        #dock-wrapper { padding: 0 0 6px 0; }
+        #dock { gap: 4px; padding: 5px 7px 5px; border-radius: 22px; border: 0.5px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.32), inset 0 0.5px 0 rgba(255,255,255,0.28);
+            backdrop-filter: saturate(180%) blur(30px); -webkit-backdrop-filter: saturate(180%) blur(30px);
+            height: calc(var(--dock-base-size) + 12px); }
+        body.light-mode #dock { border-color: rgba(255,255,255,0.55); box-shadow: 0 8px 28px rgba(0,0,0,0.18), inset 0 0.5px 0 rgba(255,255,255,0.7); }
+        .dock-icon { border-radius: 14px; }
+        .dock-icon svg, .dock-icon img { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.28)); }
+        .dock-divider { width: 0.5px; background: rgba(255,255,255,0.3); height: calc(var(--dock-base-size) - 6px); margin: 0 4px 2px; }
+        body.light-mode .dock-divider { background: rgba(0,0,0,0.25); }
+        .dock-running-dot { width: 4px; height: 4px; bottom: -6px; box-shadow: none; background: rgba(255,255,255,0.85); }
+        .dock-tooltip { top: -44px; font-size: 13px; font-weight: 400; padding: 3px 11px; border: none; border-radius: 6px;
+            background: rgba(40,40,44,0.72); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); box-shadow: 0 0 0 0.5px rgba(255,255,255,0.14), 0 4px 14px rgba(0,0,0,0.3); }
+
+        /* ---- Chrome typography: SF everywhere except real code surfaces; no dashboard caps ---- */
+        .window:not([data-app="terminal"]):not([data-app="vscode"]):not([data-app="code-studio"]) { --font-mono: var(--font-sans); }
+        .font-mono { font-family: var(--font-mono, ui-monospace) !important; }
+        .uppercase { text-transform: none !important; }
+        .tracking-wider, .tracking-wide, .tracking-widest { letter-spacing: normal !important; }
+
+        /* ---- Lock / login screen ---- */
+        .lock-screen { position: fixed; inset: 0; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            padding: max(56px, env(safe-area-inset-top)) 16px max(40px, env(safe-area-inset-bottom)); color: #fff;
+            background: var(--wallpaper-url) center / cover no-repeat, #1c2d4f; }
+        .lock-screen::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.18); backdrop-filter: blur(30px) saturate(150%); -webkit-backdrop-filter: blur(30px) saturate(150%); }
+        .lock-screen > * { position: relative; }
+        .lock-screen.hidden { display: none; }
+        #desktop-widgets-container.hidden { display: none !important; }
+        .lock-top { text-align: center; text-shadow: 0 2px 14px rgba(0,0,0,0.25); }
+        .lock-date { font-size: 22px; font-weight: 600; letter-spacing: 0.01em; opacity: 0.95; }
+        .lock-time { font-size: 96px; font-weight: 600; line-height: 1.02; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+        .lock-bottom { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .lock-avatar { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 500;
+            background: linear-gradient(180deg, #a1a7b3, #6d7380); box-shadow: 0 0 0 0.5px rgba(255,255,255,0.4), 0 4px 14px rgba(0,0,0,0.3); }
+        .lock-name { font-size: 17px; font-weight: 600; text-shadow: 0 1px 6px rgba(0,0,0,0.3); }
+        .lock-field { position: relative; width: 200px; }
+        .lock-field input { width: 100%; height: 28px; padding: 0 30px 0 12px; border-radius: 14px; border: 0.5px solid rgba(255,255,255,0.3); outline: none;
+            background: rgba(255,255,255,0.22); color: #fff; font-size: 13px; text-align: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .lock-field input::placeholder { color: rgba(255,255,255,0.75); }
+        .lock-field button { position: absolute; right: 3px; top: 3px; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.28); display: flex; align-items: center; justify-content: center; color: #fff; }
+        .lock-hint { font-size: 12px; opacity: 0.8; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+        .lock-power { display: flex; gap: 28px; margin-top: 22px; font-size: 12px; }
+        .lock-power button { display: flex; flex-direction: column; align-items: center; gap: 6px; color: rgba(255,255,255,0.9); text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+        .lock-power button span { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+        /* ---- Cmd+Tab application switcher ---- */
+        #app-switcher { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 19000; display: flex; gap: 8px; padding: 14px;
+            border-radius: 22px; background: rgba(50,50,54,0.62); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: 0 0 0 0.5px rgba(255,255,255,0.18), 0 24px 60px rgba(0,0,0,0.45); max-width: 92vw; overflow: hidden; }
+        #app-switcher .as-item { width: 84px; padding: 8px 6px 6px; border-radius: 14px; text-align: center; }
+        #app-switcher .as-item.sel { background: rgba(255,255,255,0.2); }
+        #app-switcher .as-icon { width: 64px; height: 64px; margin: 0 auto 4px; } #app-switcher .as-icon svg { width: 100%; height: 100%; }
+        #app-switcher .as-name { font-size: 12px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ---- Accessibility ---- */
+        :focus-visible { outline: 2px solid rgba(10,132,255,0.85) !important; outline-offset: 1px; }
+        .lock-field input:focus-visible { outline: 3px solid rgba(255,255,255,0.55) !important; outline-offset: 0; }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+        @media (prefers-reduced-transparency: reduce) { #top-panel, #dock, .window, .lock-screen::before, #app-switcher { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+            #top-panel { background: var(--surface-bg-solid) !important; } #dock { background: var(--surface-bg-solid) !important; } }
+        @media (prefers-contrast: more) { :root { --border-color: rgba(255,255,255,0.5); --text-secondary: rgba(245,245,247,0.9); --text-muted: rgba(245,245,247,0.75); } }
+        /* iOS Safari: inputs < 16px trigger focus-zoom */
+        @media (pointer: coarse) { input, textarea, select { font-size: 16px !important; } }
+        button, [role="button"], .dock-icon, .menubar-item { touch-action: manipulation; }
     </style>
 </head>
 <body>
@@ -1054,74 +1199,44 @@
     <div class="wm-iframe-shield" id="wm-iframe-shield"></div>
 
     <!-- Global macOS Sequoia Top Menu Bar (ALWAYS visible on Mac, PC, iPad, iPhone) -->
-    <header id="top-panel">
+    <header id="top-panel" role="menubar" aria-label="Menu bar">
         <div class="menubar-left">
-            <!-- Apple Logo Menu -->
-            <button id="apple-menu-button" class="menubar-item apple-logo" title="Apple Menu">
-                <i class="fab fa-apple"></i>
+            <button id="apple-menu-button" class="menubar-item apple-logo" role="menuitem" aria-haspopup="menu" aria-label="Apple menu">
+                <i class="fab fa-apple" aria-hidden="true"></i>
             </button>
-            <!-- Launchpad quick button (backward-compat ID) -->
-            <button id="app-launcher-button" class="menubar-item" title="Launchpad (F4)">
-                <i class="fas fa-grip text-xs"></i>
-            </button>
-            <!-- Active App Menu Bar (NEVER hidden on any device!) -->
-            <div id="app-menu-bar-container" class="flex items-center h-full">
-                <!-- Populated dynamically with active app menus -->
-            </div>
+            <div id="app-menu-bar-container" class="flex items-center h-full"></div>
         </div>
 
         <div class="menubar-right">
-            <!-- Virtual Spaces / Mission Control Switcher -->
-            <div class="spaces-pill-group" title="Mission Control Spaces">
-                <button id="activities-button" class="vdesktop-button" title="Mission Control (F3)">
-                    <i class="fas fa-layer-group text-[10px] mr-1"></i>Spaces
-                </button>
-                <div id="virtual-desktop-switcher" class="flex items-center gap-0.5"></div>
-                <button id="add-desktop-button" class="vdesktop-button" title="New Space">+</button>
-                <button id="show-desktop-button" class="vdesktop-button" title="Show Desktop (F11)">
-                    <i class="fas fa-desktop text-[10px]"></i>
-                </button>
-            </div>
+            <button id="battery-menubar-button" class="menubar-item" role="menuitem" aria-label="Battery" hidden>
+                <span id="battery-pct" class="mb-pct"></span>
+                <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" fill="currentColor" aria-hidden="true"><rect x="1.5" y="3.5" width="14.5" height="9" rx="2.6" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/><rect id="battery-fill" x="3" y="5" width="11.5" height="6" rx="1.4"/><path d="M17.3 6.3v3.4c.7-.2 1.2-.9 1.2-1.7s-.5-1.5-1.2-1.7z" opacity=".55"/></svg>
+            </button>
+            <button id="wifi-menubar-button" class="menubar-item" role="menuitem" aria-label="Wi-Fi">
+                <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" fill="currentColor" aria-hidden="true"><path d="M10 12.9a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8z" transform="translate(0 -3.4)"/><path d="M6.6 9.3a4.9 4.9 0 0 1 6.8 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M3.6 6.3a9.2 9.2 0 0 1 12.8 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M.9 3.4a13 13 0 0 1 18.2 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity=".0"/></svg>
+            </button>
+            <button id="spotlight-menubar-button" class="menubar-item" role="menuitem" aria-label="Spotlight Search">
+                <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" fill="currentColor" aria-hidden="true"><circle cx="8.6" cy="7.2" r="4.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 10.6l3.6 3.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+            </button>
+            <button id="sidebar-toggle" class="menubar-item" role="menuitem" aria-haspopup="true" aria-label="Control Center">
+                <svg class="mb-glyph" viewBox="0 0 20 16" width="20" height="16" fill="currentColor" aria-hidden="true"><rect x="2.2" y="2.6" width="15.6" height="4.6" rx="2.3" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="12.3" cy="4.9" r="1.7"/><rect x="2.2" y="8.8" width="15.6" height="4.6" rx="2.3" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="7.7" cy="11.1" r="1.7"/></svg>
+            </button>
+            <div id="clock" class="menubar-item" role="menuitem" title="Notification Center" aria-label="Date and time">Sun Nov 22  12:00 PM</div>
+        </div>
 
-            <!-- Proportional Desktop Viewport Scale Pill (1-tap Fit / 1:1 toggle for iPad & iPhone) -->
-            <button id="viewport-scale-pill" class="system-meter" title="Toggle Desktop Scale (Fit vs 1:1 Native)">
-                🖥️ <span id="viewport-scale-label">100%</span>
-            </button>
-
-            <!-- Apple Silicon M3 Max Telemetry Pill -->
-            <div id="cpu-meter" class="system-meter inline-flex items-center" title="Apple M3 Max CPU Telemetry — Click for Activity Monitor">CPU: 4%</div>
-            <div id="gpu-meter" class="system-meter inline-flex items-center" title="Apple M3 Max GPU Telemetry — Click for Activity Monitor">GPU: 6%</div>
-
-            <!-- Spotlight Search Input + Trigger -->
-            <div class="relative flex items-center flex-shrink-0">
-                <i class="fas fa-search absolute left-2 text-[10px] text-[var(--text-secondary)] pointer-events-none"></i>
-                <input id="global-search-input" type="search" placeholder="Spotlight ⌘K"
-                    class="bg-[var(--surface-overlay-bg)] border border-[var(--border-color)] text-[11px] rounded-md py-0.5 pl-5 pr-1.5 w-20 focus:w-28 transition-all outline-none text-[var(--text-primary)] placeholder-[var(--text-secondary)]" />
-            </div>
-
-            <!-- Apple Intelligence Siri Orb -->
-            <button id="siri-menubar-button" class="menubar-item" title="Apple Intelligence & Messages">
-                <span class="inline-block w-3.5 h-3.5 rounded-full" style="background: conic-gradient(from 45deg, #FF2D55, #5856D6, #007AFF, #34C759, #FF9500, #FF2D55); box-shadow: 0 0 8px rgba(0,122,255,0.7);"></span>
-            </button>
-
-            <!-- Wi-Fi, Battery, Theme Toggle, Control Center, Clock -->
-            <button id="wifi-menubar-button" class="menubar-item" title="Wi-Fi: Sequoia-5G (Connected)">
-                <i class="fas fa-wifi text-xs"></i>
-            </button>
-            <button id="battery-menubar-button" class="menubar-item inline-flex gap-1" title="Battery 100% — Charged">
-                <span class="text-[11px]">100%</span>
-                <i class="fas fa-battery-full text-xs text-emerald-400"></i>
-            </button>
-            <button id="theme-toggle-button" class="menubar-item" title="Switch Appearance Theme">
-                <i class="fas fa-moon text-xs"></i>
-            </button>
-            <button id="sidebar-toggle" class="menubar-item" title="Control Center & Notifications">
-                <i class="fas fa-sliders text-xs"></i>
-            </button>
-            <button id="user-avatar-button" class="menubar-item" title="Apple Account">
-                <img id="user-avatar-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><rect width='32' height='32' rx='16' fill='%230A84FF'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='-apple-system,sans-serif' font-size='15' font-weight='700'>E</text></svg>" alt="User" class="w-4 h-4 rounded-full" />
-            </button>
-            <div id="clock" class="menubar-item font-medium" title="Notification Center & Calendar">Sat Nov 21  3:50 PM</div>
+        <!-- Legacy hooks kept for scripts; intentionally not part of the visible macOS menu bar -->
+        <div hidden aria-hidden="true">
+            <button id="app-launcher-button"></button>
+            <button id="activities-button"></button>
+            <div id="virtual-desktop-switcher"></div>
+            <button id="add-desktop-button"></button>
+            <button id="show-desktop-button"></button>
+            <button id="viewport-scale-pill"><span id="viewport-scale-label">100%</span></button>
+            <div id="cpu-meter"></div><div id="gpu-meter"></div>
+            <input id="global-search-input" type="search" tabindex="-1">
+            <button id="siri-menubar-button"></button>
+            <button id="theme-toggle-button"><i></i></button>
+            <button id="user-avatar-button"><img id="user-avatar-img" alt=""></button>
         </div>
     </header>
 
@@ -1141,7 +1256,7 @@
         <div id="desktop-icons-layer"></div>
 
         <!-- macOS Sequoia Interactive Desktop Widgets -->
-        <div id="desktop-widgets-container">
+        <div id="desktop-widgets-container" class="hidden">
             <!-- Widget 1: Cupertino / Local Weather -->
             <div class="sequoia-widget" id="desktop-weather-widget" title="Click to open Weather">
                 <div class="flex justify-between items-start">
@@ -1156,22 +1271,6 @@
                 <div class="flex justify-between items-center mt-2 text-xs opacity-85">
                     <span id="widget-weather-cond">Mostly Sunny</span>
                     <span id="widget-weather-range">H:76°  L:58°</span>
-                </div>
-            </div>
-
-            <!-- Widget 2: Apple Silicon M3 Max Live Telemetry -->
-            <div class="sequoia-widget" id="desktop-telemetry-widget" title="Click to open Activity Monitor">
-                <div class="flex justify-between items-center mb-1.5">
-                    <span class="text-xs font-semibold tracking-wide flex items-center gap-1.5">
-                        <i class="fab fa-apple text-sm"></i> Apple M3 Max
-                    </span>
-                    <span class="text-[11px] font-mono text-emerald-500 font-semibold" id="widget-telemetry-proc">16-Core</span>
-                </div>
-                <canvas id="widget-telemetry-canvas" width="248" height="34" class="w-full h-8 rounded-lg bg-slate-900/75 border border-white/10"></canvas>
-                <div class="grid grid-cols-3 gap-1 mt-2 pt-0.5 pb-0.5 text-[11px] font-mono leading-normal">
-                    <div>CPU <span id="widget-cpu-val" class="text-sky-400 font-semibold">5%</span></div>
-                    <div>GPU <span id="widget-gpu-val" class="text-purple-400 font-semibold">7%</span></div>
-                    <div>MEM <span id="widget-ram-val" class="text-emerald-400 font-semibold">14.2G</span></div>
                 </div>
             </div>
 
@@ -1392,36 +1491,25 @@
     </div>
 
     <!-- macOS Sequoia Lock / Login Screen (#login-modal) -->
-    <div id="login-modal" class="fixed inset-0 z-[20000] flex flex-col items-center justify-between py-12 px-4 bg-cover bg-center"
-        style="background-image: radial-gradient(circle at 50% 25%, rgba(16, 40, 90, 0.55), rgba(6, 8, 16, 0.85)), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&q=85');">
-        <div class="text-center text-white mt-4">
-            <div id="lockscreen-date" class="text-lg font-medium opacity-90 tracking-wide">Saturday, November 21</div>
-            <div id="lockscreen-time" class="text-7xl font-bold tracking-tight mt-1" style="text-shadow: 0 6px 24px rgba(0,0,0,0.45);">3:50</div>
+    <div id="login-modal" class="lock-screen" role="dialog" aria-modal="true" aria-label="Lock screen">
+        <div class="lock-top">
+            <div id="lockscreen-date" class="lock-date">Sunday, November 22</div>
+            <div id="lockscreen-time" class="lock-time">12:00</div>
         </div>
-
-        <div class="bg-black/35 backdrop-blur-2xl border border-white/20 p-6 rounded-3xl shadow-2xl w-full max-w-xs text-center text-white">
-            <div class="w-20 h-20 rounded-full mx-auto mb-3 p-0.5 bg-gradient-to-tr from-sky-400 via-indigo-500 to-rose-500 shadow-lg">
-                <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-3xl font-bold">E</div>
+        <div class="lock-bottom">
+            <div class="lock-avatar" aria-hidden="true"><span id="lockscreen-initial">U</span></div>
+            <div id="lockscreen-username" class="lock-name">User</div>
+            <form class="lock-field" onsubmit="event.preventDefault(); unlockDesktop();" autocomplete="off">
+                <input type="password" id="username-input" placeholder="Enter Password" aria-label="Password" autocomplete="off">
+                <button id="login-button" type="submit" aria-label="Log in">
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h9M8.5 4l4 4-4 4"/></svg>
+                </button>
+            </form>
+            <div class="lock-hint">Touch ID or Enter Password</div>
+            <div class="lock-power">
+                <button onclick="showTemporaryMessage('Sleep')" aria-label="Sleep"><span><i class="fas fa-moon"></i></span>Sleep</button>
+                <button onclick="location.reload()" aria-label="Restart"><span><i class="fas fa-rotate-right"></i></span>Restart</button>
             </div>
-            <h2 class="text-lg font-semibold mb-1">Eugene Redko</h2>
-            <p class="text-[11px] text-white/70 mb-4">macOS Sequoia 15.1 • Apple M3 Max</p>
-            <input type="text" id="username-input" value="Eugene Redko" placeholder="Enter username"
-                class="w-full px-3.5 py-2 mb-3 rounded-full text-xs bg-white/15 border border-white/25 text-white placeholder-white/60 text-center outline-none focus:ring-2 focus:ring-sky-400" />
-            <button id="login-button" class="w-full action-button !rounded-full !py-2 text-xs font-semibold shadow-lg">
-                Unlock Mac <i class="fas fa-arrow-right ml-1"></i>
-            </button>
-            <p class="text-[10px] text-white/60 mt-3">Touch ID or Enter username to unlock desktop</p>
-        </div>
-
-        <div class="flex items-center gap-6 text-white/80 text-xs">
-            <button class="flex flex-col items-center gap-1 hover:text-white" onclick="showTemporaryMessage('System Sleep Mode')">
-                <span class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center"><i class="fas fa-moon text-xs"></i></span>
-                <span>Sleep</span>
-            </button>
-            <button class="flex flex-col items-center gap-1 hover:text-white" onclick="location.reload()">
-                <span class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center"><i class="fas fa-rotate-right text-xs"></i></span>
-                <span>Restart</span>
-            </button>
         </div>
     </div>
 </div>
@@ -1466,14 +1554,10 @@ let currentThemeIndex = 0;
 
 let currentWallpaperIdx = 0;
 const wallpapers = [
-    { name: 'Sequoia Sunrise', url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&q=85' },
-    { name: 'Sonoma Horizon', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=85' },
-    { name: 'Aurora Borealis', url: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1920&q=85' },
-    { name: 'Cosmic Nebula', url: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1920&q=85' },
-    { name: 'Redwood Forest', url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=85' },
-    { name: 'Ventura Abstract', url: 'https://images.unsplash.com/photo-1518655048521-f130df041f66?auto=format&fit=crop&w=1920&q=85' },
-    { name: 'Mojave Dunes', url: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?auto=format&fit=crop&w=1920&q=85' },
-    { name: 'Monterey Night', url: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1920&q=85' }
+    { name: 'Sequoia', url: 'vendor/wallpapers/sequoia.svg', dark: 'vendor/wallpapers/sequoia-dark.svg', auto: true },
+    { name: 'Sonoma', url: 'vendor/wallpapers/sonoma.svg' },
+    { name: 'Ventura', url: 'vendor/wallpapers/ventura.svg' },
+    { name: 'Sequoia Dark', url: 'vendor/wallpapers/sequoia-dark.svg' }
 ];
 
 const dockTransparencyLevels = [
@@ -1513,6 +1597,15 @@ function getMacFolderSVG(accent = '#36A8FF') {
         <path d="M6 15 C6 11.5 8.5 9 12 9 L24 9 C26.5 9 28 10.5 29.5 12.5 L31.5 15 L52 15 C55.5 15 58 17.5 58 21 L58 49 C58 52.5 55.5 55 52 55 L12 55 C8.5 55 6 52.5 6 49 Z" fill="url(#fBack)"/>
         <rect x="6" y="20" width="52" height="35" rx="6" fill="url(#fFront)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
         <line x1="10" y1="22" x2="54" y2="22" stroke="rgba(255,255,255,0.55)" stroke-width="1" stroke-linecap="round"/>
+    </svg>`;
+}
+
+function getTrashSVG() {
+    return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="trBin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E9EDF2" stop-opacity=".92"/><stop offset="1" stop-color="#B9C0CA" stop-opacity=".85"/></linearGradient></defs>
+        <path d="M13 14 H51 L47 55 C46.8 57 45.2 58.5 43.2 58.5 H20.8 C18.8 58.5 17.2 57 17 55 Z" fill="url(#trBin)" stroke="rgba(255,255,255,.55)" stroke-width="1"/>
+        <g stroke="rgba(120,128,140,.55)" stroke-width="1.6" stroke-linecap="round"><path d="M24 21 L25.5 52"/><path d="M32 21 V52"/><path d="M40 21 L38.5 52"/></g>
+        <ellipse cx="32" cy="13.5" rx="19.5" ry="4.2" fill="#F4F6F9" stroke="rgba(255,255,255,.7)" stroke-width="1"/>
     </svg>`;
 }
 
@@ -3070,6 +3163,9 @@ function createWindow(appId, options = {}) {
     const winEl = document.createElement('div');
     winEl.id = windowId;
     winEl.className = 'window focused';
+    winEl.dataset.app = appId;
+    winEl.setAttribute('role', 'group');
+    winEl.setAttribute('aria-label', config.title);
     winEl.style.width = `${defaultW}px`;
     winEl.style.height = `${defaultH}px`;
     winEl.style.left = `${startX}px`;
@@ -3082,9 +3178,9 @@ function createWindow(appId, options = {}) {
     titleBar.className = 'window-title-bar';
     titleBar.innerHTML = `
         <div class="traffic-lights">
-            <button class="tl-btn tl-close" title="Close (⌘W)">×</button>
-            <button class="tl-btn tl-min" title="Minimize (⌘M)">−</button>
-            <button class="tl-btn tl-max" title="Full Screen / Hover for Sequoia Window Tiling">+</button>
+            <button class="tl-btn tl-close" title="Close" aria-label="Close window"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1.6 1.6l4.8 4.8M6.4 1.6L1.6 6.4"/></svg></button>
+            <button class="tl-btn tl-min" title="Minimize" aria-label="Minimize window"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1.2 4h5.6"/></svg></button>
+            <button class="tl-btn tl-max" title="Zoom" aria-label="Zoom window"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1.8 6.2V2.6a.4.4 0 0 1 .4-.4h3.6M6.2 1.8v3.6a.4.4 0 0 1-.4.4H2.2" fill="currentColor" stroke="none" opacity="0"/><path d="M2 2h3.2L2 5.2zM6 6H2.8L6 2.8z" fill="currentColor" stroke="none"/></svg></button>
             <div class="sequoia-tile-popover">
                 <div class="text-[11px] font-semibold opacity-75">Move & Resize</div>
                 <div class="tile-grid">
@@ -3104,7 +3200,6 @@ function createWindow(appId, options = {}) {
             </div>
         </div>
         <div class="window-title-text">
-            <span class="w-4 h-4 inline-block">${getAppIconSVG(appId)}</span>
             <span class="window-title-label">${escapeHtml(config.title)}</span>
         </div>
         <div class="w-14"></div>
@@ -3660,22 +3755,16 @@ function openForceQuitModal() {
 const pinnedDockApps = [
     'file-explorer',
     'app-launcher',
-    'chrome',
     'web-browser',
-    'vscode',
-    'code-studio',
-    'slack',
     'ai-assistant',
     'mail-client',
-    'spotify',
-    'music-player',
-    'notepad',
-    'calendar-app',
-    'reminders',
     'image-viewer',
-    'terminal',
-    'system-monitor',
+    'calendar-app',
+    'notepad',
+    'reminders',
+    'music-player',
     'clicker-game',
+    'terminal',
     'settings'
 ];
 
@@ -3777,6 +3866,14 @@ function renderDock() {
     dlStack.addEventListener('click', () => launchOrFocusApp('file-explorer', { initialPath: '/Users/eugene/Downloads' }));
     dock.appendChild(dlStack);
 
+    const trash = document.createElement('div');
+    trash.className = 'dock-icon';
+    trash.setAttribute('role', 'button');
+    trash.setAttribute('aria-label', 'Trash');
+    trash.innerHTML = `<div class="dock-tooltip">Trash</div>${getTrashSVG()}`;
+    trash.addEventListener('click', () => launchOrFocusApp('file-explorer', { initialPath: '/Users/eugene/.Trash' }));
+    dock.appendChild(trash);
+
     fitDockToViewport();
 }
 
@@ -3787,12 +3884,12 @@ function fitDockToViewport() {
     dock.style.setProperty('--dock-count', String(iconCount));
     const bounds = OS.viewport.getDesktopBounds();
     const stageW = bounds.width || 1180;
-    const gap = iconCount > 18 ? 4 : 5;
+    const gap = 4;
     dock.style.gap = `${gap}px`;
-    const availableForIcons = stageW - 68 - (iconCount - 1) * gap;
+    const availableForIcons = stageW - 80 - (iconCount - 1) * gap;
     const computedSize = Math.floor(availableForIcons / Math.max(1, iconCount));
-    const maxCap = iconCount > 16 ? 42 : 48;
-    const baseSize = Math.max(32, Math.min(maxCap, computedSize));
+    const maxCap = 64;
+    const baseSize = Math.max(34, Math.min(maxCap, computedSize));
     document.documentElement.style.setProperty('--dock-base-size', `${baseSize}px`);
 }
 
@@ -4220,7 +4317,7 @@ function initFinder(winEl, windowData, options = {}) {
         if (!OS.vfs.exists(state.cwd)) state.cwd = '/Users/eugene';
         folderTitle.textContent = OS.vfs.baseName(state.cwd);
         const winTitleLabel = winEl.querySelector('.window-title-label');
-        if (winTitleLabel) winTitleLabel.textContent = `Finder — ${OS.vfs.baseName(state.cwd)}`;
+        if (winTitleLabel) winTitleLabel.textContent = OS.vfs.baseName(state.cwd) || 'Macintosh HD';
 
         // Sidebar active state
         winEl.querySelectorAll('[data-nav]').forEach(btn => {
@@ -7757,6 +7854,7 @@ function applyThemeByIndex(idx) {
         btnIcon.className = themeClass === 'light-mode' ? 'fas fa-sun text-xs text-amber-500' : 'fas fa-moon text-xs';
     }
     localStorage.setItem('osweb_theme_idx', String(currentThemeIndex));
+    if (typeof applyDefaultWallpaperForTheme === 'function' && document.getElementById('wallpaper-container')) applyDefaultWallpaperForTheme();
 }
 
 function cycleTheme() {
@@ -7764,10 +7862,19 @@ function cycleTheme() {
     showTemporaryMessage(`Appearance: ${themeNames[themes[currentThemeIndex]]}`, 1500);
 }
 
-function applyWallpaper(url) {
+function applyWallpaper(url, persist = true) {
     const el = document.getElementById('wallpaper-container');
     if (el) el.style.backgroundImage = `url('${url}')`;
-    localStorage.setItem('osweb_wallpaper_url', url);
+    document.documentElement.style.setProperty('--wallpaper-url', `url('${url}')`);
+    try { if (persist) localStorage.setItem('osweb_wallpaper_url', url); } catch (_) {}
+}
+// Default "Sequoia" wallpaper follows the appearance (dynamic light/dark), like macOS.
+function applyDefaultWallpaperForTheme() {
+    let saved = null;
+    try { saved = localStorage.getItem('osweb_wallpaper_url'); } catch (_) {}
+    if (saved && !/^https?:/.test(saved)) return applyWallpaper(saved, false);
+    const light = document.body.classList.contains('light-mode');
+    applyWallpaper(light ? wallpapers[0].url : wallpapers[0].dark, false);
 }
 
 function changeWallpaperContext(showToast = false) {
@@ -7853,7 +7960,7 @@ function updateClockAndTelemetry() {
     if (clockEl) {
         const dStr = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
         const tStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-        clockEl.textContent = `${dStr}  ${tStr}`;
+        clockEl.textContent = `${dStr.replace(',', '')}  ${tStr}`;
     }
 
     // Lockscreen clock
@@ -7879,40 +7986,26 @@ function updateClockAndTelemetry() {
         uptimeEl.textContent = `0d ${h}h ${m}m`;
     }
 
-    // CPU & GPU Telemetry
-    const winCount = Object.keys(openWindows).length;
-    const cpu = Math.min(92, Math.max(3, Math.round(winCount * 3.8 + Math.random() * 6 + 2)));
-    const gpu = Math.min(88, Math.max(4, Math.round(winCount * 4.2 + (OS.music.playing ? 12 : 3) + Math.random() * 5)));
-    const cpuEl = document.getElementById('cpu-meter');
-    const gpuEl = document.getElementById('gpu-meter');
-    if (cpuEl) cpuEl.textContent = `CPU: ${cpu}%`;
-    if (gpuEl) gpuEl.textContent = `GPU: ${gpu}%`;
+}
 
-    const wCpu = document.getElementById('widget-cpu-val');
-    const wGpu = document.getElementById('widget-gpu-val');
-    const wRam = document.getElementById('widget-ram-val');
-    if (wCpu) wCpu.textContent = `${cpu}%`;
-    if (wGpu) wGpu.textContent = `${gpu}%`;
-    if (wRam) wRam.textContent = `${(12.4 + winCount * 0.45).toFixed(1)}G`;
-
-    // Draw Sequoia Desktop Telemetry Sparkline Canvas
-    const wCanvas = document.getElementById('widget-telemetry-canvas');
-    if (wCanvas) {
-        telemetryHistory.push(cpu);
-        if (telemetryHistory.length > 30) telemetryHistory.shift();
-        const c2 = wCanvas.getContext('2d');
-        c2.clearRect(0, 0, wCanvas.width, wCanvas.height);
-        c2.strokeStyle = '#38BDF8';
-        c2.lineWidth = 2;
-        c2.beginPath();
-        telemetryHistory.forEach((v, i) => {
-            const x = (i / 29) * wCanvas.width;
-            const y = wCanvas.height - (v / 100) * (wCanvas.height - 8) - 4;
-            if (i === 0) c2.moveTo(x, y);
-            else c2.lineTo(x, y);
-        });
-        c2.stroke();
-    }
+// Real device status (no invented numbers): Battery API where supported, online state from the browser.
+async function initRealStatusItems() {
+    const wifi = document.getElementById('wifi-menubar-button');
+    const syncNet = () => { if (wifi) wifi.style.opacity = navigator.onLine ? '1' : '.4'; };
+    window.addEventListener('online', syncNet); window.addEventListener('offline', syncNet); syncNet();
+    const btn = document.getElementById('battery-menubar-button');
+    if (!btn || !navigator.getBattery) return;           // Safari/Firefox: no API -> show nothing rather than fake it
+    try {
+        const b = await navigator.getBattery();
+        const paint = () => {
+            btn.hidden = false;
+            const pct = Math.round(b.level * 100);
+            const pe = document.getElementById('battery-pct'); if (pe) pe.textContent = pct + '%';
+            const fill = document.getElementById('battery-fill'); if (fill) fill.setAttribute('width', String(Math.max(1, 11.5 * b.level)));
+            btn.title = `Battery ${pct}%` + (b.charging ? ' (charging)' : '');
+        };
+        b.addEventListener('levelchange', paint); b.addEventListener('chargingchange', paint); paint();
+    } catch (_) {}
 }
 
 function lockScreen() {
@@ -7923,8 +8016,10 @@ function lockScreen() {
 function unlockDesktop() {
     const loginModal = document.getElementById('login-modal');
     const userInput = document.getElementById('username-input');
-    const name = (userInput && userInput.value.trim()) ? userInput.value.trim() : 'Eugene Redko';
+    let name = 'Eugene Redko';
+    try { name = localStorage.getItem('osweb_username') || name; } catch (_) {}
     currentUsername = name;
+    if (userInput) userInput.value = '';
     localStorage.setItem('osweb_username', name);
 
     const userInfoEl = document.getElementById('user-info');
@@ -7963,8 +8058,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (savedThemeIdx !== null) applyThemeByIndex(Number(savedThemeIdx));
     else applyThemeByIndex(0);
 
-    const savedWall = localStorage.getItem('osweb_wallpaper_url');
-    applyWallpaper(savedWall || wallpapers[0].url);
+    applyDefaultWallpaperForTheme();
+    try { const n = localStorage.getItem('osweb_username') || 'Eugene Redko'; document.getElementById('lockscreen-username').textContent = n; document.getElementById('lockscreen-initial').textContent = n.trim().charAt(0).toUpperCase() || 'U'; } catch (_) {}
 
     // 5. Render Menu Bar, Virtual Spaces, Desktop Icons, Widgets & Parabolic Dock
     updateTopAppMenuBar('file-explorer');
@@ -7976,7 +8071,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderSidebarCalendar();
     updateSidebarWeather(false);
     updateClockAndTelemetry();
-    setInterval(updateClockAndTelemetry, 2000);
+    (function tickClock() {
+        updateClockAndTelemetry();
+        setTimeout(tickClock, 60000 - (Date.now() % 60000) + 50);   // aligned to the minute, no 2s repaint
+    })();
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) updateClockAndTelemetry(); });
 
     OS.bus.addEventListener('vfs:change', () => renderDesktopIcons());
 
@@ -8009,11 +8108,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('activities-button')?.addEventListener('click', () => toggleMissionControl());
     document.getElementById('add-desktop-button')?.addEventListener('click', () => addVirtualDesktop());
     document.getElementById('show-desktop-button')?.addEventListener('click', () => showDesktop(true));
-    document.getElementById('cpu-meter')?.addEventListener('click', () => launchOrFocusApp('system-monitor'));
-    document.getElementById('gpu-meter')?.addEventListener('click', () => launchOrFocusApp('system-monitor'));
+    document.getElementById('spotlight-menubar-button')?.addEventListener('click', () => toggleSpotlight());
     document.getElementById('siri-menubar-button')?.addEventListener('click', () => launchOrFocusApp('ai-assistant'));
-    document.getElementById('wifi-menubar-button')?.addEventListener('click', () => showTemporaryMessage('Wi-Fi: Connected to Sequoia-5G (1200 Mbps)', 1800));
-    document.getElementById('battery-menubar-button')?.addEventListener('click', () => showTemporaryMessage('Battery 100% — Power Source: MagSafe 3 (140W)', 1800));
+    document.getElementById('wifi-menubar-button')?.addEventListener('click', () => showTemporaryMessage(navigator.onLine ? 'Wi-Fi: Connected' : 'Wi-Fi: Not Connected', 1600));
+    initRealStatusItems();
     document.getElementById('theme-toggle-button')?.addEventListener('click', () => cycleTheme());
     document.getElementById('user-avatar-button')?.addEventListener('click', () => launchOrFocusApp('settings'));
 
@@ -8099,31 +8197,77 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    initKeyboardShortcuts();
+});
+
+/* ============================================================================
+ * Keyboard layer: macOS shortcuts. On Apple platforms the modifier is Cmd; elsewhere Ctrl+Alt,
+ * so we never hijack browser-reserved bare Ctrl combos. (Safari itself reserves some Cmd keys
+ * such as Cmd+W/Q/Tab/N — those work once the site is installed to the Dock / Home Screen.)
+ * ============================================================================ */
+const IS_APPLE = /Mac|iPhone|iPad|iPod/.test(navigator.platform || '') || /Mac OS X|iPhone|iPad/.test(navigator.userAgent || '');
+const hasMod = (e) => IS_APPLE ? e.metaKey : (e.ctrlKey && e.altKey);
+
+function runningAppsMRU() {
+    const seen = []; 
+    Object.values(openWindows).sort((a, b) => (parseInt(b.element?.style.zIndex) || 0) - (parseInt(a.element?.style.zIndex) || 0))
+        .forEach(w => { if (!seen.includes(w.appId)) seen.push(w.appId); });
+    return seen;
+}
+const appSwitcher = { el: null, list: [], idx: 0,
+    open(dir) {
+        this.list = runningAppsMRU(); if (this.list.length < 2) return;
+        this.idx = dir < 0 ? this.list.length - 1 : 1;
+        this.el = document.createElement('div'); this.el.id = 'app-switcher'; this.el.setAttribute('role', 'listbox'); this.el.setAttribute('aria-label', 'Application switcher');
+        document.getElementById('macos-viewport-root').appendChild(this.el); this.render();
+    },
+    render() { this.el.innerHTML = this.list.map((id, i) => `<div class="as-item${i === this.idx ? ' sel' : ''}" role="option" aria-selected="${i === this.idx}"><div class="as-icon">${getAppIconSVG(id)}</div><div class="as-name">${escapeHtml(appConfig[id]?.title || id)}</div></div>`).join(''); },
+    step(dir) { this.idx = (this.idx + dir + this.list.length) % this.list.length; this.render(); },
+    commit() { if (!this.el) return; const id = this.list[this.idx]; this.el.remove(); this.el = null; if (id) launchOrFocusApp(id); }
+};
+
+function initKeyboardShortcuts() {
     window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' || e.code === 'Escape') {
-            OS.menu.closeAll();
-            OS.spotlight.close();
-            toggleLaunchpad(false);
-            toggleMissionControl(false);
+        const key = (e.key || '').toLowerCase();
+        if (e.key === 'Escape') {
+            if (appSwitcher.el) { appSwitcher.el.remove(); appSwitcher.el = null; }
+            OS.menu.closeAll(); OS.spotlight.close(); toggleLaunchpad(false); toggleMissionControl(false);
         }
-        if ((e.metaKey || e.ctrlKey) && (e.key.toLowerCase() === 'k' || e.code === 'Space')) {
-            e.preventDefault();
-            toggleSpotlight();
+        const mod = hasMod(e);
+        const active = activeWindowId && openWindows[activeWindowId];
+        if ((mod && e.code === 'Space') || (e.altKey && !e.ctrlKey && !e.metaKey && e.code === 'Space')) { e.preventDefault(); toggleSpotlight(); return; }
+        if (e.key === 'F3') { e.preventDefault(); toggleMissionControl(); return; }
+        if (e.key === 'F4') { e.preventDefault(); toggleLaunchpad(); return; }
+        if (e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+            const ids = virtualDesktops.slice();
+            const i = ids.indexOf(currentVirtualDesktop); if (ids.length > 1 && i >= 0) { e.preventDefault(); switchVirtualDesktop(ids[(i + (e.key === 'ArrowRight' ? 1 : -1) + ids.length) % ids.length]); }
+            return;
         }
-        if ((e.metaKey || e.ctrlKey) && e.altKey && e.key === 'Escape') {
+        if (e.key === 'Tab' && (mod || e.altKey)) {   // Cmd+Tab (or Option+Tab where the OS/browser owns Cmd+Tab)
             e.preventDefault();
-            openForceQuitModal();
+            if (!appSwitcher.el) appSwitcher.open(e.shiftKey ? -1 : 1); else appSwitcher.step(e.shiftKey ? -1 : 1);
+            return;
         }
-        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'w' && activeWindowId) {
+        if (!mod) return;
+        if (e.altKey && e.key === 'Escape') { e.preventDefault(); openForceQuitModal(); return; }
+        if (e.ctrlKey && key === 'f' && active) { e.preventDefault(); toggleMaximizeWindow(activeWindowId); return; }
+        if (e.shiftKey || e.altKey) return;
+        if (key === 'w' && active) { e.preventDefault(); closeWindow(activeWindowId); }
+        else if (key === 'm' && active) { e.preventDefault(); minimizeWindow(activeWindowId); }
+        else if (key === 'q' && active) { e.preventDefault(); Object.values(openWindows).filter(w => w.appId === active.appId).forEach(w => closeWindow(w.id)); }
+        else if (key === 'h' && active) { e.preventDefault(); Object.values(openWindows).filter(w => w.appId === active.appId).forEach(w => minimizeWindow(w.id)); }
+        else if (key === 'n' && active) { e.preventDefault(); createWindow(active.appId, { forceNew: true }); }
+        else if (key === ',') { e.preventDefault(); launchOrFocusApp('settings'); }
+        else if (e.code === 'Backquote' && active) {
             e.preventDefault();
-            closeWindow(activeWindowId);
-        }
-        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'm' && activeWindowId) {
-            e.preventDefault();
-            minimizeWindow(activeWindowId);
+            const same = Object.values(openWindows).filter(w => w.appId === active.appId && !w.isMinimized);
+            if (same.length > 1) { const i = same.findIndex(w => w.id === activeWindowId); focusWindow(same[(i + 1) % same.length].id); }
         }
     }, true);
-});
+    window.addEventListener('keyup', (e) => {
+        if (appSwitcher.el && (e.key === 'Meta' || e.key === 'Alt' || e.key === 'Control')) appSwitcher.commit();
+    }, true);
+}
 </script>
 </body>
 </html>
